@@ -1,0 +1,25 @@
+:root[theme="dark"] {
+  --back-a: #1a1b1e;
+  --back-b: #2a2b30;
+  --back-c: #323339;
+  --back-d: #3e3f45;
+  --text-a: #ffffff;
+  --text-b: #e0e0e0;
+  --text-c: #9ca3af;
+  --text-d: #6b7280;
+  --transparent: #00000000;
+  --svg-invert: 1;
+}
+
+:root[theme="light"] {
+  --back-a: #f8f8f8;
+  --back-b: #efefef;
+  --back-c: #e8e8e8;
+  --back-d: #dfdfdf;
+  --text-a: #0a0a0a;
+  --text-b: #363636;
+  --text-c: #626262;
+  --text-d: #8e8e8e;
+  --transparent: #00000000;
+  --svg-invert: 0;
+}

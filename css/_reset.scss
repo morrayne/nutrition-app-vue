@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
+:root {
+  --main-font: "JetBrains Mono", monospace; 
+}
+html {
+  font-family: var(--main-font);
+  color: var(--text-a);
+  background: var(--back-b);
+  overflow: hidden;
+}
+input {
+  font-family: var(--main-font);
+  color: var(--text-a);
+}
+*, *::before, *::after {
+  transition: 0.15s;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  font-size: 1rem;
+  scroll-behavior: smooth;
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul, ol {
+  list-style: none;
+}
+svg {
+  filter: invert(var(--svg-invert));
+}
+#app {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

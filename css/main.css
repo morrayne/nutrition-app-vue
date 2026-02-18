@@ -1,0 +1,187 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
+:root {
+  --main-font: "JetBrains Mono", monospace;
+}
+
+html {
+  font-family: var(--main-font);
+  color: var(--text-a);
+  background: var(--back-b);
+  overflow: hidden;
+}
+
+input {
+  font-family: var(--main-font);
+  color: var(--text-a);
+}
+
+*, *::before, *::after {
+  transition: 0.15s;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-size: 1rem;
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+svg {
+  filter: invert(var(--svg-invert));
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:root[lang=en] {
+  --intakes: "dashboard";
+  --menu: "menu";
+  --settings: "settings";
+  --health: "strategy";
+  --prep-intro: "nutrition-app created by one person for free use";
+  --prep-a: "What we provide";
+  --prep-a1: "intuitive interface";
+  --prep-a2: "easy start";
+  --prep-a3: "wide range of features";
+  --prep-a4: "start with friends";
+  --prep-a5: "suitable for most";
+  --prep-b: "What you can do";
+  --prep-b1: "set your own goals";
+  --prep-b2: "adjust your diet";
+  --prep-b3: "track friends' progress";
+  --prep-b4: "app customization";
+  --forward: "forward";
+  --finish: "finish";
+  --back: "back";
+  --signup: "signup";
+  --login: "log in";
+  --logout: "log out";
+  --health-prep: "Welcome";
+  --general-data: "Account data";
+  --config-data: "App settings";
+  --body-data: "Body info";
+  --current-data: "Current data";
+  --goal-data: "Goal data";
+  --language: "Language";
+  --theme: "Theme";
+  --gender: "Gender";
+  --monochrome: "Colors";
+  --male: "male";
+  --female: "female";
+  --light: "light";
+  --dark: "dark";
+  --en: "eng";
+  --ru: "rus";
+  --mono: "mono";
+  --multi: "multi";
+  --have-login: "Already have an account? Log in!";
+  --back-to-register: "Back to registration";
+  --choose-activity: "choose activity level";
+}
+
+:root[lang=ru] {
+  --intakes: "дашборд";
+  --menu: "меню";
+  --settings: "параметры";
+  --health: "стратегия";
+  --prep-intro: "nutrition-app создан одним человеком для свободного пользования";
+  --prep-a: "Мы предоставляем";
+  --prep-a1: "простой интерфейс";
+  --prep-a2: "быстрый старт";
+  --prep-a3: "большой функционал";
+  --prep-a4: "совместная активность";
+  --prep-a5: "универсальность использования";
+  --prep-b: "Что можно делать";
+  --prep-b1: "ставить свои цели";
+  --prep-b2: "регулировать диету";
+  --prep-b3: "следить за прогрессом друзей";
+  --prep-b4: "кастомизировать приложение";
+  --forward: "далее";
+  --finish: "завершить";
+  --back: "назад";
+  --signup: "регистрация";
+  --login: "вход";
+  --logout: "выйти";
+  --health-prep: "Здравствуйте";
+  --general-data: "Данные аккаунта";
+  --config-data: "Настройки приложения";
+  --body-data: "Параметры тела";
+  --current-data: "Текущие показатели";
+  --goal-data: "Ваши цели";
+  --language: "Язык";
+  --theme: "Тема";
+  --gender: "Пол";
+  --monochrome: "Цветовая схема";
+  --male: "мужской";
+  --female: "женский";
+  --light: "светлая";
+  --dark: "темная";
+  --en: "англ";
+  --ru: "рус";
+  --mono: "моно";
+  --multi: "цветная";
+  --have-login: "Уже есть аккаунт? Войти!";
+  --back-to-register: "Назад к регистрации";
+  --choose-activity: "выберите уровень активности";
+}
+
+:root[theme=dark] {
+  --back-a: #1a1b1e;
+  --back-b: #2a2b30;
+  --back-c: #323339;
+  --back-d: #3e3f45;
+  --text-a: #ffffff;
+  --text-b: #e0e0e0;
+  --text-c: #9ca3af;
+  --text-d: #6b7280;
+  --transparent: #00000000;
+  --svg-invert: 1;
+}
+
+:root[theme=light] {
+  --back-a: #f8f8f8;
+  --back-b: #efefef;
+  --back-c: #e8e8e8;
+  --back-d: #dfdfdf;
+  --text-a: #0a0a0a;
+  --text-b: #363636;
+  --text-c: #626262;
+  --text-d: #8e8e8e;
+  --transparent: #00000000;
+  --svg-invert: 0;
+}/*# sourceMappingURL=main.css.map */
