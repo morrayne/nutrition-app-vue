@@ -21,6 +21,7 @@ const avatarUrl = computed(() => {
 // vars
 const userEmail = computed(() => userStore.userData.common.email);
 const username = computed(() => userStore.userData.common.username);
+const uid = computed(() => userStore.userData.id);
 </script>
 
 <template>
@@ -30,12 +31,12 @@ const username = computed(() => userStore.userData.common.username);
       <div v-else class="box"></div>
     </div>
     <div class="text-w">
+      <div class="username" v-if="authStore.isAuthenticated"> {{ username }}</div>
+      <div class="fake-username" v-else></div>
       <div class="email" v-if="authStore.isAuthenticated">{{ userEmail }}</div>
       <div class="fake-email" v-else></div>
-      <div class="username" v-if="authStore.isAuthenticated">
-        {{ username }}
-      </div>
-      <div class="fake-username" v-else></div>
+      <div class="id" v-if="authStore.isAuthenticated">{{ uid }}</div>
+      <div class="fake-id" v-else></div>
     </div>
   </div>
 </template>
@@ -43,15 +44,14 @@ const username = computed(() => userStore.userData.common.username);
 <style scoped lang="scss">
 .top {
   width: 100%;
-  height: 4rem;
   background: var(--back-b);
   border-radius: 0.75rem;
   padding: 0.5rem;
   display: flex;
   gap: 1rem;
 
-  .fake-username, .fake-email {
-    height: 50%;
+  .fake-username, .fake-email, .fake-id {
+    height: 30%;
     border-radius: 0.25rem;
   }
 
@@ -63,9 +63,13 @@ const username = computed(() => userStore.userData.common.username);
     width: 70%;
   }
 
+  .fake-id {
+    width: 100%;
+  }
+
   .img-holder {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     overflow: hidden;
     border-radius: 50%;
 
@@ -86,17 +90,25 @@ const username = computed(() => userStore.userData.common.username);
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
     justify-content: space-between;
-
-    .email {
-      font-size: 0.95rem;
-      color: var(--text-a);
-    }
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;
 
     .username {
       font-size: 0.85rem;
+      color: var(--text-a);
+    }
+
+    .email {
+      font-size: 0.75rem;
       color: var(--text-c);
+    }
+
+
+    .id {
+      font-size: 0.5rem;
+      color: var(--text-d);
     }
   }
 }
@@ -106,7 +118,8 @@ const username = computed(() => userStore.userData.common.username);
 
   .box,
   .fake-username,
-  .fake-email {
+  .fake-email, 
+  .fake-id {
     background: var(--back-d);
   }
 }

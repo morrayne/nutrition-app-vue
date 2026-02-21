@@ -97,13 +97,19 @@ export const useAuthStore = defineStore("auth", () => {
   };
   // sign in
   const signIn = async (email: string, password: string) => {
-    isLoading.value = true; error.value = null;
+    isLoading.value = true; 
+    error.value = null;
     try {
       const { data, error: supabaseError } = await supabase.auth.signInWithPassword({ email, password });
       if (supabaseError) throw supabaseError;
       session.value = data.session;
       user.value = data.user;
-      if (data.user) { await loadUserData(data.user.id) }
+      if (data.user) {
+        await loadUserData(data.user.id);
+        const userStore = useUserStore();
+        userStore.setUserData({...userStore.userData, online: true });
+        await saveUserData();
+      }
       return { success: true, data };
     } catch (err) {
       error.value = (err as AuthError).message;
@@ -116,6 +122,9 @@ export const useAuthStore = defineStore("auth", () => {
   const signOut = async () => {
     isLoading.value = true; error.value = null;
     try {
+      const userStore = useUserStore();
+      await userStore.setUserData({...userStore.userData, online: false });
+      await saveUserData();
       const { error: supabaseError } = await supabase.auth.signOut();
       if (supabaseError) throw supabaseError;
       clearLocalData();

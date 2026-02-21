@@ -34,13 +34,15 @@ const navArray = [
 .header-ul {
   width: 100%;
   padding: 0.35rem 0.5rem;
-  border-bottom: solid 0.125rem var(--back-d);
+  background: var(--back-a);
+  border-bottom: solid 0.125rem var(--back-b);
   display: flex;
   justify-content: space-between;
 
   .header-li {
     font-size: 0.75rem;
-    color: var(--text-b);
+    background: var(--back-a);
+    color: var(--text-c);
     padding: 0.35rem 1rem;
     display: flex;
     align-items: center;
@@ -53,7 +55,8 @@ const navArray = [
   }
 
   .active {
-    background: var(--back-c);
+    color: var(--text-a);
+    background: var(--back-b) ;
     border-radius: 0.5rem;
   }
 }

@@ -63,18 +63,21 @@ const avatarUrl = computed(() => {
   return userStore.availableAvatars[index];
 });
 
-// username and email
-const userEmail = computed(() => userStore.userData.common.email);
-const username = computed(() => userStore.userData.common.username);
+// 
+const arr = ['app config', 'subscription upgrade', 'pick new icon', 'language swap', 'theme change', 'monochrome options', 'find friends']
 </script>
 
 <template>
   <div class="a">
     <profile_preview :data="false"></profile_preview>
     <div class="settings">
-      <switcher :data="switcher_data.theme" field="theme" @infoInput="updateSetting" />
-      <switcher :data="switcher_data.lang" field="lang" @infoInput="updateSetting" />
-      <switcher :data="switcher_data.monochrome" field="monochrome" @infoInput="updateSetting" />
+      <div class="item" v-for="value in arr">
+        <p>{{ value }}</p>
+        <div class="dot"></div>
+      </div>
+      <!-- <switcher :data="switcher_data.theme" field="theme" @infoInput="updateSetting" /> -->
+      <!-- <switcher :data="switcher_data.lang" field="lang" @infoInput="updateSetting" /> -->
+      <!-- <switcher :data="switcher_data.monochrome" field="monochrome" @infoInput="updateSetting" /> -->
     </div>
     <button class="logout" @click="handleLogout"></button>
   </div>
@@ -85,18 +88,45 @@ const username = computed(() => userStore.userData.common.username);
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--back-a);
   gap: 0.75rem;
-  padding: 1rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.75rem;
 
-  
+  // .settings {
+  //   background: var(--back-b);
+  //   display: flex;
+  //   border-radius: 0.75rem;
+  //   flex-direction: column;
+  //   gap: 0.75rem;
+  //   padding: 1rem 0.75rem;
+  // }
 
   .settings {
-    background: var(--back-b);
     display: flex;
-    border-radius: 0.75rem;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1rem 0.75rem;
+    gap: 0.25rem;
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: solid 2px var(--back-b);
+      cursor: pointer;
+
+      p {
+        margin-left: 1rem;
+        color: var(--text-b);
+      }
+
+      .dot {
+        margin-right: 1rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        aspect-ratio: 1 / 1;
+        background: var(--back-c);
+      }
+    }
   }
 
   .logout {

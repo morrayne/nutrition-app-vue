@@ -202,6 +202,8 @@ watch(userStore, () => {
 .health-page {
   width: 100%;
   height: 100%;
+  padding: 0.5rem 0.75rem 0.75rem;
+  background: var(--back-a);
 
   .health {
     width: 100%;
@@ -210,10 +212,13 @@ watch(userStore, () => {
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
 
     .view {
       width: 100%;
       display: flex;
+      background: var(--back-b);
+      position: relative;
 
       h1 {
         top: -2.5rem;
@@ -221,50 +226,14 @@ watch(userStore, () => {
         position: absolute;
         font-size: 1.5rem;
       }
-      ::after {
+      
+      h1::after {
         content: var(--title-name);
       }
 
       .progress-bar {
         min-width: 0.25rem;
         height: 0.25rem;
-      }
-
-      .wrap {
-        min-width: 100%;
-        height: 100%;
-      }
-    }
-
-    .switch {
-      width: 100%;
-      height: 2.5rem;
-      display: flex;
-
-      .back, .forward, .save {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-  }
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-.health-page {
-  padding: 1rem;
-
-  .health {
-    overflow: hidden;
-
-    .view {
-      background: var(--back-b);
-      position: relative;
-
-      .progress-bar {
         background: var(--text-a);
         position: absolute;
         top: 0;
@@ -272,17 +241,25 @@ watch(userStore, () => {
       }
 
       .wrap {
+        min-width: 100%;
+        height: 100%;
         position: relative;
         overflow: hidden;
       }
     }
 
     .switch {
+      width: 100%;
+      height: 2.5rem;
+      display: flex;
       position: absolute;
       bottom: 0;
       left: 0;
 
       .back, .forward, .save {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border-radius: 0.75rem;
       }
 
@@ -308,5 +285,9 @@ watch(userStore, () => {
       }
     }
   }
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 </style>

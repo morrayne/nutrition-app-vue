@@ -39,7 +39,8 @@ const lib = ["prep-b1", "prep-b2", "prep-b3", "prep-b4"];
       font-size: 0.7rem;
       color: var(--text-b);
       background: var(--back-c);
-      border-radius: 0.25rem;
+      border: solid 1px var(--back-d);
+      border-radius: 0.5rem;
       position: relative;
     }
 

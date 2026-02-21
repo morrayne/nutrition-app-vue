@@ -26,7 +26,7 @@ function onSwitch(option: string) {
 <!-- prettier-ignore -->
 <template>
   <div class="b">
-    <h3 :style="{'--switcher-name': `var(--${data.name})`}"></h3>
+    <h3 v-if="data.name" :style="{'--switcher-name': `var(--${data.name})`}"></h3>
     <div class="switcher">
       <button class="option" :style="{'--option-name': `var(--${data.option1})`}" :class="{ active: data.value === data.option1 }" @click="onSwitch(data.option1)"></button>
       <button class="option" :style="{'--option-name': `var(--${data.option2})`}" :class="{ active: data.value === data.option2 }" @click="onSwitch(data.option2)"></button>
@@ -64,15 +64,15 @@ function onSwitch(option: string) {
   }
   
   .switcher {
-    padding: 0.25rem;
+    padding: 0.1875rem;
     background: var(--back-c);
-    border: solid 0.125rem var(--back-d);
-    border-radius: 0.75rem;
+    border: solid 1px var(--back-d);
+    border-radius: 1rem;
 
     .option {
       width: 50%;
-      padding: 0.25rem 0;
-      border-radius: 0.5rem;
+      padding: 0.125rem 0;
+      border-radius: 0.875rem;
       color: var(--text-c);
       outline: none;
     }

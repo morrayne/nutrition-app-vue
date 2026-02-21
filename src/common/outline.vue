@@ -40,6 +40,7 @@ onUnmounted(() => {
 <template>
   <!-- Мобильная версия (без обертки) -->
   <div v-if="isMobile" class="mobile-content">
+    <headerComponent v-if="userStore.userData.config.first_login"></headerComponent>
     <slot></slot>
   </div>
 
@@ -55,9 +56,7 @@ onUnmounted(() => {
           <p>22:16</p>
         </div>
       </div>
-      <headerComponent
-        v-if="userStore.userData.config.first_login"
-      ></headerComponent>
+      <headerComponent v-if="userStore.userData.config.first_login"></headerComponent>
       <div class="content">
         <slot></slot>
       </div>
@@ -88,6 +87,7 @@ onUnmounted(() => {
     border-radius: 2.5rem;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     .imaginary-head {
       height: 2rem;
@@ -128,6 +128,7 @@ onUnmounted(() => {
 
     .content {
       height: calc(100% - 2rem);
+      background: var(--back-a);
       border-radius: 0 0 2rem 2rem;
       display: flex;
       flex-direction: column;

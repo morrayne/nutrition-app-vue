@@ -50,10 +50,7 @@ const checkInfo = (field: string, value: string) => {
 // auth
 const handleLogin = async () => {
   if (allowence.value) {
-    const result = await authStore.signIn(
-      login_data.value.email,
-      login_data.value.password,
-    );
+    const result = await authStore.signIn(login_data.value.email, login_data.value.password);
     if (result.success) {
       if (userStore.userData.config.first_login) {
         router.push("/account");
@@ -73,13 +70,12 @@ watch(allowence, (newVal) => { if (newVal) { handleLogin() }});
 
 <template>
   <div class="login">
-    <h1 class="login-title"></h1>
     <div class="form">
+      <h1 class="login-title"></h1>
       <profile_preview :data="true"></profile_preview>
       <text_input :data="{ placeholder: 'example@gmail.com', status: field_status.email }" field="email" @infoInput="checkInfo" />
       <text_input :data="{ placeholder: '******', status: field_status.password }" field="password" @infoInput="checkInfo" />
       <p v-if="loginError" class="error">{{ loginError }}</p>
-      <button class="login-btn" @click="handleLogin"></button>
       <button class="back-to-register" @click="router.push('/signup')"></button>
     </div>
   </div>
@@ -88,16 +84,20 @@ watch(allowence, (newVal) => { if (newVal) { handleLogin() }});
 <style scoped lang="scss">
 .login {
   width: 100%;
+  background: var(--back-a);
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem 0.75rem 0.75rem;
 
   .login-title {
-    width: 100%;
     text-align: left;
+    font-size: 1.5rem;
+    position: absolute;
+    top: -2.5rem;
+    left: 0;
   }
   .login-title::after {
     content: var(--login-title);
@@ -105,13 +105,14 @@ watch(allowence, (newVal) => { if (newVal) { handleLogin() }});
 
   .form {
     width: 100%;
-    height: 18rem;
+    height: 19rem;
     background: var(--back-b);
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 0.5rem;
+    position: relative;
 
     .preview {
       width: 100%;
