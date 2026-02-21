@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import router from '../utils/router';
+import router from '../app_settings/router';
 
 </script>
 

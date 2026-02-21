@@ -1,10 +1,8 @@
-<!-- prettier-ignore -->
 <script setup lang="ts">
 const lia = ["prep-a1", "prep-a2", "prep-a3", "prep-a4", "prep-a5"];
 const lib = ["prep-b1", "prep-b2", "prep-b3", "prep-b4"];
 </script>
 
-<!-- prettier-ignore -->
 <template>
   <div class="prep">
     <p class="prep-intro"></p>

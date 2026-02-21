@@ -1,36 +1,25 @@
 <script setup lang="ts">
-// vue
-import { computed } from "vue";
+// MAIN IMPORTS
 // router
 import { useRoute } from "vue-router";
-import router from "../../utils/router";
+import router from "../../app_settings/router";
+const route = useRoute();
 
+// CONTENT
 // type
 interface navItemType {
   route: string;
   css: string;
 }
-
-// Текущий route
-const route = useRoute();
-
-// Массив навигации
+// vars
+const isActive = (itemRoute: string) => { return route.path.includes(itemRoute) };
+const navItemClick = (item: navItemType) => { router.push(item.route) };
 const navArray = [
-  {route: "intakes", css: "intakes"},
+  {route: "dashboard", css: "dashboard"},
   {route: "menu", css: "menu"},
-  {route: "health", css: "health"},
-  {route: "settings", css: "settings"}
+  {route: "reshape", css: "reshape"},
+  {route: "account", css: "account"}
 ];
-
-// Определяем активный пункт по текущему пути
-const isActive = (itemRoute: string) => {
-  return route.path.includes(itemRoute);
-};
-
-// Навигация
-const navItemClick = (item: navItemType) => {
-  router.push(item.route);
-};
 </script>
 
 <template>
@@ -44,7 +33,7 @@ const navItemClick = (item: navItemType) => {
 <style scoped>
 .header-ul {
   width: 100%;
-  padding: 0.4rem 0.5rem;
+  padding: 0.35rem 0.5rem;
   border-bottom: solid 0.125rem var(--back-d);
   display: flex;
   justify-content: space-between;
@@ -52,7 +41,7 @@ const navItemClick = (item: navItemType) => {
   .header-li {
     font-size: 0.75rem;
     color: var(--text-b);
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;

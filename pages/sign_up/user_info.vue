@@ -1,19 +1,15 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui & router
 import { ref, computed, watch } from "vue";
-// ui
-import text_input from "@/ui/text_input.vue";
-// router
-import router from "../../utils/router";
+import text_input from "../../src/inputs/text_input.vue";
+import router from "../../app_settings/router";
 
-// PROPS & EMITS
-// props
+// CONTENT
+// props & emits
 const props = defineProps(["userData"]);
-// emits
 const emit = defineEmits(["update-field", "update-right"]);
-
-// MAIN VARS
+// vars
 const allowence = computed(() => data.value.username.status === 2 && data.value.email.status === 2 && data.value.password.status === 2);
 const data = ref({
   username: {
@@ -81,7 +77,7 @@ watch(allowence, (new_value) => {
     <text_input :data="data.email" field="email" @infoInput="checkInfo" />
     <text_input :data="data.password" field="password" @infoInput="checkInfo" />
     <text_input :data="data.username" field="username" @infoInput="checkInfo" />
-    <button @click="router.push('login')" class="login-btn"></button>
+    <button @click="router.push('signin')" class="login-btn"></button>
   </div>
 </template>
 

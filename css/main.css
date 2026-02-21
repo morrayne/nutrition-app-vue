@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
 :root {
-  --main-font: "JetBrains Mono", monospace;
+  --main-font: "JetBrains Mono", monospace ;
 }
 
 html {
@@ -69,38 +69,27 @@ svg {
 }
 
 :root[lang=en] {
-  --intakes: "dashboard";
+  --dashboard: "dashboard";
   --menu: "menu";
-  --settings: "settings";
-  --health: "strategy";
-  --prep-intro: "nutrition-app created by one person for free use";
-  --prep-a: "What we provide";
-  --prep-a1: "intuitive interface";
-  --prep-a2: "easy start";
-  --prep-a3: "wide range of features";
-  --prep-a4: "start with friends";
-  --prep-a5: "suitable for most";
-  --prep-b: "What you can do";
-  --prep-b1: "set your own goals";
-  --prep-b2: "adjust your diet";
-  --prep-b3: "track friends' progress";
-  --prep-b4: "app customization";
+  --account: "account";
+  --reshape: "reshape";
   --forward: "forward";
   --finish: "finish";
   --back: "back";
-  --signup: "signup";
+  --signup: "sign up";
   --login: "log in";
   --logout: "log out";
-  --health-prep: "Welcome";
-  --general-data: "Account data";
-  --config-data: "App settings";
-  --body-data: "Body info";
-  --current-data: "Current data";
-  --goal-data: "Goal data";
-  --language: "Language";
-  --theme: "Theme";
-  --gender: "Gender";
-  --monochrome: "Colors";
+  --login-title: "sign in";
+  --health-prep: "welcome";
+  --general-data: "account";
+  --config-data: "settings";
+  --body-data: "body info";
+  --current-data: "current data";
+  --goal-data: "goal data";
+  --language: "language";
+  --theme: "theme";
+  --gender: "gender";
+  --monochrome: "colors";
   --male: "male";
   --female: "female";
   --light: "light";
@@ -109,44 +98,45 @@ svg {
   --ru: "rus";
   --mono: "mono";
   --multi: "multi";
-  --have-login: "Already have an account? Log in!";
-  --back-to-register: "Back to registration";
+  --have-login: "already have an account? log in!";
+  --back-to-register: "back to registration";
   --choose-activity: "choose activity level";
+  --prep-intro: "nutrition-app created by one person for free use";
+  --prep-a: "what we provide";
+  --prep-a1: "intuitive interface";
+  --prep-a2: "easy start";
+  --prep-a3: "wide range of features";
+  --prep-a4: "start with friends";
+  --prep-a5: "suitable for most";
+  --prep-b: "what you can do";
+  --prep-b1: "set your own goals";
+  --prep-b2: "adjust your diet";
+  --prep-b3: "track friends' progress";
+  --prep-b4: "app customization";
 }
 
 :root[lang=ru] {
-  --intakes: "дашборд";
+  --dashboard: "дашборд";
   --menu: "меню";
-  --settings: "параметры";
-  --health: "стратегия";
-  --prep-intro: "nutrition-app создан одним человеком для свободного пользования";
-  --prep-a: "Мы предоставляем";
-  --prep-a1: "простой интерфейс";
-  --prep-a2: "быстрый старт";
-  --prep-a3: "большой функционал";
-  --prep-a4: "совместная активность";
-  --prep-a5: "универсальность использования";
-  --prep-b: "Что можно делать";
-  --prep-b1: "ставить свои цели";
-  --prep-b2: "регулировать диету";
-  --prep-b3: "следить за прогрессом друзей";
-  --prep-b4: "кастомизировать приложение";
+  --account: "аккаунт";
+  --reshape: "стратегия";
   --forward: "далее";
   --finish: "завершить";
   --back: "назад";
   --signup: "регистрация";
   --login: "вход";
   --logout: "выйти";
-  --health-prep: "Здравствуйте";
-  --general-data: "Данные аккаунта";
-  --config-data: "Настройки приложения";
-  --body-data: "Параметры тела";
-  --current-data: "Текущие показатели";
-  --goal-data: "Ваши цели";
-  --language: "Язык";
-  --theme: "Тема";
-  --gender: "Пол";
-  --monochrome: "Цветовая схема";
+  --login-title: "вход";
+  --health-prep: "здравствуйте";
+  --general-data: "аккаунт";
+  --config-data: "настройки";
+  --body-data: "параметры тела";
+  --current-data: "текущие показатели";
+  --goal-data: "ваши цели";
+  --language: "язык";
+  --theme: "тема";
+  --gender: "пол";
+  --monochrome: "цветовая схема";
   --male: "мужской";
   --female: "женский";
   --light: "светлая";
@@ -155,9 +145,21 @@ svg {
   --ru: "рус";
   --mono: "моно";
   --multi: "цветная";
-  --have-login: "Уже есть аккаунт? Войти!";
-  --back-to-register: "Назад к регистрации";
+  --have-login: "уже есть аккаунт? войти!";
+  --back-to-register: "назад к регистрации";
   --choose-activity: "выберите уровень активности";
+  --prep-intro: "nutrition-app создан одним человеком для свободного пользования";
+  --prep-a: "мы предоставляем";
+  --prep-a1: "простой интерфейс";
+  --prep-a2: "быстрый старт";
+  --prep-a3: "большой функционал";
+  --prep-a4: "совместная активность";
+  --prep-a5: "универсальность использования";
+  --prep-b: "что можно делать";
+  --prep-b1: "ставить свои цели";
+  --prep-b2: "регулировать диету";
+  --prep-b3: "следить за прогрессом друзей";
+  --prep-b4: "кастомизировать приложение";
 }
 
 :root[theme=dark] {

@@ -1,36 +1,31 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui
 import { ref, computed, watch } from "vue";
-import router from "../utils/router";
-// ui
-import text_input from "@/ui/text_input.vue";
+import router from "../app_settings/router";
+import text_input from "../src/inputs/text_input.vue";
+import profile_preview from "./account/profile_preview.vue";
 // store
-import { useAuthStore } from "../store/useAuthStore";
-import { useUserStore } from "../store/useUserStore";
+import { useAuthStore } from "../stores/useAuthStore";
+import { useUserStore } from "../stores/useUserStore";
 const authStore = useAuthStore();
 const userStore = useUserStore();
 
-// Данные для входа
+// CONTENT
+// vars
+const allowence = computed(() => field_status.value.email === 2 && field_status.value.password === 2);
+const loginError = ref("");
 const login_data = ref({
   email: "",
   password: "",
 });
-
-// Статусы полей
 const field_status = ref({
   email: 0,
   password: 0,
 });
 
-const allowence = computed(
-  () => field_status.value.email === 2 && field_status.value.password === 2,
-);
-
-// Ошибка авторизации
-const loginError = ref("");
-
-// Функция проверки полей
+// FUNCTIONS
+// information moderation
 const checkInfo = (field: string, value: string) => {
   if (field === "email") {
     login_data.value.email = value;
@@ -52,59 +47,40 @@ const checkInfo = (field: string, value: string) => {
     }
   }
 };
-
-// Авторизация
+// auth
 const handleLogin = async () => {
   if (allowence.value) {
     const result = await authStore.signIn(
       login_data.value.email,
       login_data.value.password,
     );
-
     if (result.success) {
-      setTimeout(() => {
-        router.push("/settings");
-      }, 2000);
+      if (userStore.userData.config.first_login) {
+        router.push("/account");
+      } else {
+        router.push("/signup");
+      }
     } else {
       loginError.value = "Invalid email or password";
     }
   }
 };
 
-// Следим за валидностью и вызываем login
-watch(allowence, (newVal) => {
-  if (newVal) { handleLogin() }
-});
-
-// Аватарка
-const avatarUrl = computed(() => {
-  if (userStore.availableAvatars.length === 0) return "";
-  const index = userStore.common.icon;
-  return userStore.availableAvatars[index] || "";
-});
+// WATCH & COMPUTED
+// allowence
+watch(allowence, (newVal) => { if (newVal) { handleLogin() }});
 </script>
 
-<!-- prettier-ignore -->
 <template>
   <div class="login">
     <h1 class="login-title"></h1>
     <div class="form">
-      <div class="preview">
-        <div class="img-holder">
-          <img v-if="authStore.userEmail" :src="avatarUrl" alt="profile icon" class="icon" />
-          <div v-else class="circle"></div>
-        </div>
-        <div class="text-w">
-          <div class="email" v-if="authStore.userEmail"> {{ authStore.userEmail }} </div>
-          <div class="box" style="width: 12rem" v-else></div>
-          <div class="username" v-if="userStore.common.username"> {{ userStore.common.username }} </div>
-          <div class="box" style="width: 8rem" v-else></div>
-        </div>
-      </div>
+      <profile_preview :data="true"></profile_preview>
       <text_input :data="{ placeholder: 'example@gmail.com', status: field_status.email }" field="email" @infoInput="checkInfo" />
       <text_input :data="{ placeholder: '******', status: field_status.password }" field="password" @infoInput="checkInfo" />
       <p v-if="loginError" class="error">{{ loginError }}</p>
-      <button class="back-to-register" @click="router.push('/health')"></button>
+      <button class="login-btn" @click="handleLogin"></button>
+      <button class="back-to-register" @click="router.push('/signup')"></button>
     </div>
   </div>
 </template>
@@ -114,9 +90,18 @@ const avatarUrl = computed(() => {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+
+  .login-title {
+    width: 100%;
+    text-align: left;
+  }
+  .login-title::after {
+    content: var(--login-title);
+  }
 
   .form {
     width: 100%;

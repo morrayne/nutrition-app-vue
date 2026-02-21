@@ -1,17 +1,14 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui
 import { ref, computed, watch } from "vue";
-// ui
-import number_input from "@/ui/number_input.vue";
+import number_input from "../../src/inputs/number_input.vue";
 
-// PROPS & EMITS
-// props
+// CONTENT
+// props & emits
 const props = defineProps(["userData"]);
-// emits
 const emit = defineEmits(["update-field", "update-right"]);
-
-// MAIN VARS
+// vars
 const allowence = computed(() => data.value.goalWeight.status === 2 && data.value.goalBf.status === 2);
 const data = ref({
   goalWeight: {

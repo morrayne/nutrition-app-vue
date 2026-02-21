@@ -1,18 +1,16 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui
 import { ref, computed, watch } from "vue";
-// ui
-import switcher from "@/ui/switcher.vue";
-import number_input from "@/ui/number_input.vue";
+import switcher from "../../src/inputs/switcher.vue";
+import number_input from "../../src/inputs/number_input.vue";
 
-// PROPS & EMITS
-// props
+
+// CONTENT
+// props & emits
 const props = defineProps(["userData"]);
-// emits
 const emit = defineEmits(["update-field", "update-right"]);
-
-// MAIN VARS
+// vars
 const allowence = computed(() => data.value.age.status === 2 && data.value.height.status === 2);
 const data = ref({
   gender: {

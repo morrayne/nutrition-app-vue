@@ -1,3 +1,5 @@
+// THEMES
+// dark
 :root[theme="dark"] {
   --back-a: #1a1b1e;
   --back-b: #2a2b30;
@@ -10,7 +12,7 @@
   --transparent: #00000000;
   --svg-invert: 1;
 }
-
+// light
 :root[theme="light"] {
   --back-a: #f8f8f8;
   --back-b: #efefef;

@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useUserStore } from "../../store/useUserStore";
-const userStore = useUserStore();
+// MAIN IMPORTS
+// vue & store
+import { useUserStore } from "../../stores/useUserStore";
 import headerComponent from "./header_navigation.vue";
+import { ref, onMounted, onUnmounted } from "vue";
+const userStore = useUserStore();
 
+// CONTENT
+// vars
 const frame_array = ["#c3e0b9", "#b1a8e1", "#ece0ef"];
 const currentColor = ref(frame_array[0]);
+const isMobile = ref(window.innerWidth <= 540);
 
-// Функция для получения случайного цвета
+// functions
 const getRandomColor = (): string => {
   const randomIndex = Math.floor(Math.random() * frame_array.length);
   if (frame_array[randomIndex]) {
@@ -17,14 +22,29 @@ const getRandomColor = (): string => {
   }
 };
 
-// Обновляем цвет при монтировании
+// handle resize
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 540;
+};
+
 onMounted(() => {
   currentColor.value = getRandomColor();
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 
 <template>
-  <div class="edge" :style="{ border: `solid 0.5rem ${currentColor}` }">
+  <!-- Мобильная версия (без обертки) -->
+  <div v-if="isMobile" class="mobile-content">
+    <slot></slot>
+  </div>
+
+  <!-- Десктопная версия (с рамкой) -->
+  <div v-else class="edge" :style="{ border: `solid 0.5rem ${currentColor}` }">
     <div class="frame">
       <div class="imaginary-head">
         <div class="layer-1">
@@ -35,7 +55,9 @@ onMounted(() => {
           <p>22:16</p>
         </div>
       </div>
-      <headerComponent v-if="userStore.common.firstLogin"></headerComponent>
+      <headerComponent
+        v-if="userStore.userData.config.first_login"
+      ></headerComponent>
       <div class="content">
         <slot></slot>
       </div>
@@ -44,6 +66,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.mobile-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .edge {
   max-width: 400px;
   aspect-ratio: 8 / 16;

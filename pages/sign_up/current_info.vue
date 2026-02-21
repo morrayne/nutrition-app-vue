@@ -1,17 +1,16 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui
 import { ref, computed, watch } from "vue";
-// ui
-import number_input from "@/ui/number_input.vue";
+import number_input from "../../src/inputs/number_input.vue";
 
-// PROPS & EMITS
-// props
+// CONTENT
+// props & emits
 const props = defineProps(["userData"]);
-// emits
 const emit = defineEmits(["update-field", "update-right"]);
-
-// MAIN VARS
+// vars
+const possible_activity = [1.15, 1.3, 1.45, 1.6, 1.75, 1.9];
+const current_activity = ref<number>(props.userData?.activity || 1.45);
 const allowence = computed(() => data.value.weight.status === 2 && data.value.bf.status === 2);
 const data = ref({
   weight: {
@@ -23,9 +22,6 @@ const data = ref({
     status: 0,
   },
 });
-// activity
-const possible_activity = [1.15, 1.3, 1.45, 1.6, 1.75, 1.9];
-const current_activity = ref<number>(props.userData?.activity || 1.45);
 
 // FUNCTIONS
 // information moderation

@@ -1,17 +1,14 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & ui
 import { ref } from "vue";
-// ui
-import switcher from "@/ui/switcher.vue";
+import switcher from "../../src/inputs/switcher.vue";
 
-// PROPS & EMITS
-// props
+// CONTENT
+// props & emits
 const props = defineProps(["userData"]);
-// emits
 const emit = defineEmits(["update-field"]);
-
-// MAIN VARS
+// vars
 const data = ref({
   theme: {
     name: "theme",

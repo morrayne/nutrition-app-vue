@@ -1,44 +1,34 @@
 <script setup lang="ts">
 // MAIN IMPORTS
-// vue
+// vue & router & types
+import router from "../app_settings/router";
 import { computed, ref, watch } from "vue";
 import { type Component } from "vue";
-// router
-import router from "../utils/router";
+import type { new_format } from "../stores/store_types";
 // store imports
-import { useAuthStore } from "../store/useAuthStore";
-import { useUserStore } from "../store/useUserStore";
-import { useUserPrivateStore } from "../store/useUserPrivateStore";
+import { useAuthStore } from "../stores/useAuthStore";
+import { useUserStore } from "../stores/useUserStore";
 // store vars
 const authStore = useAuthStore();
 const userStore = useUserStore();
-const userPrivateStore = useUserPrivateStore();
+// views
+import current_info from "./sign_up/current_info.vue";
+import config_info from "./sign_up/config_info.vue";
+import body_info from "./sign_up/body_info.vue";
+import goal_info from "./sign_up/goal_info.vue";
+import user_info from "./sign_up/user_info.vue";
+import prep from "./sign_up/introduction.vue";
+import finale from "./sign_up/finale.vue";
 
-// VIEWS
-// imports
-import prep from "@/health/prep.vue";
-import user_info from "@/health/user_info.vue";
-import config_info from "@/health/config_info.vue";
-import body_info from "@/health/body_info.vue";
-import current_info from "@/health/current_info.vue";
-import goal_info from "@/health/goal_info.vue";
-import finale from "@/health/finale.vue";
+// CONTENT
 // types
 interface component_array_type {
   component: Component;
   height: number;
   title: string;
 }
-// component data
-const component_array = computed<component_array_type[]>(() => userStore.common.firstLogin ? login_true_array : login_false_array);
-const login_true_array : component_array_type[] = [
-  { component: config_info, height: 17, title: "config-data" },
-  { component: body_info, height: 16, title: "body-data" },
-  { component: current_info, height: 26, title: "current-data" },
-  { component: goal_info, height: 11, title: "goal-data" },
-  { component: finale, height: 24, title: "health-finale" },
-]
-const login_false_array : component_array_type[] = [
+// vars
+const component_array = <component_array_type[]>([
   { component: config_info, height: 17, title: "config-data" },
   { component: prep, height: 25, title: "health-prep" },
   { component: user_info, height: 19, title: "general-data" },
@@ -46,7 +36,7 @@ const login_false_array : component_array_type[] = [
   { component: current_info, height: 26, title: "current-data" },
   { component: goal_info, height: 11, title: "goal-data" },
   { component: finale, height: 24, title: "health-finale" },
-];
+]);
 
 // NAVIGATION
 // types
@@ -62,13 +52,13 @@ const view_data = ref<view_data_type>({
   max: 2,
 });
 // computed vars
-const current_view_height = computed(() => component_array.value[view_data.value.current]?.height);
+const current_view_height = computed(() => component_array[view_data.value.current]?.height);
 const current_view_eq_0 = computed(() => view_data.value.current === 0);
-const current_width_progress_bar = computed(() => view_data.value.current / (component_array.value.length - 1) * 100);
+const current_width_progress_bar = computed(() => view_data.value.current / (component_array.length - 1) * 100);
 
 // MAIN DATA
 // types
-interface health_data_type {
+interface form_data_type {
   lang: "en" | "ru";
   theme: "light" | "dark";
   monochrome: "mono" | "multi";
@@ -86,7 +76,7 @@ interface health_data_type {
   goalBf: number;
 }
 // vars
-const health_data = ref<health_data_type>({
+const form_data = ref<form_data_type>({
   lang: "en",
   theme: "light",
   monochrome: "mono",
@@ -105,9 +95,9 @@ const health_data = ref<health_data_type>({
 });
 
 // FUNCTIONS  
-// healh_data field update
-const UpdateHealthDataField = (payload: { field: string, value: string | number }) => {
-  health_data.value = { ...health_data.value, [payload.field]: payload.value };
+// form_data field update
+const UpdateFormDataField = (payload: { field: string, value: string | number }) => {
+  form_data.value = { ...form_data.value, [payload.field]: payload.value };
 }
 // view_data field update
 const UpdateViewDataField = (payload: { field: "min" | "max" | "current", value: number }) => {
@@ -121,8 +111,46 @@ const UpdateViewDataField = (payload: { field: "min" | "max" | "current", value:
 }
 // signing up in supabase
 async function SupabaseSignUp(): Promise<{ success: boolean; error?: any } | void> {
-  if (health_data.value.email && health_data.value.password && health_data.value.username) {
-    const result = await authStore.signUp(health_data.value.email, health_data.value.password, health_data.value.username, health_data.value.lang, health_data.value.theme, health_data.value.monochrome);
+  if (form_data.value.email && form_data.value.password && form_data.value.username) {
+    const signUpData: new_format = {
+      id: "",
+      online: true,
+      friends: [],
+      common: {
+        sub_tier: 0,
+        username: form_data.value.username,
+        email: form_data.value.email,
+        icon: form_data.value.icon,
+      },
+      config: {
+        first_login: false,
+        lang: form_data.value.lang,
+        theme: form_data.value.theme,
+        monochrome: form_data.value.monochrome,
+      },
+      body_data: {
+        general: {
+          gender: form_data.value.gender,
+          age: form_data.value.age,
+          height: form_data.value.height,
+          activity: form_data.value.activity as 1.15 | 1.3 | 1.45 | 1.6 | 1.75 | 1.9,
+        },
+        current: {
+          weight: form_data.value.weight,
+          bf: form_data.value.bf,
+        },
+        goal: {
+          weight: form_data.value.goalWeight,
+          bf: form_data.value.goalBf,
+        },
+      },
+      macros_data: {
+        current: { kcal: 0, proteins: 0, carbs: 0, fats: 0 },
+        goal: { kcal: 0, proteins: 0, carbs: 0, fats: 0 },
+      },
+    };
+    
+    const result = await authStore.signUp(signUpData, form_data.value.password);
     if (result.success) {
       UpdateViewDataField({ field: "current", value: view_data.value.current + 1 });
       UpdateViewDataField({ field: "min", value: 3 });
@@ -137,11 +165,41 @@ async function SupabaseSignUp(): Promise<{ success: boolean; error?: any } | voi
 async function SupabaseSignUpFinish(): Promise<{ success: boolean; error?: any } | void> {
   try {
     userStore.calculateMacros("current");
-    userStore.updateCommon({ firstLogin: true, username: health_data.value.username, icon: health_data.value.icon });
+    userStore.setUserData({ 
+      ...userStore.userData,
+      config: { 
+        ...userStore.userData.config, 
+        first_login: true 
+      },
+      common: { 
+        ...userStore.userData.common, 
+        username: form_data.value.username, 
+        icon: form_data.value.icon 
+      },
+      body_data: {
+        ...userStore.userData.body_data,
+        current: {
+          weight: form_data.value.weight,
+          bf: form_data.value.bf,
+        },
+        goal: {
+          weight: form_data.value.goalWeight,
+          bf: form_data.value.goalBf,
+        },
+        general: {
+          ...userStore.userData.body_data.general,
+          gender: form_data.value.gender,
+          age: form_data.value.age,
+          height: form_data.value.height,
+          activity: form_data.value.activity as 1.15 | 1.3 | 1.45 | 1.6 | 1.75 | 1.9,
+        }
+      }
+    });
+    
     const saveResult = await authStore.saveUserData();
     if (saveResult.success) {
-      console.log("Onboarding completed successfully!");
-      router.push("/settings");
+      console.log("🚀 Onboarding completed successfully!");
+      router.push("/account");
       return { success: true };
     } else {
       console.error("Failed to save user data:", saveResult.error);
@@ -156,15 +214,11 @@ async function SupabaseSignUpFinish(): Promise<{ success: boolean; error?: any }
 // VUE WATCH
 // reload/f5 restore
 watch(userStore, () => {
-  if (!userStore.common.firstLogin && authStore.session) {
+  if (!userStore.userData.config.first_login && authStore.session) {
     view_data.value.current = 3;
     view_data.value.min = 3;
   }
 }, { deep: true, immediate: true });
-// view_data watcher
-// watch(health_data, () => {console.log("health_data changed", JSON.parse(JSON.stringify(health_data.value)))}, { deep: true });
-// view_data watcher
-// watch(view_data, () => { console.log("view_data changed", JSON.parse(JSON.stringify(view_data.value)))}, { deep: true });
 
 // VUE ONMOUNTED
 </script>
@@ -176,7 +230,7 @@ watch(userStore, () => {
         <div class="progress-bar" :style="{ width: `${current_width_progress_bar}%`}"></div>
         <h1 :style="{'--title-name': `var(--${component_array[view_data.current]?.title})`}"></h1>
         <div class="wrap" v-for="(comp, index) in component_array" :key="index" :style="{ transform: `translateX(-${view_data.current * 100}%)` }">
-          <component :is="comp.component" :user-data="health_data" @update-field="UpdateHealthDataField" @update-right="UpdateViewDataField" />
+          <component :is="comp.component" :user-data="form_data" @update-field="UpdateFormDataField" @update-right="UpdateViewDataField" />
         </div>
       </div>
       <div class="switch">

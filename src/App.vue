@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import outline from "./ui/pc_outline.vue";
+import outline from "./common/outline.vue";
 </script>
 
 <template>

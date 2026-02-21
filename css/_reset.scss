@@ -1,7 +1,8 @@
+// FONT
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
-:root {
-  --main-font: "JetBrains Mono", monospace; 
-}
+:root { --main-font: "JetBrains Mono", monospace };
+
+// STYLES
 html {
   font-family: var(--main-font);
   color: var(--text-a);
