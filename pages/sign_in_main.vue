@@ -75,7 +75,6 @@ watch(allowence, (newVal) => { if (newVal) { handleLogin() }});
       <profile_preview :data="true"></profile_preview>
       <text_input :data="{ placeholder: 'example@gmail.com', status: field_status.email }" field="email" @infoInput="checkInfo" />
       <text_input :data="{ placeholder: '******', status: field_status.password }" field="password" @infoInput="checkInfo" />
-      <p v-if="loginError" class="error">{{ loginError }}</p>
       <button class="back-to-register" @click="router.push('/signup')"></button>
     </div>
   </div>

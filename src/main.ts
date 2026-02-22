@@ -49,7 +49,7 @@ const bootstrap = async () => {
   app.mount("#app");
   window.addEventListener('beforeunload', () => {flag_manager(false)});
   if (authStore.isAuthenticated) {
-    router.push("/account");
+    router.push("/dashboard");
   } else {
     router.push("/signup");
   }

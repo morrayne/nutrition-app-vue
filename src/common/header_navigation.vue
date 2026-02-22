@@ -33,7 +33,7 @@ const navArray = [
 <style scoped>
 .header-ul {
   width: 100%;
-  padding: 0.35rem 0.5rem;
+  padding: 0.125rem 0.5rem 0.375rem;
   background: var(--back-a);
   border-bottom: solid 0.125rem var(--back-b);
   display: flex;
@@ -63,5 +63,10 @@ const navArray = [
 
 ::-webkit-scrollbar {
   display: none;
+}
+@media(max-width: 540px) {
+  .header-ul {
+    padding: 0.375rem 0.5rem;
+  }
 }
 </style>

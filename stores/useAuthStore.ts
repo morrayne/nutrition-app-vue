@@ -62,12 +62,14 @@ export const useAuthStore = defineStore("auth", () => {
         await signOut();
         return;
       }
-      if (!profile) {console.error("Failed to create profile after registration")}
+      if (!profile) {
+        console.error("Profile not found for user:", userId);
+        return;
+      }
       updateStoresFromProfile(profile);
     } catch (err) {
       console.error("Error loading user data:", err);
       error.value = (err as Error).message;
-      await signOut();
     }
   };
   // register

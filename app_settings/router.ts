@@ -7,6 +7,8 @@ import account_page from "../pages/account_main.vue";
 import sign_up_page from "../pages/sign_up_main.vue";
 import sign_in_page from "../pages/sign_in_main.vue";
 import reshape_page from "../pages/reshape_main.vue";
+import menu_page from "../pages/menu_main.vue";
+import dashboard_page from "../pages/dashboard_main.vue";
 
 // CONTENT
 // routes
@@ -35,6 +37,16 @@ const routes = [
     path: "/reshape",
     name: "reshape",
     component: reshape_page,
+  },
+  {
+    path: "/menu",
+    name: "menu",
+    component: menu_page,
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: dashboard_page,
   },
   {
     path: "/:pathMatch(.*)*",

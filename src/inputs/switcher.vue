@@ -14,16 +14,14 @@ const props = defineProps({
 const emit = defineEmits(["infoInput"]);
 // switching
 function onSwitch(option: string) {
-  if (props.field === 'nothing') {
+  if (props.field === "nothing") {
     emit("infoInput", option);
-    console.log(option)
   } else {
     emit("infoInput", props.field, option);
   }
 }
 </script>
 
-<!-- prettier-ignore -->
 <template>
   <div class="b">
     <h3 v-if="data.name" :style="{'--switcher-name': `var(--${data.name})`}"></h3>

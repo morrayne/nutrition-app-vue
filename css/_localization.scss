@@ -51,11 +51,15 @@
   --prep-b2: "adjust your diet";
   --prep-b3: "track friends' progress";
   --prep-b4: "app customization";
+
+  //
+  --basket: "basket";
+  --list: "сlist";
 }
 
 :root[lang="ru"] {
   // NAVIGATION
-  --dashboard: "дашборд";
+  --dashboard: "главная";
   --menu: "меню";
   --account: "аккаунт";
   --reshape: "стратегия";
@@ -106,4 +110,8 @@
   --prep-b2: "регулировать диету";
   --prep-b3: "следить за прогрессом друзей";
   --prep-b4: "кастомизировать приложение";
+
+  //
+  --basket: "корзина";
+  --list: "список";
 }

@@ -26,7 +26,7 @@ const uid = computed(() => userStore.userData.id);
 
 <template>
   <div class="top" :class="`${props.data ? 'dark' : 'light'}`">
-    <div class="img-holder" v-if="avatarUrl">
+    <div class="img-holder">
       <img v-if="authStore.isAuthenticated" :src="avatarUrl" alt="profile icon" class="icon" />
       <div v-else class="box"></div>
     </div>
