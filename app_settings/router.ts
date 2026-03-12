@@ -2,13 +2,10 @@
 // vue router
 import { createRouter, createWebHistory } from "vue-router";
 // pages
-import not_found_page from "../pages/not_found_main.vue";
-import account_page from "../pages/account_main.vue";
 import sign_up_page from "../pages/sign_up_main.vue";
 import sign_in_page from "../pages/sign_in_main.vue";
-import reshape_page from "../pages/reshape_main.vue";
-import menu_page from "../pages/menu_main.vue";
-import dashboard_page from "../pages/dashboard_main.vue";
+import account_page from "../pages/account_main.vue";
+import home_page from "../pages/home_main.vue";
 
 // CONTENT
 // routes
@@ -17,11 +14,6 @@ const routes = [
     path: "/",
     name: "blank",
     redirect: "home",
-  },
-  {
-    path: "/account",
-    name: "account",
-    component: account_page,
   },
   {
     path: "/signup",
@@ -34,28 +26,21 @@ const routes = [
     component: sign_in_page,
   },
   {
-    path: "/reshape",
-    name: "reshape",
-    component: reshape_page,
+    path: "/home",
+    name: "home",
+    component: home_page,
   },
   {
-    path: "/menu",
-    name: "menu",
-    component: menu_page,
-  },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: dashboard_page,
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "not-found",
-    component: not_found_page,
+    path: "/account",
+    name: "account",
+    component: account_page,
   },
 ];
 
 // EXPORTS
 // router
-const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
+});
 export default router;

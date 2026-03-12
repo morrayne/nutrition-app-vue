@@ -1,344 +1,265 @@
 <script setup lang="ts">
-// MAIN IMPORTS
-// vue & router & types
+// IMPORT
+// vue & router
+import { ref } from "vue";
 import router from "../app_settings/router";
-import { computed, ref, watch } from "vue";
-import { type Component } from "vue";
-import type { new_format } from "../stores/store_types";
-// store imports
+// ui 
+import tr_controls from "./sign_folder/signup_controls.vue";
+import dynamic_island from "@/common/dynamic.vue";
+// store & type
+import type { auth_type, common_type, config_type, body_type, goal_type } from "../stores/useAuthStore";
 import { useAuthStore } from "../stores/useAuthStore";
-import { useUserStore } from "../stores/useUserStore";
-// store vars
 const authStore = useAuthStore();
-const userStore = useUserStore();
-// views
-import current_info from "./sign_up/current_info.vue";
-import config_info from "./sign_up/config_info.vue";
-import body_info from "./sign_up/body_info.vue";
-import goal_info from "./sign_up/goal_info.vue";
-import user_info from "./sign_up/user_info.vue";
-import prep from "./sign_up/introduction.vue";
-import finale from "./sign_up/finale.vue";
+// view
+import view_username_email_password from "./sign_folder/view_use_ema_pas.vue";
+import view_gender_age_height from "./sign_folder/view_gen_age_hei.vue";
+import view_theme_lang from "./sign_folder/view_the_lan.vue";
+import view_weight_bf from "./sign_folder/view_wei_bf.vue";
+import view_palette_mm from "./sign_folder/view_pal_mm.vue";
+import view_phone_color from "./sign_folder/view_pho.vue";
+import view_activity from "./sign_folder/view_act.vue";
+import view_kpcf from "./sign_folder/view_pcf.vue";
 
-// CONTENT
-// types
-interface component_array_type {
-  component: Component;
-  height: number;
-  title: string;
-}
-// vars
-const component_array = <component_array_type[]>([
-  { component: config_info, height: 15, title: "config-data" },
-  { component: prep, height: 25, title: "health-prep" },
-  { component: user_info, height: 19, title: "general-data" },
-  { component: body_info, height: 16, title: "body-data" },
-  { component: current_info, height: 26, title: "current-data" },
-  { component: goal_info, height: 11, title: "goal-data" },
-  { component: finale, height: 24, title: "health-finale" },
-]);
-
-// NAVIGATION
-// types
-interface view_data_type {
-  current: number;
-  min: number;
-  max: number;
-}
-// vars
-const view_data = ref<view_data_type>({
-  current: 0,
-  min: 0,
-  max: 2,
-});
-// computed vars
-const current_view_height = computed(() => component_array[view_data.value.current]?.height);
-const current_view_eq_0 = computed(() => view_data.value.current === 0);
-const current_width_progress_bar = computed(() => view_data.value.current / (component_array.length - 1) * 100);
-
-// MAIN DATA
-// types
-interface form_data_type {
-  lang: "en" | "ru";
-  theme: "light" | "dark";
-  monochrome: "mono" | "multi";
-  username: string;
-  email: string;
-  password: string;
-  icon: number;
-  gender: "male" | "female";
-  age: number;
-  height: number;
-  weight: number;
-  activity: number;
-  bf: number;
-  goalWeight: number;
-  goalBf: number;
-}
-// vars
-const form_data = ref<form_data_type>({
-  lang: "en",
-  theme: "light",
-  monochrome: "mono",
-  username: "",
+// SIGNUP PLACEHOLDER
+let auth : auth_type = {
   email: "",
   password: "",
-  icon: 0,
+  username: "",
+} 
+let common : common_type = {
+  email: "",
+  username: "",
+  icon: null,
+  sub_tier: null,
+  online: false,
+  first_login: false,
+}  
+let config : config_type = {
+  theme: "light",
+  palette: "colorful",
+  phone_color: "blue",
+  language: "en",
+  mm: "16",
+} 
+const body = ref<body_type>({
   gender: "male",
-  age: 21,
-  height: 180,
-  weight: 72,
-  activity: 1.45,
-  bf: 12,
-  goalWeight: 82,
-  goalBf: 8,
+  age: null,
+  height: null,
+  activity: null,
+  weight: null,
+  bf: null,
+})
+let goal = ref<goal_type>({
+  calories: null,
+  proteins: null,
+  carbs: null,
+  fats: null,
+  weight: null,
+  bf: null,
+})
+// EMIT HANDLER
+// error
+const err = ref("");
+const set_err_func = async (data: string) => {
+  err.value = "";
+  await new Promise(resolve => setTimeout(resolve, 10));
+  err.value = data;
+};
+// theme
+const change_theme_func = (data: string) => {
+  config.theme = data;
+  document.documentElement.setAttribute("data-theme", data);
+};
+// language
+const change_lang_func = (data: string) => {
+  config.language = data;
+  document.documentElement.setAttribute("lang", data);
+  document.documentElement.lang = data;
+  go_next_func();
+};
+// palette
+const change_palette_func = (data: string) => {
+  config.palette = data;
+  document.documentElement.setAttribute("data-palette", data);
+};
+// phone color
+const change_phone_color_func = (data: string) => {
+  config.phone_color = data;
+  document.documentElement.setAttribute("data-phone-color", data);
+  go_next_func();
+};
+// gender
+const change_gender_func = (data: string) => {
+  body.value.gender = data;
+  go_next_func();
+};
+// mm
+const change_mm_func = (data: string) => {
+  config.mm = data;
+  document.documentElement.setAttribute("data-mm", data);
+  go_next_func();
+};
+// age
+const change_age_func = (data: number) => {
+  body.value.age = data;
+};
+// height
+const change_height_func = (data: number) => {
+  body.value.height = data;
+};
+// activity
+const change_activity_func = (data: number) => {
+  body.value.activity = data;
+  go_next_func();
+};
+// current weight
+const change_current_weight_func = (data: number) => {
+  body.value.weight = data; 
+};
+// current bf
+const change_current_bf_func = (data: number) => {
+  body.value.bf = data; 
+};
+// goal weight
+const change_goal_weight_func = (data: number) => {
+  goal.value.weight = data;
+};
+// goal bf
+const change_goal_bf_func = (data: number) => {
+  goal.value.bf = data;
+};
+// calories
+const change_kcal_func = (data: number) => {
+  goal.value.calories = data;
+};
+// proteins
+const change_proteins_func = (data: number) => {
+  goal.value.proteins = data;
+};
+// carbs
+const change_carbs_func = (data: number) => {
+  goal.value.carbs = data;
+};
+// fats
+const change_fats_func = (data: number) => {
+  goal.value.fats = data;
+};
+// full auth
+const change_auth_func = (data: auth_type) => {
+  auth = data;
+  common.email = data.email;
+  common.username = data.username;
+};
+
+// VIEW CONTROL
+// view display controls
+const view_vars = ref({
+  min: 0,
+  current: 0,
+  max: 3,
 });
-
-// FUNCTIONS  
-// form_data field update
-const UpdateFormDataField = (payload: { field: string, value: string | number }) => {
-  form_data.value = { ...form_data.value, [payload.field]: payload.value };
-}
-// view_data field update
-const UpdateViewDataField = (payload: { field: "min" | "max" | "current", value: number }) => {
-  if (payload.field === "current") {
-    if (!(payload.value > view_data.value.max || payload.value < view_data.value.min)) {
-      view_data.value.current = payload.value;
-    } 
+// component and controls
+const view_components = [
+  { comp: view_theme_lang, back: false, next: false },
+  { comp: view_palette_mm, back: true, next: false },
+  { comp: view_phone_color, back: true, next: true },
+  { comp: view_gender_age_height, back: true, next: false },
+  { comp: view_activity, back: true, next: false },
+  { comp: view_weight_bf, back: true, next: true },
+  { comp: view_kpcf, back: true, next: true },
+  { comp: view_username_email_password, back: true, next: true },
+];
+// transform
+const view_transform_style = (index: number) => {
+  if (index < view_vars.value.current) {
+    return "translateX(-100%)";
+  } else if (index > view_vars.value.current) {
+    return "translateX(100%)";
   } else {
-    view_data.value[payload.field] = payload.value;
+    return "translateX(0%)";
   }
-}
-// signing up in supabase
-async function SupabaseSignUp(): Promise<{ success: boolean; error?: any } | void> {
-  if (form_data.value.email && form_data.value.password && form_data.value.username) {
-    const signUpData: new_format = {
-      id: "",
-      online: true,
-      friends: [],
-      common: {
-        sub_tier: 0,
-        username: form_data.value.username,
-        email: form_data.value.email,
-        icon: form_data.value.icon,
-      },
-      config: {
-        first_login: false,
-        lang: form_data.value.lang,
-        theme: form_data.value.theme,
-        monochrome: form_data.value.monochrome,
-      },
-      body_data: {
-        general: {
-          gender: form_data.value.gender,
-          age: form_data.value.age,
-          height: form_data.value.height,
-          activity: form_data.value.activity as 1.15 | 1.3 | 1.45 | 1.6 | 1.75 | 1.9,
-        },
-        current: {
-          weight: form_data.value.weight,
-          bf: form_data.value.bf,
-        },
-        goal: {
-          weight: form_data.value.goalWeight,
-          bf: form_data.value.goalBf,
-        },
-      },
-      macros_data: {
-        current: { kcal: 0, proteins: 0, carbs: 0, fats: 0 },
-        goal: { kcal: 0, proteins: 0, carbs: 0, fats: 0 },
-      },
-    };
-    
-    const result = await authStore.signUp(signUpData, form_data.value.password);
-    if (result.success) {
-      UpdateViewDataField({ field: "current", value: view_data.value.current + 1 });
-      UpdateViewDataField({ field: "min", value: 3 });
-      return { success: true };
-    } else {
-      console.error(result.error);
-      return { success: false, error: result.error };
-    }
+};
+// set min view count
+const set_min_func = (data: number) => {
+  view_vars.value.min = data;
+};
+// set max view count
+const set_max_func = (data: number) => {
+  view_vars.value.max = data;
+};
+// back
+const go_back_func = () => {
+  if (view_vars.value.current > view_vars.value.min) view_vars.value.current--;
+};
+// forward
+const go_next_func = () => {
+  if (view_vars.value.current === view_components.length - 1) {
+    handleSignUp();
+  } else if (view_vars.value.current < view_vars.value.max) {
+    view_vars.value.current++;
   }
-}
-// finishing login/onboarding in supabase
-async function SupabaseSignUpFinish(): Promise<{ success: boolean; error?: any } | void> {
-  try {
-    userStore.calculateMacros("current");
-    userStore.setUserData({ 
-      ...userStore.userData,
-      config: { 
-        ...userStore.userData.config, 
-        first_login: true 
-      },
-      common: { 
-        ...userStore.userData.common, 
-        username: form_data.value.username, 
-        icon: form_data.value.icon 
-      },
-      body_data: {
-        ...userStore.userData.body_data,
-        current: {
-          weight: form_data.value.weight,
-          bf: form_data.value.bf,
-        },
-        goal: {
-          weight: form_data.value.goalWeight,
-          bf: form_data.value.goalBf,
-        },
-        general: {
-          ...userStore.userData.body_data.general,
-          gender: form_data.value.gender,
-          age: form_data.value.age,
-          height: form_data.value.height,
-          activity: form_data.value.activity as 1.15 | 1.3 | 1.45 | 1.6 | 1.75 | 1.9,
-        }
-      }
-    });
-    
-    const saveResult = await authStore.saveUserData();
-    if (saveResult.success) {
-      console.log("🚀 Onboarding completed successfully!");
-      router.push("/account");
-      return { success: true };
-    } else {
-      console.error("Failed to save user data:", saveResult.error);
-      return { success: false, error: saveResult.error };
-    }
-  } catch (error) {
-    console.error("Error in finish onboarding:", error);
-    return { success: false, error };
-  }
-}
+};
 
-// VUE WATCH
-// reload/f5 restore
-watch(userStore, () => {
-  if (!userStore.userData.config.first_login && authStore.session) {
-    view_data.value.current = 3;
-    view_data.value.min = 3;
-  }
-}, { deep: true, immediate: true });
-
-// VUE ONMOUNTED
+// FINAL SIGNUP
+const handleSignUp = async () => {
+  console.warn("Signup data:", { auth: auth, common: common, config: config, body: body, goal: goal });
+  const result = await authStore.signUp(auth, common, config, body.value, goal.value);
+  if (result.success) router.push("/account");
+};
 </script>
 
 <template>
-  <div class="health-page">
-    <div class="health">
-      <div class="view" v-if="current_view_height" :style="{ height: `${current_view_height}rem`}">
-        <div class="progress-bar" :style="{ width: `${current_width_progress_bar}%`}"></div>
-        <h1 :style="{'--title-name': `var(--${component_array[view_data.current]?.title})`}"></h1>
-        <div class="wrap" v-for="(comp, index) in component_array" :key="index" :style="{ transform: `translateX(-${view_data.current * 100}%)` }">
-          <component :is="comp.component" :user-data="form_data" @update-field="UpdateFormDataField" @update-right="UpdateViewDataField" />
-        </div>
-      </div>
-      <div class="switch">
-        <div class="back" @click='UpdateViewDataField({ field: "current", value: view_data.current - 1 })' :style="{minWidth: `${current_view_eq_0 ? '0%' : 'calc(50% - 0.25rem)'}`}"></div>
-        <div class="signup" v-if="view_data.current === 2" @click='SupabaseSignUp()' :style="{minWidth: `${current_view_eq_0 ? 'calc(100%)' : 'calc(50% - 0.25rem)'}`, marginLeft: `${current_view_eq_0 ? '0' : '0.5rem'}`}"></div>
-        <div class="finish" v-else-if="view_data.current === 6" @click='SupabaseSignUpFinish()' :style="{minWidth: `${current_view_eq_0 ? 'calc(100%)' : 'calc(50% - 0.25rem)'}`, marginLeft: `${current_view_eq_0 ? '0' : '0.5rem'}`}"></div>
-        <div class="forward" v-else @click='UpdateViewDataField({ field: "current", value: view_data.current + 1 })' :style="{minWidth: `${current_view_eq_0 ? 'calc(100%)' : 'calc(50% - 0.25rem)'}`, marginLeft: `${current_view_eq_0 ? '0' : '0.5rem'}`}"></div>
-      </div>
+  <div class="signup">
+    <dynamic_island :text="err" />
+    <tr_controls @next="go_next_func()" @back="go_back_func()" :back="view_components[view_vars.current]!.back" :next="view_components[view_vars.current]!.next" />
+    <div class="view" v-for="(item, index) in view_components" :key="index" :style="{ transform: `${view_transform_style(index)}` }">
+      <component :is="item.comp"
+        @set-min="set_min_func"
+        @set-max="set_max_func"
+        @set-err="set_err_func"
+        @change-theme="change_theme_func"
+        @change-lang="change_lang_func"
+        @change-phone-color="change_phone_color_func"
+        @change-palette="change_palette_func"
+        @change-mm="change_mm_func"
+        @change-gender="change_gender_func"
+        @change-age="change_age_func"
+        @change-height="change_height_func"
+        @change-activity="change_activity_func"
+        @change-current-weight="change_current_weight_func"
+        @change-current-bf="change_current_bf_func"
+        @change-goal-weight="change_goal_weight_func"
+        @change-goal-bf="change_goal_bf_func"
+        @change-auth="change_auth_func"
+        @change-kcal="change_kcal_func"
+        @change-proteins="change_proteins_func"
+        @change-carbs="change_carbs_func"
+        @change-fats="change_fats_func"
+        :goal="goal"
+        :body="body"
+      />
     </div>
   </div>
 </template>
 
-<style scoped>
-.health-page {
+<style scoped lang="scss">
+.signup {
   width: 100%;
   height: 100%;
-  padding: 0.5rem 0.75rem 0.75rem;
-  background: var(--back-a);
+  display: flex;
+  position: relative;
+  overflow: hidden;
 
-  .health {
-    width: 100%;
+  .view {
+    min-width: 100%;
     height: 100%;
+    padding: 1rem;
     display: flex;
-    align-items: center;
+    background: var(--back-a);
     justify-content: center;
-    position: relative;
-    overflow: hidden;
-
-    .view {
-      width: 100%;
-      display: flex;
-      background: var(--back-b);
-      position: relative;
-
-      h1 {
-        top: -2.5rem;
-        left: 0;
-        position: absolute;
-        font-size: 1.5rem;
-      }
-      
-      h1::after {
-        content: var(--title-name);
-      }
-
-      .progress-bar {
-        min-width: 0.25rem;
-        height: 0.25rem;
-        background: var(--text-a);
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-
-      .wrap {
-        min-width: 100%;
-        height: 100%;
-        position: relative;
-        overflow: hidden;
-      }
-    }
-
-    .switch {
-      width: 100%;
-      height: 2.5rem;
-      display: flex;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-
-      .back, .forward, .finish, .signup {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 0.75rem;
-        border: solid 1px var(--text-a);
-      }
-
-      .back {
-        background: var(--back-b);
-        border: solid 1px var(--back-c);
-      }
-
-      .back::after {
-        content: var(--back);
-      }
-
-      .forward, .finish, .signup {
-        color: var(--back-a);
-        background: var(--text-a);
-      }
-
-      .forward::after {
-        content: var(--forward);
-      }
-
-      .finish::after {
-        content: var(--finish);
-      }
-
-      .signup::after {
-        content: var(--signup);
-      }
-    }
+    align-items: center;
+    position: absolute;
+    transition: 0.2s;
   }
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 </style>
