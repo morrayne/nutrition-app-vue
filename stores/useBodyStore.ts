@@ -1,29 +1,19 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & pinia
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-
-// TYPES
-export interface body_type {
-  user_id: string;
-  gender: string;
-  age: number;
-  height: number;
-  activity: number;
-  weight: number | null;
-  bf: number | null;
-}
+// type
+import type { tBody } from "./types";
 
 // STORE
 export const useBodyStore = defineStore("body", () => {
   // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
-  const body = ref<body_type>({
-    user_id: "",
+  const body = ref<tBody>({
     gender: "male",
     age: 21,
     height: 180,
@@ -45,11 +35,11 @@ export const useBodyStore = defineStore("body", () => {
     }
   };
   // 
-  const setBodyData = (data: Partial<body_type>) => {
+  const setBodyData = (data: Partial<tBody>) => {
     body.value = { ...body.value, ...data };
   };
   // 
-  const createBodyData = async (data: Omit<body_type, "user_id">) => {
+  const createBodyData = async (data: Omit<tBody, "user_id">) => {
     if (!authStore.user) return;
     try {
       const newData = { user_id: authStore.user.id, ...data };
@@ -64,7 +54,7 @@ export const useBodyStore = defineStore("body", () => {
     }
   };
   // 
-  const updateBodyData = async (data: Partial<body_type>) => {
+  const updateBodyData = async (data: Partial<tBody>) => {
     if (!authStore.user) return;
     try {
       const { error: supabaseError } = await supabase.from("body").update(data).eq("user_id", authStore.user.id);
@@ -80,7 +70,6 @@ export const useBodyStore = defineStore("body", () => {
   // 
   const clearBodyData = () => {
     body.value = {
-      user_id: "",
       gender: "male",
       age: 21,
       height: 180,

@@ -1,5 +1,11 @@
-// IMOPORTS
-@use "./reset";
-@use "./local_en";
-@use "./theme";
-@use "./mm";
+// IMOPORT
+// theme & palette
+@use "./color/theme";
+@use "./color/palette";
+// common
+@use "./common/default";
+@use "./common/reset";
+@use "./common/frame";
+@use "./common/mm";
+// local
+@use "./local/en";

@@ -1,0 +1,20 @@
+// light
+:root[data-theme="light"] {
+  --light: #f8f8f8;
+  --html-background: #e8e8e8;
+  --html-color: #323232;
+  --phone-background: #f2f2f2;
+  --active-background: #e4e4e4;
+  --sign-border: #d8d8d8;
+  --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.5rem 1.5rem;
+}
+// dark
+:root[data-theme="dark"] {
+  --light: #1a1a1a;
+  --html-background: #0a0a0a;
+  --html-color: #ffffff;
+  --phone-background: #1e1e1e;
+  --active-background: #181818;
+  --sign-border: #282828;
+  --box-shadow: none;
+}

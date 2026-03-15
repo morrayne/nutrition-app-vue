@@ -1,5 +1,33 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
+:root[data-theme=light] {
+  --light: #f8f8f8;
+  --html-background: #e8e8e8;
+  --html-color: #323232;
+  --phone-background: #f2f2f2;
+  --active-background: #e4e4e4;
+  --sign-border: #d8d8d8;
+  --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.5rem 1.5rem;
+}
+
+:root[data-theme=dark] {
+  --light: #1a1a1a;
+  --html-background: #0a0a0a;
+  --html-color: #ffffff;
+  --phone-background: #1e1e1e;
+  --active-background: #181818;
+  --sign-border: #282828;
+  --box-shadow: none;
+}
+
+:root[data-palette=colorful] {
+  --swh-background: #2baf4a;
+}
+
+:root[data-palette=greyscale] {
+  --swh-background: #e8e8e8;
+}
+
 :root {
   --main-font: "JetBrains Mono", monospace;
   --english: "english";
@@ -10,21 +38,50 @@
 
 html {
   font-family: var(--main-font);
-  color: transparent;
+  background: var(--html-background);
+  color: var(--html-color);
   font-weight: 500;
-  background: var(--back-a);
   overflow: hidden;
 }
 
 input {
+  color: var(--html-color);
   font-family: var(--main-font);
-  color: var(--text-a);
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.v {
+  height: 100%;
+  padding: calc(10.5 * var(--mm)) var(--mm) var(--mm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mm);
+  overflow-y: scroll;
+}
+
+.v::-webkit-scrollbar {
+  display: none;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  transition: 0.2s ease-in-out;
 }
 
 html, body {
@@ -42,105 +99,24 @@ ul, ol {
   list-style: none;
 }
 
-#app {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+:root[data-phone-color=black] {
+  --frame: #6c6c6d;
 }
 
-:root[lang=en] {
-  --continue: "continue";
-  --log-in: "log in";
-  --sign-out: "sign out";
-  --language: "language";
-  --phone-color: "phone color";
-  --dark-theme: "dark theme";
-  --gender: "gender";
-  --activity-level: "activity level";
-  --greyscale-palette: "greyscale palette";
-  --target: "target";
-  --current: "current";
-  --username: "name";
-  --email: "email";
-  --password: "password";
-  --activity-level-1: "minimal movement";
-  --activity-level-2: "light walking";
-  --activity-level-3: "moderate exercise";
-  --activity-level-4: "active lifestyle";
-  --activity-level-5: "very active";
-  --activity-level-6: "extreme athlete";
-  --male: "male";
-  --female: "female";
-  --age: "age";
-  --height: "height";
-  --weight: "weight";
-  --bf: "bf %";
-  --black: "black";
-  --white: "white";
-  --green: "green";
-  --blue: "blue";
-  --purple: "purple";
-  --font-size: "font size";
-  --small: "small";
-  --medium: "medium";
-  --large: "large";
-  --kcal: "kcal";
-  --proteins: "proteins";
-  --carbs: "carbs";
-  --fats: "fats";
-  --enter-login-and-password: "please enter login and password";
-  --invalid-credentials: "invalid credentials";
-  --weight-less-than-30: "weight must be at least 30 kg";
-  --weight-greater-than-150: "weight cannot exceed 150 kg";
-  --bf-less-than-5: "body fat must be at least 5%";
-  --test: "test";
-  --bf-greater-than-30: "body fat cannot exceed 30%";
-  --kcal-between-1200-and-6000: "calories must be between 1200 and 6000 kcal";
-  --proteins-between-30-and-400: "proteins must be between 30 and 400 g";
-  --carbs-between-50-and-800: "carbs must be between 50 and 800 g";
-  --fats-between-20-and-200: "fats must be between 20 and 200 g";
-  --age-between-14-and-80: "age must be between 14 and 80 years";
-  --height-between-120-and-220: "height must be between 120 and 220 cm";
-  --username-too-short: "username must be at least 2 characters";
-  --invalid-email: "please enter a valid email address";
-  --password-too-short: "password must be at least 6 characters";
+:root[data-phone-color=white] {
+  --frame: #f1f2ed;
 }
 
-:root[data-theme=dark] {
-  --back-a: #1a1b1e;
-  --back-a-half: #1a1b1e80;
-  --back-b: #2a2b30;
-  --back-c: #323339;
-  --back-d: #3e3f45;
-  --text-a: #ffffff;
-  --text-b: #e0e0e0;
-  --text-c: #9ca3af;
-  --text-d: #6b7280;
-  --box-shadow: none;
-  --liquid-glass-border: #545557;
-  --transparent: #00000000;
-  --svg-invert: 1;
-  --green-switcher: #2baf4a;
-  --accent: #d30141;
+:root[data-phone-color=green] {
+  --frame: #c4cfa7;
 }
 
-:root[data-theme=light] {
-  --back-a: #f8f8f8;
-  --back-a-half: #f8f8f880;
-  --back-b: #f8f8f8;
-  --back-c: #efefef;
-  --back-d: #e0e0e0;
-  --text-a: #0a0a0a;
-  --text-b: #363636;
-  --text-c: #626262;
-  --text-d: #8e8e8e;
-  --box-shadow: #00000010 0px 4px 12px;
-  --liquid-glass-border: #00000010;
-  --transparent: #00000000;
-  --svg-invert: 0;
-  --green-switcher: #2baf4a;
-  --accent: #e61352;
+:root[data-phone-color=blue] {
+  --frame: #b5c6de;
+}
+
+:root[data-phone-color=purple] {
+  --frame: #ebe2f1;
 }
 
 :root[data-mm="14"] {
@@ -161,4 +137,66 @@ ul, ol {
 
 :root[data-mm="18"] {
   --mm: 18px;
+}
+
+:root[lang=en] {
+  --continue: "continue";
+  --signup: "sign up";
+  --signin: "sign in";
+  --signout: "sign out";
+  --language: "language";
+  --phone-color: "phone color";
+  --dark-theme: "dark mode";
+  --gender: "gender";
+  --subtier: "sub tier";
+  --activity-level: "activity level";
+  --greyscale-palette: "colors";
+  --target: "target";
+  --current: "current";
+  --username: "name";
+  --email: "email";
+  --password: "password";
+  --activity-level-1: "minimal movement";
+  --activity-level-2: "light walking";
+  --activity-level-3: "moderate exercise";
+  --activity-level-4: "active lifestyle";
+  --activity-level-5: "very active";
+  --activity-level-6: "extreme athlete";
+  --male: "male";
+  --female: "female";
+  --age: "age";
+  --height: "height";
+  --weight: "weight";
+  --body-fat: "body fat";
+  --black: "black";
+  --white: "white";
+  --green: "green";
+  --blue: "blue";
+  --purple: "purple";
+  --font-size: "font size";
+  --very-small: "very small";
+  --small: "small";
+  --medium: "medium";
+  --big: "big";
+  --large: "large";
+  --calories: "calories";
+  --proteins: "proteins";
+  --carbs: "carbs";
+  --fats: "fats";
+  --enter-login-and-password: "please enter login and password";
+  --invalid-credentials: "invalid credentials";
+  --weight-less-than-30: "weight must be at least 30 kg";
+  --weight-greater-than-150: "weight cannot exceed 150 kg";
+  --bf-less-than-5: "body fat must be at least 5%";
+  --test: "test";
+  --bf-greater-than-30: "body fat cannot exceed 30%";
+  --kcal-between-1200-and-6000: "calories must be between 1200 and 6000 kcal";
+  --proteins-between-30-and-400: "proteins must be between 30 and 400 g";
+  --carbs-between-50-and-800: "carbs must be between 50 and 800 g";
+  --fats-between-20-and-200: "fats must be between 20 and 200 g";
+  --age-between-14-and-80: "age must be between 14 and 80 years";
+  --height-between-120-and-220: "height must be between 120 and 220 cm";
+  --username-too-short: "username must be at least 6 characters";
+  --invalid-email: "please enter a valid email address";
+  --password-too-short: "password must be at least 6 characters";
 }/*# sourceMappingURL=main.css.map */

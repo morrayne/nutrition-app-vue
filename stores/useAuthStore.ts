@@ -1,9 +1,9 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & pinia
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import type { AuthError, Session, User } from "@supabase/supabase-js";
 // store
 import { useCommonStore } from "./useCommonStore";
@@ -11,44 +11,8 @@ import { useConfigStore } from "./useConfigStore";
 import { useBodyStore } from "./useBodyStore";
 import { useGoalStore } from "./useGoalStore";
 import { useHistoryStore } from "./useHistoryStore";
-
-// TYPES
-export interface auth_type {
-  email: string;
-  password: string;
-  username: string;
-}
-export interface common_type {
-  email: string;
-  username: string;
-  icon: number | null;
-  sub_tier: number | null;
-  online: boolean;
-  first_login: boolean;
-}
-export interface config_type {
-  theme: string;
-  palette: string;
-  phone_color: string;
-  language: string;
-  mm: string;
-}
-export interface body_type {
-  gender: string;
-  age: number | null;
-  height: number | null;
-  activity: number | null;
-  weight: number | null;
-  bf: number | null;
-}
-export interface goal_type {
-  calories: number | null;
-  proteins: number | null;
-  carbs: number | null;
-  fats: number | null;
-  weight: number | null;
-  bf: number | null;
-}
+// type
+import type { tAuth, tCommon, tConfig, tBody, tGoal } from "./types";
 
 // 
 const getRandomAvatarIndex = (): number => {
@@ -132,7 +96,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
   // create user profile
-  const createUserProfile = async (common: common_type, config: config_type, body: body_type, goal: goal_type, user_id: string) => {
+  const createUserProfile = async (common: tCommon, config: tConfig, body: tBody, goal: tGoal, user_id: string) => {
     try {
       const commonWithId = { ...common, user_id: user_id, icon: getRandomAvatarIndex(), sub_tier: 0, online: true, first_login: false };
       const { error: profileError } = await supabase.from("common").insert(commonWithId);
@@ -155,7 +119,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
   // signup
-  const signUp = async (auth: auth_type, common: common_type, config: config_type, body: body_type, goal: goal_type) => {
+  const signUp = async (auth: tAuth, common: tCommon, config: tConfig, body: tBody, goal: tGoal,) => {
     isLoading.value = true;
     error.value = null;
     const email = auth.email;
@@ -231,7 +195,12 @@ export const useAuthStore = defineStore("auth", () => {
     configStore.resetToDefaults();
     bodyStore.clearBodyData?.();
     goalStore.clearGoal?.();
-    historyStore.clearHistory?.();
+    historyStore.clearHistory?.(); 
+  document.documentElement.setAttribute("data-theme", "light");
+  document.documentElement.setAttribute("lang", "en");
+  document.documentElement.setAttribute("data-palette", "colorful");
+  document.documentElement.setAttribute("data-phone-color", "blue");
+  document.documentElement.setAttribute("data-mm", "16");
   };
   // 
   const clearLocalData = () => {

@@ -1,29 +1,19 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-
-// TYPES
-export interface goal_type {
-  user_id: string;
-  calories: number;
-  proteins: number;
-  carbs: number;
-  fats: number;
-  weight: number | null;
-  bf: number | null;
-}
+// type
+import type { tGoal } from "./types";
 
 // STORE
 export const useGoalStore = defineStore("goal", () => {
   // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
-  const goal = ref<goal_type>({
-    user_id: "",
+  const goal = ref<tGoal>({
     calories: 2000,
     proteins: 120,
     carbs: 250,
@@ -44,7 +34,7 @@ export const useGoalStore = defineStore("goal", () => {
     }
   };
   // 
-  const createGoal = async (data: Omit<goal_type, "user_id">) => {
+  const createGoal = async (data: Omit<tGoal, "user_id">) => {
     if (!authStore.user) return;
     try {
       const newData = { user_id: authStore.user.id, ...data };
@@ -59,7 +49,7 @@ export const useGoalStore = defineStore("goal", () => {
     }
   };
   // 
-  const updateGoal = async (data: Partial<goal_type>) => {
+  const updateGoal = async (data: Partial<tGoal>) => {
     if (!authStore.user) return;
     try {
       const { error: supabaseError } = await supabase.from("goal").update(data).eq("user_id", authStore.user.id);
@@ -75,7 +65,6 @@ export const useGoalStore = defineStore("goal", () => {
   // 
   const clearGoal = () => {
     goal.value = {
-      user_id: "",
       calories: 2000,
       proteins: 120,
       carbs: 250,

@@ -1,27 +1,33 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & app
-import App from "./App.vue";
 import { createApp } from "vue";
-const app = createApp(App);
+import App from "./App.vue";
+// router & pinia
+import router from "../appSettings/router.ts";
+import { createPinia } from "pinia";
 // store
 import { useAuthStore } from "../stores/useAuthStore";
 import { useCommonStore } from "../stores/useCommonStore";
+// import { useConfigStore } from "../stores/useConfigStore.ts";
+
+// USE
+// app
+const app = createApp(App);
 // router & pinia
-import { createPinia } from "pinia";
 const pinia = createPinia();
 app.use(pinia);
-import router from "../app_settings/router";
 app.use(router);
+// store
+const authStore = useAuthStore();
+const commonStore = useCommonStore();
+// const configStore = useConfigStore();
 
-// bootstrap
+// BOOTSTRAP
 const bootstrap = async () => {
-  const authStore = useAuthStore();
-  const commonStore = useCommonStore();
   await authStore.initialize();
   if (authStore.isAuthenticated) await commonStore.loadAvailableAvatars();
-  app.mount("#app");
-  if (authStore.isAuthenticated) router.push("/account");
   else router.push("/signup");
+  app.mount("#app");
 };
 
 // APP START

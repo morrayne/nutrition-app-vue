@@ -1,0 +1,70 @@
+:root[lang="en"] {
+  // general
+  --continue: "continue";
+  --signup: "sign up";
+  --signin: "sign in";
+  --signout: "sign out";
+  --language: "language";
+  --phone-color: "phone color";
+  --dark-theme: "dark mode";
+  --gender: "gender";
+  --subtier: "sub tier";
+  --activity-level: "activity level";
+  --greyscale-palette: "colors";
+  --target: "target";
+  --current: "current";
+  --username: "name";
+  --email: "email";
+  --password: "password";
+  // activity levels
+  --activity-level-1: "minimal movement";
+  --activity-level-2: "light walking";
+  --activity-level-3: "moderate exercise";
+  --activity-level-4: "active lifestyle";
+  --activity-level-5: "very active";
+  --activity-level-6: "extreme athlete";
+  // body
+  --male: "male";
+  --female: "female";
+  --age: "age";
+  --height: "height";
+  --weight: "weight";
+  --body-fat: "body fat";
+  // colors
+  --black: "black";
+  --white: "white";
+  --green: "green";
+  --blue: "blue";
+  --purple: "purple";
+  // font
+  --font-size: "font size";
+  --very-small: "very small";
+  --small: "small";
+  --medium: "medium";
+  --big: "big";
+  --large: "large";
+  // macros
+  --calories: "calories";
+  --proteins: "proteins";
+  --carbs: "carbs";
+  --fats: "fats";
+  // errors
+  --enter-login-and-password: "please enter login and password";
+  --invalid-credentials: "invalid credentials";
+  --weight-less-than-30: "weight must be at least 30 kg";
+  --weight-greater-than-150: "weight cannot exceed 150 kg";
+  --bf-less-than-5: "body fat must be at least 5%";
+  --test: "test";
+  --bf-greater-than-30: "body fat cannot exceed 30%";
+  // Ошибки для view_pcf
+  --kcal-between-1200-and-6000: "calories must be between 1200 and 6000 kcal";
+  --proteins-between-30-and-400: "proteins must be between 30 and 400 g";
+  --carbs-between-50-and-800: "carbs must be between 50 and 800 g";
+  --fats-between-20-and-200: "fats must be between 20 and 200 g";
+  // Остальные ошибки
+  --age-between-14-and-80: "age must be between 14 and 80 years";
+  --height-between-120-and-220: "height must be between 120 and 220 cm";
+  --username-too-short: "username must be at least 6 characters";
+  --invalid-email: "please enter a valid email address";
+  --password-too-short: "password must be at least 6 characters";
+}

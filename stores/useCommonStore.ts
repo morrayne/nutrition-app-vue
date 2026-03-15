@@ -1,21 +1,12 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & pinia
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-
-// TYPES
-export interface common_type {
-  user_id: string;
-  online: boolean;
-  icon: number | null;
-  email: string | null;
-  username: string | null;
-  sub_tier: number | null;
-  first_login: boolean | null;
-}
+// type
+import type { tCommon } from "./types";
 
 // STORE
 export const useCommonStore = defineStore("common", () => {
@@ -26,15 +17,13 @@ export const useCommonStore = defineStore("common", () => {
   const isSubscribed = computed(() => profile.value.sub_tier === 1);
   const userEmail = computed(() => profile.value.email);
   const username = computed(() => profile.value.username);
-  const userId = computed(() => profile.value.user_id);
-  const profile = ref<common_type>({
-    user_id: "",
+  const profile = ref<tCommon>({
     online: false,
     icon: null,
-    email: null,
-    username: null,
+    email: '',
+    username: '',
     sub_tier: null,
-    first_login: null,
+    first_login: false,
   });
 
   // ACTION
@@ -49,11 +38,11 @@ export const useCommonStore = defineStore("common", () => {
     }
   };
   // 
-  const setProfile = (data: Partial<common_type>) => {
+  const setProfile = (data: Partial<tCommon>) => {
     profile.value = { ...profile.value, ...data };
   };
   // 
-  const updateProfile = async (data: Partial<common_type>) => {
+  const updateProfile = async (data: Partial<tCommon>) => {
     if (!authStore.user) return;
     try {
       const { error } = await supabase.from("common").update(data).eq("user_id", authStore.user.id);
@@ -108,16 +97,15 @@ export const useCommonStore = defineStore("common", () => {
   // 
   const clearProfile = () => {
     profile.value = {
-      user_id: "",
       online: false,
       icon: null,
-      email: null,
-      username: null,
+      email: '',
+      username: '',
       sub_tier: null,
-      first_login: null,
+      first_login: false,
     };
   };
 
   // EXPORT
-  return { profile, availableAvatars, avatarsLoading, isSubscribed, userEmail, username, userId, getAvatarUrl, loadProfile, setProfile, updateProfile, setOnline, setIcon, setUsername, setSubTier, setFirstLogin, loadAvailableAvatars, clearProfile };
+  return { profile, availableAvatars, avatarsLoading, isSubscribed, userEmail, username, getAvatarUrl, loadProfile, setProfile, updateProfile, setOnline, setIcon, setUsername, setSubTier, setFirstLogin, loadAvailableAvatars, clearProfile };
 });

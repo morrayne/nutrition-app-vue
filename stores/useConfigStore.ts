@@ -1,28 +1,20 @@
-// MAIN IMPORTS
+// IMPORT
 // vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
+// type
+import type { tConfig } from "./types";
 
-// TYPES
-export interface config_type {
-  user_id: string;
-  language: string;
-  theme: string;
-  palette: string;
-  phone_color: string;
-  mm: string | null;
-}
 
 // STORE
 export const useConfigStore = defineStore("config", () => {
   // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
-  const config = ref<config_type>({
-    user_id: "",
+  const config = ref<tConfig>({
     language: "en",
     theme: "light",
     palette: "mono",
@@ -43,11 +35,11 @@ export const useConfigStore = defineStore("config", () => {
     }
   };
   // 
-  const setConfig = (data: Partial<config_type>) => {
+  const setConfig = (data: Partial<tConfig>) => {
     config.value = { ...config.value, ...data };
   };
   // 
-  const applyConfig = (data: Partial<config_type>) => {
+  const applyConfig = (data: Partial<tConfig>) => {
     if (data.language) document.documentElement.lang = data.language;
     if (data.theme) document.documentElement.setAttribute("data-theme", data.theme);
     if (data.palette) document.documentElement.setAttribute("data-palette", data.palette);
@@ -55,7 +47,7 @@ export const useConfigStore = defineStore("config", () => {
     if (data.mm) document.documentElement.setAttribute("data-mm", data.mm);
   };
   // 
-  const updateConfig = async (data: Partial<config_type>) => {
+  const updateConfig = async (data: Partial<tConfig>) => {
     if (!authStore.user) return;
     try {
       const { error: supabaseError } = await supabase.from("config").update(data).eq("user_id", authStore.user.id);

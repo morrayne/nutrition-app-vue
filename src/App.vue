@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import phone_frame from "./common/phone_frame.vue";
+import phoneFrame from "./common/ui/frame.vue";
 </script>
 
 <template>
-  <phone_frame>
+  <phoneFrame>
     <RouterView></RouterView>
-  </phone_frame>
+  </phoneFrame>
 </template>
 
 <style scoped></style>

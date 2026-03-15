@@ -3,39 +3,11 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 // supabase
-import { supabase } from "../app_settings/supabase";
+import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
+// type
+import type { tHistory, tDailyMeal, tWeightEntry } from "./types";
 
-// TYPES
-export interface meal_item {
-  name: string;
-  weight: number;
-  calories: number;
-  proteins: number;
-  carbs: number;
-  fats: number;
-}
-export interface daily_meal {
-  date: string;
-  total: {
-    calories: number;
-    proteins: number;
-    carbs: number;
-    fats: number;
-  };
-  items: meal_item[];
-}
-export interface weight_entry {
-  date: string;
-  weight: number;
-  bf: number;
-}
-export interface history_type {
-  user_id: string;
-  active_days: string[];
-  meals: daily_meal[];
-  weight: weight_entry[];
-}
 
 // STORE
 export const useHistoryStore = defineStore("history", () => {
@@ -43,7 +15,7 @@ export const useHistoryStore = defineStore("history", () => {
   const authStore = useAuthStore();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
-  const history = ref<history_type>({
+  const history = ref<tHistory>({
     user_id: "",
     active_days: [],
     meals: [],
@@ -88,14 +60,14 @@ export const useHistoryStore = defineStore("history", () => {
     }
   };
   // 
-  const addMeal = (meal: daily_meal) => {
+  const addMeal = (meal: tDailyMeal) => {
     const index = history.value.meals.findIndex((m) => m.date === meal.date);
     if (index === -1) history.value.meals.push(meal);
     else history.value.meals[index] = meal;
     history.value.meals.sort((a, b) => b.date.localeCompare(a.date));
   };
   // 
-  const addWeightEntry = (entry: weight_entry) => {
+  const addWeightEntry = (entry: tWeightEntry) => {
     const index = history.value.weight.findIndex((w) => w.date === entry.date);
     if (index === -1) history.value.weight.push(entry);
     else history.value.weight[index] = entry;
