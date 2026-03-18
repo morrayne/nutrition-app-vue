@@ -15,7 +15,6 @@ export interface tCommon {
 }
 export interface tConfig {
   theme: string;
-  palette: string;
   phone_color: string;
   language: string;
   mm: string;

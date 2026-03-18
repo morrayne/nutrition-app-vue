@@ -1,50 +1,34 @@
 <script setup lang="ts">
 // IMPORT
+// vue
+import { computed } from "vue";
 // ui
 import glass from "@/common/ui/glass.vue";
 import arrow from "@/common/svg/arrow.vue";
 import account from "@/common/svg/account.vue";
 // router
 import router from "../../appSettings/router";
+import type { tAuth } from "../../stores/types";
+import type { tUpdateViewArray } from "../signUpPage.vue"; 
 
 // CONTENT
 // props 
 const props = defineProps<{
-  modelValue: {
-    current: number
-    max: number
-  },
-  toShow: {
-    component: any,
-    back: boolean,
-    next: boolean,
-    signup: boolean
-  }
+  toDisplay: {
+    back: boolean;
+    forward: boolean;
+    signup: boolean;
+    profile: boolean;
+  };
+  viewCurrent: number
 }>()
 // emits
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: { current: number; max: number }): void 
+const emits = defineEmits<{
   (e: 'back'): void
   (e: 'next'): void
   (e: 'signup'): void 
+  (e: 'updateViewArray', value: tUpdateViewArray): void 
 }>()
-// previous slide
-const goBack = () => {
-  if (props.modelValue.current > 0) {
-    emit('update:modelValue', { ...props.modelValue, current: props.modelValue.current - 1 });
-    emit('back');
-  }
-}
-// next slide
-const goNext = () => {
-  if (props.modelValue.current < props.modelValue.max) {
-    emit('update:modelValue', { ...props.modelValue, current: props.modelValue.current + 1 });
-    emit('next');
-  }
-}
-const goSignup = () => {
-  emit('signup');
-}
 // vars
 const back = {
   type: "svg" as const,
@@ -54,7 +38,7 @@ const cont = {
   type: "text" as const,
   title: "continue",
 }
-const signup = {
+const signupBtn = {
   type: "text" as const,
   title: "signup",
 }
@@ -62,20 +46,36 @@ const more = {
   type: "svg" as const,
   svg: account,
 }
+// previous slide
+const goBack = () => {
+  emits('back');
+}
+// next slide
+const goNext = () => {
+  emits('next');
+}
+// try sign up
+const trySignup = () => {
+  emits('signup');
+}
+// btn
+const currentButton = computed(() => {
+  return props.toDisplay.signup ? signupBtn : cont;
+})
 </script>
 
 <template>
   <div class="up-control">
-    <div class="round" @click="goBack" :class="`${props.toShow.back ? 'show' : 'hidden'}`">
+    <div class="round" @click="goBack" :class="props.toDisplay.back ? 'show' : 'hidden'">
       <glass v-bind="back" />
     </div>
-    <div class="wider" @click="goNext" :class="`${props.toShow.next ? 'show' : 'hidden'}`" v-if="!props.toShow.signup">
-      <glass v-bind="cont" />
+    <div class="wider" @click="goNext" :class="props.toDisplay.forward ? 'show' : 'hidden'" v-if="props.viewCurrent !== 3">
+      <glass v-bind="currentButton" />
     </div>
-    <div class="wider" @click="goSignup" :class="`${props.toShow.signup ? 'show' : 'hidden'}`" v-else>
-      <glass v-bind="signup" />
+    <div class="wider" @click="trySignup" :class="props.toDisplay.signup ? 'show' : 'hidden'" v-else>
+      <glass v-bind="signupBtn" />
     </div>
-    <div class="round" @click="router.push('/signin')">
+    <div class="round" @click="router.push('/signin')" :class="props.toDisplay.profile ? 'show' : 'hidden'">
       <glass v-bind="more" />
     </div>
   </div>
@@ -87,7 +87,7 @@ const more = {
   height: 3rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   position: absolute;
   bottom: calc(1.25 * var(--mm));
   left: calc(1.25 * var(--mm));
@@ -95,12 +95,14 @@ const more = {
 
   .wider, .round {
     height: 100%;
+    color: var(--signup-main-text);
     position: relative;
     cursor: pointer;
   }
 
   .wider {
     flex: 1;
+    font-weight: 500;
   }
 
   .wider::after {

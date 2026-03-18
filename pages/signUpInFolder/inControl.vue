@@ -41,7 +41,7 @@ const signin = {
   height: 3rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   position: absolute;
   bottom: calc(1.25 * var(--mm));
   left: calc(1.25 * var(--mm));
@@ -49,16 +49,14 @@ const signin = {
 
   .wider, .round {
     height: 100%;
+    color: var(--signup-main-text);
     position: relative;
     cursor: pointer;
   }
 
   .wider {
     flex: 1;
-  }
-
-  .wider::after {
-    color: var(--sign-text);
+    font-weight: 500;
   }
 
   .round {

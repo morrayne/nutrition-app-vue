@@ -1,0 +1,16 @@
+html {
+  font-family: var(--main-font);
+  background: var(--html-background);
+  font-weight: 300;
+  overflow: hidden;
+}
+input {
+  font-family: var(--main-font);
+}
+#app {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

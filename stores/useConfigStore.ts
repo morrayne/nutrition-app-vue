@@ -17,7 +17,6 @@ export const useConfigStore = defineStore("config", () => {
   const config = ref<tConfig>({
     language: "en",
     theme: "light",
-    palette: "mono",
     phone_color: "black",
     mm: "16",
   });
@@ -42,7 +41,6 @@ export const useConfigStore = defineStore("config", () => {
   const applyConfig = (data: Partial<tConfig>) => {
     if (data.language) document.documentElement.lang = data.language;
     if (data.theme) document.documentElement.setAttribute("data-theme", data.theme);
-    if (data.palette) document.documentElement.setAttribute("data-palette", data.palette);
     if (data.phone_color) document.documentElement.setAttribute("data-phone-color", data.phone_color);
     if (data.mm) document.documentElement.setAttribute("data-mm", data.mm);
   };
@@ -67,9 +65,6 @@ export const useConfigStore = defineStore("config", () => {
   const setTheme = async (theme: string) => {
     await updateConfig({ theme });
   };
-  const setPalette = async (palette: string) => {
-    await updateConfig({ palette });
-  };
   const setPhoneColor = async (color: string) => {
     await updateConfig({ phone_color: color });
   };
@@ -81,12 +76,11 @@ export const useConfigStore = defineStore("config", () => {
     await updateConfig({
       language: "en",
       theme: "light",
-      palette: "colorful",
       phone_color: "blue",
       mm: "16",
     });
   };
 
   // EXPORT
-  return { config, error, loadConfig, setConfig, updateConfig, setLang, setTheme, setPalette, setPhoneColor, setMm, resetToDefaults, applyConfig };
+  return { config, error, loadConfig, setConfig, updateConfig, setLang, setTheme, setPhoneColor, setMm, resetToDefaults, applyConfig };
 });

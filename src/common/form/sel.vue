@@ -57,9 +57,9 @@ const getItemClass = (option: tSelOpt, index: number) => {
 
 <!-- prettier-ignore -->
 <template>
-  <div class="s">
+  <div class="sel">
     <p class="title" :style="{ '--item-text': `var(--${props.title})` }"></p>
-    <div class="sel">
+    <div class="s">
       <div class="options">
         <div class="item" :class="getItemClass(option, index)" v-for="(option, index) in data.options" :key="option.toEmit" @click="handleSelect(option.toEmit)">
           <div class="cont">
@@ -72,13 +72,15 @@ const getItemClass = (option: tSelOpt, index: number) => {
 </template>
 
 <style scoped lang="scss">
-.s {
+.sel {
   display: flex;
   flex-direction: column;
   gap: calc(var(--mm) * 0.5);
 
   .title {
+    color: var(--signup-main-text);
     font-size: var(--mm);
+    font-weight: 500;
     padding: 0 calc(1.5 * var(--mm));
   }
 
@@ -86,17 +88,19 @@ const getItemClass = (option: tSelOpt, index: number) => {
     content: var(--item-text);
   }
 
-  .sel {
+  .s {
+    background: var(--signup-sub-background);
     display: flex;
     flex-direction: column;
     border-radius: calc(var(--mm) * 1.5);
-    border: 1px solid var(--sign-border);
+    border: 1px solid var(--signup-main-border);
     box-shadow: var(--box-shadow);
     backdrop-filter: blur(6px);
     overflow: hidden;
 
     .item {
       flex: 1;
+      color: var(--signup-sub-text);
       padding: 0 calc(var(--mm) * 1.5);
       cursor: pointer;
 
@@ -105,7 +109,7 @@ const getItemClass = (option: tSelOpt, index: number) => {
         align-items: center;
         padding: calc(var(--mm) * 0.75) 0;
         justify-content: space-between;
-        border-bottom: solid 1px var(--sign-border);
+        border-bottom: solid 1px var(--signup-main-border);
 
         .text {
           font-size: var(--mm);
@@ -114,6 +118,12 @@ const getItemClass = (option: tSelOpt, index: number) => {
         .text::after {
           content: var(--data-text);
         }
+
+        .dot {
+          width: 0.5rem;
+          aspect-ratio: 1 / 1;
+          border-radius: 50%;
+        }
       }
 
       &.last .cont {
@@ -121,8 +131,9 @@ const getItemClass = (option: tSelOpt, index: number) => {
       }
     }
 
-    .active {
-      background: var(--active-background);
+    .active .text {
+      color: var(--signup-main-text);
+      font-weight: 500;
     }
   }
 }

@@ -92,20 +92,6 @@ const mm: tSel = {
     options: avaliableMm,
   },
 };
-// palette
-const paletteModel = computed({
-  get: () => props.modelValue.palette,
-  set: (val) => emit('update:modelValue', { ...props.modelValue, palette: val })
-})
-const palette: tSwh = {
-  title: "greyscale-palette",
-  data: {
-    type: "text" as const,
-    start: props.modelValue.palette === "colorful" ? "on" : "off",
-    on: "colorful",
-    off: "greyscale",
-  },
-};
 </script>
 
 <template>
@@ -113,7 +99,6 @@ const palette: tSwh = {
     <sel v-bind="lang" v-model="languageModel" />
     <sel v-bind="mm" v-model="mmModel" />
     <swh v-bind="theme" v-model="themeModel" />
-    <swh v-bind="palette" v-model="paletteModel" />
     <sel v-bind="phoneColor" v-model="phoneColorModel" />
     <endUp />
   </div>

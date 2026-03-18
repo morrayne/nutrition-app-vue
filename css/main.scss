@@ -1,11 +1,12 @@
 // IMOPORT
-// theme & palette
-@use "./color/theme";
-@use "./color/palette";
-// common
-@use "./common/default";
-@use "./common/reset";
-@use "./common/frame";
-@use "./common/mm";
+// attr
+@use "./attr/theme";
+@use "./attr/frame";
+@use "./attr/mm";
+// smth
+@use "./smth/default";
+@use "./smth/reset";
+@use "./smth/def";
 // local
+@use "./local/general";
 @use "./local/en";

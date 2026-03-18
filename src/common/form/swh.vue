@@ -42,9 +42,9 @@ const isActive = computed(() => selectedValue.value === props.data.on)
 <template>
   <div class="swh">
     <p class="title" :style="{ '--item-text': `var(--${props.title})` }"></p>
-    <div class="switch" :class="{ active: isActive }" @click="handleSwitch">
+    <div class="switch" :class="{ active: isActive }" :style="{ border: isActive ? 'solid 1px var(--swh-background)' : 'solid 1px var(--signup-main-border)' }" @click="handleSwitch">
       <div class="gap"></div>
-      <div class="runner" :style="{ background: isActive ? 'var(--light)' : 'var(--html-background)' }"></div>
+      <div class="runner" :style="{ background: isActive ? 'var(--signup-main-background)' : 'var(--signup-sub-border)' }"></div>
     </div>
   </div>
 </template>
@@ -52,17 +52,20 @@ const isActive = computed(() => selectedValue.value === props.data.on)
 <style scoped lang="scss">
 .swh {
   width: 100%;
+  background: var(--signup-sub-background);
   padding: calc(0.75 * var(--mm)) calc(1.5 * var(--mm));
   font-size: var(--mm);
   display: flex;
   justify-content: space-between;
   border-radius: 2rem;
-  border: solid 1px var(--sign-border);
+  border: solid 1px var(--signup-main-border);
   box-shadow: var(--box-shadow);
   backdrop-filter: blur(6px);
 
   .title {
     width: fit-content;
+    color: var(--signup-main-text);
+    font-weight: 500;
   }
 
   .title::after {
@@ -74,7 +77,7 @@ const isActive = computed(() => selectedValue.value === props.data.on)
     height: 1.25rem;
     border-radius: 2rem;
     padding: 0.25rem;
-    background: var(--sign-border);
+    border: solid 1px var(--signup-main-border);
     transition: 0.1s;
     cursor: pointer;
     display: flex;

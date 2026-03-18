@@ -57,6 +57,7 @@ watch(
   justify-content: center;
   position: absolute;
   z-index: 3;
+  top: 0;
   left: 0;
 
   .wrap {

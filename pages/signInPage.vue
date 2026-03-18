@@ -4,6 +4,7 @@
 import { ref, computed } from "vue";
 // component
 import inp from "@/common/form/inp.vue";
+import dynamicIsland from "@/common/ui/dynamicIsland.vue";
 import inControl from "./signUpInFolder/inControl.vue";
 import endUp from "./signUpInFolder/endUp.vue";
 // router
@@ -25,26 +26,41 @@ const emailModel = computed({
   get: () => loginData.value.email,
   set: (val) => loginData.value.email = val,
 });
-
 const email: tInp = {
   title: "email",
   data: {
     type: "text" as const,
-    start: loginData.value.email,
+    start: '',
+  },
+  rule: {
+    str: {
+      minLength: 6,
+      maxLength: 50,
+      toContain: ["@"],
+      noToContain: [" "],
+      stringPattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    }
   },
   width: { left: 40, right: 60 },
 };
-
 const passwordModel = computed({
   get: () => loginData.value.password,
   set: (val) => loginData.value.password = val,
 });
-
 const password: tInp = {
   title: "password",
   data: {
     type: "text" as const,
-    start: loginData.value.password,
+    start: '...',
+  },
+  rule: {
+    str: {
+      minLength: 6,
+      maxLength: 20,
+      toContain: [],
+      noToContain: [" "],
+      stringPattern: /^[a-zA-Z0-9!]+$/
+    }
   },
   width: { left: 40, right: 60 },
 };
@@ -69,6 +85,7 @@ const handleSignIn = async () => {
 <template>
   <div class="screen signin">
     <inControl @trySignIn="handleSignIn" />
+    <dynamicIsland />
     <inp v-bind="email" v-model="emailModel" />
     <inp v-bind="password" v-model="passwordModel" />
     <endUp />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // IMPORT
 // vue
-import { computed, watch } from "vue";
+import { ref, computed, watch } from "vue";
 // component
 import inp from "@/common/form/inp.vue";
 import sel from "@/common/form/sel.vue";
@@ -10,18 +10,19 @@ import endUp from "./endUp.vue";
 import type { tInp } from "@/common/form/inp.vue";
 import type { tSel, tSelOpt } from "@/common/form/sel.vue";
 import type { tBody } from "../../stores/types";
+import type { tUpdateViewArray } from "../signUpPage.vue";
 
 // CONTENT
 // props & emits
 const props = defineProps<{
-  modelValue: tBody
+  modelValue: tBody;
 }>()
 const emits = defineEmits<{
   (e: 'update:modelValue', value: tBody): void;
-   (e: 'set-max', value: number): void
-  (e: 'set-min', value: number): void
-  (e: 'set-err', value: string): void
+  (e: 'updateViewArray', value: tUpdateViewArray): void
+  (e: 'error', value: string[]): void;
 }>()
+
 // gender
 const genderModel = computed({
   get: () => props.modelValue.gender,
@@ -50,10 +51,13 @@ const age: tInp = {
     type: "number" as const,
     start: props.modelValue.age,
   },
-  width: {
-    left: 50,
-    right: 50
-  }
+  rule: {
+    num: {
+      minValue: 14,
+      maxValue: 80,
+    },
+  },
+  width: { left: 50, right: 50 }
 };
 // height
 const heightModel = computed({
@@ -66,10 +70,13 @@ const height: tInp = {
     type: "number" as const,
     start: props.modelValue.height,
   },
-  width: {
-    left: 50,
-    right: 50
-  }
+  rule: {
+    num: {
+      minValue: 120,
+      maxValue: 220
+    },
+  },
+  width: { left: 50, right: 50 }
 };
 // weight
 const weightModel = computed({
@@ -82,12 +89,14 @@ const weight: tInp = {
     type: "number" as const,
     start: props.modelValue.weight,
   },
-  width: {
-    left: 50,
-    right: 50
-  }
+  rule: {
+    num: {
+      minValue: 30,
+      maxValue: 120
+    },
+  },
+  width: { left: 50, right: 50 }
 };
-
 // body fat %
 const bfModel = computed({
   get: () => props.modelValue.bf,
@@ -99,10 +108,13 @@ const bf: tInp = {
     type: "number" as const,
     start: props.modelValue.bf,
   },
-  width: {
-    left: 50,
-    right: 50
-  }
+  rule: {
+    num: {
+      minValue: 3,
+      maxValue: 50
+    },
+  },
+  width: { left: 50, right: 50 }
 };
 // activity level
 const avaliableActivity: tSelOpt[] = [
@@ -126,49 +138,34 @@ const activity: tSel = {
   },
 };
 
+// ERROR
+const SCREEN_INDEX = 1; 
+const hasErrors = ref(false);
+const errorMessage = ref<string[]>([]);
+const handleError = (err: string[]) => {
+  errorMessage.value = [SCREEN_INDEX.toString(), ...err];
+  hasErrors.value = err.length > 0;
+};
+
 // VALIDATION
-// age
-const isValidAge = computed(() => {
-  const age = props.modelValue.age
-  if (!age) return false
-  return age >= 13 && age <= 120
-})
-// height
-const isValidHeight = computed(() => {
-  const height = props.modelValue.height
-  if (!height) return false
-  return height >= 100 && height <= 250
-})
-// weight
-const isValidWeight = computed(() => {
-  const weight = props.modelValue.weight
-  if (!weight) return false
-  return weight >= 30 && weight <= 250
-})
-// body fat
-const isValidBodyFat = computed(() => {
-  const bf = props.modelValue.bf
-  if (bf === null || bf === undefined) return true
-  return bf >= 3 && bf <= 50
-})
-// 
-const allowToGo = computed(() => {
-  return isValidAge.value && isValidHeight.value && isValidWeight.value && isValidBodyFat.value;
-});
-watch(allowToGo, (newVal) => {
-  if (newVal) emits("set-max", 2);
-  else emits("set-max", 1);
-  emits("set-min", 0);
-});
+watch([() => props.modelValue.age, () => props.modelValue.height, () => props.modelValue.weight, () => props.modelValue.bf, () => props.modelValue.gender, hasErrors], () => {
+  const m = props.modelValue;
+  const allFilled = m.age !== null && m.height !== null && m.weight !== null && m.bf !== null && m.gender !== null;
+  const canContinue = allFilled && !hasErrors.value;
+  if (!canContinue && hasErrors.value) emits('error', errorMessage.value);
+  else if (!canContinue && !hasErrors.value) emits('error', [SCREEN_INDEX.toString(), 'fill-form']);
+  else emits('error', []);
+  emits('updateViewArray', { index: 1, field: 'forward', newValue: canContinue });
+}, { deep: true, immediate: true });
 </script>
 
 <template>
   <div class="v">
-    <inp v-bind="age" v-model="ageModel!" />
-    <inp v-bind="height" v-model="heightModel!" />
-    <sel v-bind="gender" v-model="genderModel!" />
-    <inp v-bind="weight" v-model="weightModel!" />
-    <inp v-bind="bf" v-model="bfModel!" />
+    <inp v-bind="age" v-model="ageModel!" @error="handleError" />
+    <inp v-bind="height" v-model="heightModel!" @error="handleError" />
+    <sel v-bind="gender" v-model="genderModel" />
+    <inp v-bind="weight" v-model="weightModel!" @error="handleError" />
+    <inp v-bind="bf" v-model="bfModel!" @error="handleError" />
     <sel v-bind="activity" v-model="activityModel" />
     <endUp />
   </div>

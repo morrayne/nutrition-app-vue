@@ -9,6 +9,7 @@ import endUp from "./endUp.vue";
 import type { tInp } from "@/common/form/inp.vue";
 import type { tGoal } from "../../stores/types";
 import type { tBody } from "../../stores/types";
+import type { tUpdateViewArray } from "../signUpPage.vue";
 
 // CONTENT
 // props & emits
@@ -16,16 +17,15 @@ const props = defineProps<{
   modelValue: tGoal;
   body: tBody;
 }>();
-const emit = defineEmits<{
+const emits = defineEmits<{
   (e: "update:modelValue", value: tGoal): void;
-  (e: "set-max", value: number): void;
-  (e: "set-min", value: number): void;
-  (e: "set-err", value: string): void;
+  (e: "updateViewArray", value: tUpdateViewArray): void;
+  (e: "error", value: string[]): void;
 }>();
 // weight
 const goalWeightModel = computed({
   get: () => props.modelValue.weight,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, weight: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, weight: val }),
 });
 const goalWeight: tInp = {
   title: "weight",
@@ -33,15 +33,18 @@ const goalWeight: tInp = {
     type: "number" as const,
     start: props.modelValue.weight,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 30,
+      maxValue: 120
+    },
   },
+  width: { left: 50, right: 50 },
 };
 // body fat
 const goalBfModel = computed({
   get: () => props.modelValue.bf,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, bf: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, bf: val }),
 });
 const goalBf: tInp = {
   title: "body-fat",
@@ -49,15 +52,18 @@ const goalBf: tInp = {
     type: "number" as const,
     start: props.modelValue.bf,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 5,
+      maxValue: 50
+    },
   },
+  width: { left: 50, right: 50 },
 };
 // calories
 const caloriesModel = computed({
   get: () => props.modelValue.calories,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, calories: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, calories: val }),
 });
 const calories: tInp = {
   title: "calories",
@@ -65,15 +71,18 @@ const calories: tInp = {
     type: "number" as const,
     start: props.modelValue.calories,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 1200,
+      maxValue: 5000
+    },
   },
+  width: { left: 50, right: 50 },
 };
 // proteins
 const proteinsModel = computed({
   get: () => props.modelValue.proteins,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, proteins: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, proteins: val }),
 });
 const proteins: tInp = {
   title: "proteins",
@@ -81,15 +90,18 @@ const proteins: tInp = {
     type: "number" as const,
     start: props.modelValue.proteins,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 30,
+      maxValue: 300
+    },
   },
+  width: { left: 50, right: 50 },
 };
 // carbs
 const carbsModel = computed({
   get: () => props.modelValue.carbs,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, carbs: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, carbs: val }),
 });
 const carbs: tInp = {
   title: "carbs",
@@ -97,15 +109,18 @@ const carbs: tInp = {
     type: "number" as const,
     start: props.modelValue.carbs,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 60,
+      maxValue: 600
+    },
   },
+  width: { left: 50, right: 50 },
 };
 // fats
 const fatsModel = computed({
   get: () => props.modelValue.fats,
-  set: (val) => emit("update:modelValue", { ...props.modelValue, fats: val }),
+  set: (val) => emits("update:modelValue", { ...props.modelValue, fats: val }),
 });
 const fats: tInp = {
   title: "fats",
@@ -113,10 +128,13 @@ const fats: tInp = {
     type: "number" as const,
     start: props.modelValue.fats,
   },
-  width: {
-    left: 50,
-    right: 50,
+  rule: {
+    num: {
+      minValue: 10,
+      maxValue: 200
+    },
   },
+  width: { left: 50, right: 50 },
 };
 
 // CALCULATION
@@ -125,25 +143,20 @@ const calculateBMR = (weight: number, height: number, age: number, gender: strin
   else return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
 }
 const calculateMacros = (goalWeight: number | null, goalBf: number | null, bodyData: tBody) => {
-  if (!goalWeight || !goalBf || !bodyData.height || !bodyData.age || !bodyData.gender || !bodyData.activity) {
-    return null
-  }
+  if (!goalWeight || !goalBf || !bodyData.height || !bodyData.age || !bodyData.gender || !bodyData.activity) return null
   const bmr = calculateBMR(goalWeight, bodyData.height, bodyData.age, bodyData.gender)
   const tdee = bmr * bodyData.activity
   let proteinMultiplier = 2.0 
-  if (goalBf < 12) {
-    proteinMultiplier = 2.4
-  } else if (goalBf < 18) {
-    proteinMultiplier = 2.2
-  } else if (goalBf > 25) {
-    proteinMultiplier = 1.8
-  }
+  if (goalBf < 12) proteinMultiplier = 2.4
+  else if (goalBf < 18) proteinMultiplier = 2.2
+  else if (goalBf > 25) proteinMultiplier = 1.8
   const proteins = Math.round(goalWeight * proteinMultiplier)
   const fats = Math.round(goalWeight * 1)
   const calories = Math.round(tdee)
   const carbs = Math.round((calories - (proteins * 4) - (fats * 9)) / 4)
   return { calories, proteins, carbs, fats }
 }
+// autoupdate
 const isAutoUpdating = ref(false);
 watch([() => props.modelValue.weight, () => props.modelValue.bf, () => props.body], ([newWeight, newBf, newBody], [oldWeight, oldBf, oldBody]) => {
   const weightChanged = newWeight !== oldWeight;
@@ -155,67 +168,46 @@ watch([() => props.modelValue.weight, () => props.modelValue.bf, () => props.bod
   const macros = calculateMacros(props.modelValue.weight, props.modelValue.bf, props.body);
   if (macros) {
     isAutoUpdating.value = true;
-    emit("update:modelValue", { ...props.modelValue, calories: macros.calories, proteins: macros.proteins, carbs: macros.carbs, fats: macros.fats });
+    emits("update:modelValue", { 
+      ...props.modelValue, 
+      calories: macros.calories, 
+      proteins: macros.proteins, 
+      carbs: macros.carbs, 
+      fats: macros.fats 
+    });
     nextTick(() => { isAutoUpdating.value = false });
   }
 }, { deep: true });
 
+// ERROR
+const SCREEN_INDEX = 2;
+const hasErrors = ref(false);
+const errorMessage = ref<string[]>([]);
+const handleError = (err: string[]) => {
+  errorMessage.value = [SCREEN_INDEX.toString(), ...err];
+  hasErrors.value = err.length > 0;
+};
+
 // VALIDATION
-// weight
-const isValidGoalWeight = computed(() => {
-  const val = props.modelValue.weight;
-  if (val === null || val === undefined) return false;
-  return val >= 30 && val <= 250;
-});
-// body fat
-const isValidGoalBf = computed(() => {
-  const val = props.modelValue.bf;
-  if (val === null || val === undefined) return false;
-  return val >= 3 && val <= 50;
-});
-// calories
-const isValidCalories = computed(() => {
-  const val = props.modelValue.calories;
-  if (val === null || val === undefined) return false;
-  return val >= 1200 && val <= 5000;
-});
-// proteins
-const isValidProteins = computed(() => {
-  const val = props.modelValue.proteins;
-  if (val === null || val === undefined) return false;
-  return val >= 30 && val <= 300;
-});
-// carbs
-const isValidCarbs = computed(() => {
-  const val = props.modelValue.carbs;
-  if (val === null || val === undefined) return false;
-  return val >= 50 && val <= 600;
-});
-// fats
-const isValidFats = computed(() => {
-  const val = props.modelValue.fats;
-  if (val === null || val === undefined) return false;
-  return val >= 20 && val <= 200;
-});
-// 
-const allowToGo = computed(() => {
-  return isValidGoalWeight.value && isValidGoalBf.value && isValidCalories.value && isValidProteins.value && isValidCarbs.value && isValidFats.value;
-});
-watch(allowToGo, (newVal) => {
-  if (newVal) emit("set-max", 3);
-  else emit("set-max", 2);
-  emit("set-min", 0);
-});
+watch([() => props.modelValue.weight, () => props.modelValue.bf, () => props.modelValue.calories, () => props.modelValue.proteins, () => props.modelValue.carbs, () => props.modelValue.fats, hasErrors], () => {
+  const m = props.modelValue;
+  const allFilled = m.weight !== null && m.bf !== null && m.calories !== null && m.proteins !== null && m.carbs !== null && m.fats !== null;
+  const canContinue = allFilled && !hasErrors.value;
+  if (!canContinue && hasErrors.value) emits('error', errorMessage.value);
+  else if (!canContinue && !hasErrors.value) emits('error', [SCREEN_INDEX.toString(), 'fill-form']);
+  else emits('error', []);
+  emits('updateViewArray', { index: 2, field: 'forward', newValue: canContinue });
+}, { deep: true });
 </script>
 
 <template>
   <div class="v">
-    <inp v-bind="goalWeight" v-model="goalWeightModel!" />
-    <inp v-bind="goalBf" v-model="goalBfModel!" />
-    <inp v-bind="calories" v-model="caloriesModel!" />
-    <inp v-bind="proteins" v-model="proteinsModel!" />
-    <inp v-bind="carbs" v-model="carbsModel!" />
-    <inp v-bind="fats" v-model="fatsModel!" />
+    <inp v-bind="goalWeight" v-model="goalWeightModel!" @error="handleError" />
+    <inp v-bind="goalBf" v-model="goalBfModel!" @error="handleError" />
+    <inp v-bind="calories" v-model="caloriesModel!" @error="handleError" />
+    <inp v-bind="proteins" v-model="proteinsModel!" @error="handleError" />
+    <inp v-bind="carbs" v-model="carbsModel!" @error="handleError" />
+    <inp v-bind="fats" v-model="fatsModel!" @error="handleError" />
     <endUp />
   </div>
 </template>
