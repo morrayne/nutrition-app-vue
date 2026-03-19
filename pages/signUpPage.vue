@@ -3,6 +3,7 @@
 // vue
 import { ref, watch, computed, markRaw, reactive } from "vue";
 // component
+import loadingCover from "@/common/ui/loadingCover.vue";
 import dynamicIsland from "@/common/ui/dynamicIsland.vue";
 import upControl from "./signUpInFolder/upControl.vue";
 // router
@@ -87,7 +88,6 @@ const viewArray = reactive([
   { back: true, forward: false, signup: false, profile: true, },
   { back: true, forward: false, signup: false, profile: false, },
 ]);
-
 const updateViewArray = (data: tUpdateViewArray): void => {
   // @ts-ignore
   if (data.index >= 0 && data.index < viewArray.length) viewArray[data.index] = { ...viewArray[data.index], [data.field]: data.newValue };
@@ -112,12 +112,17 @@ watch(signup, () => {
   common.value.username = signup.value.username;
 }, { deep: true });
 
-// FUNCTION
+// SUPABASE SIGN UP
+const isLoading = ref(false);
 const handleSignUp = async () => {
-  if (signup.value.email && signup.value.username && signup.value.password) {
-    // prettier-ignore
+  if (isLoading.value) return;
+  if (!signup.value.email || !signup.value.username || !signup.value.password) return;
+  isLoading.value = true;
+  try {
     const result = await authStore.signUp(signup.value, common.value, config.value, body.value, goal.value);
     if (result.success) router.push("/account");
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -125,7 +130,8 @@ const handleSignUp = async () => {
 <template>
   <div class="screen signup">
     <upControl :viewCurrent="viewCurrent" :toDisplay="viewArray[viewCurrent]!" @updateViewArray="updateViewArray" @next="viewCurrent++" @back="viewCurrent--" @signup="handleSignUp" />
-    <dynamicIsland />
+    <dynamicIsland :text="errorMessage" />
+    <loadingCover v-if="isLoading" />
     <div class="view" :style="{ transform: viewTransformStyle(0) }">
       <viewConfig v-model="config" @updateViewArray="updateViewArray" @error="handleError" />
     </div>

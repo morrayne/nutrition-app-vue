@@ -39,7 +39,7 @@ const goalWeight: tInp = {
       maxValue: 120
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 // body fat
 const goalBfModel = computed({
@@ -58,7 +58,7 @@ const goalBf: tInp = {
       maxValue: 50
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 // calories
 const caloriesModel = computed({
@@ -77,7 +77,7 @@ const calories: tInp = {
       maxValue: 5000
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 // proteins
 const proteinsModel = computed({
@@ -96,7 +96,7 @@ const proteins: tInp = {
       maxValue: 300
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 // carbs
 const carbsModel = computed({
@@ -115,7 +115,7 @@ const carbs: tInp = {
       maxValue: 600
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 // fats
 const fatsModel = computed({
@@ -134,7 +134,7 @@ const fats: tInp = {
       maxValue: 200
     },
   },
-  width: { left: 50, right: 50 },
+  width: { left: 65, right: 35 },
 };
 
 // CALCULATION

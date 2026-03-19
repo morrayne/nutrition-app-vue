@@ -57,7 +57,7 @@ const age: tInp = {
       maxValue: 80,
     },
   },
-  width: { left: 50, right: 50 }
+  width: { left: 65, right: 35 },
 };
 // height
 const heightModel = computed({
@@ -76,7 +76,7 @@ const height: tInp = {
       maxValue: 220
     },
   },
-  width: { left: 50, right: 50 }
+  width: { left: 65, right: 35 },
 };
 // weight
 const weightModel = computed({
@@ -95,7 +95,7 @@ const weight: tInp = {
       maxValue: 120
     },
   },
-  width: { left: 50, right: 50 }
+  width: { left: 65, right: 35 },
 };
 // body fat %
 const bfModel = computed({
@@ -114,7 +114,7 @@ const bf: tInp = {
       maxValue: 50
     },
   },
-  width: { left: 50, right: 50 }
+  width: { left: 65, right: 35 },
 };
 // activity level
 const avaliableActivity: tSelOpt[] = [

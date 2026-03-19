@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import navigation from "./navigation.vue";
 import { useRoute } from 'vue-router';
 const isMobile = ref(false);
 onMounted(() => {
-  isMobile.value = window.innerWidth <= 540;
+  const mediaQuery = window.matchMedia('(max-width: 540px)');
+  isMobile.value = mediaQuery.matches;
+  const handler = (e: MediaQueryListEvent) => {
+    isMobile.value = e.matches;
+  };
+  mediaQuery.addEventListener('change', handler);
+  onBeforeUnmount(() => {
+    mediaQuery.removeEventListener('change', handler);
+  });
 });
 const route = useRoute();
 const showNav = computed(() => {
@@ -60,7 +68,9 @@ const showNav = computed(() => {
   }
 }
 .no-frame {
-  background: var(--frame);
+  width: 100%;
+  height: 100%;
+  background: var(--html-background);
   position: relative;
 }
 .content {
