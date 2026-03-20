@@ -134,6 +134,10 @@ ul, ol {
   --espaniol: "español";
 }
 
+:root[lang=zh] {
+  --main-font: "unset";
+}
+
 :root[lang=en] {
   --continue: "continue";
   --signup: "sign up";
@@ -178,9 +182,11 @@ ul, ol {
   --proteins: "proteins";
   --carbs: "carbs";
   --fats: "fats";
-  --should-be-at-least: "should be at least";
-  --should-be-maximum: "should be maximum";
+  --should-be: "should be";
+  --at-least: "at least";
+  --maximum: "maximum of";
   --fill-form: "fill form";
+  --characters-long: "characters long";
 }
 
 :root[lang=zh] {
@@ -227,9 +233,11 @@ ul, ol {
   --proteins: "蛋白质";
   --carbs: "碳水化合物";
   --fats: "脂肪";
-  --should-be-at-least: "至少应为";
-  --should-be-maximum: "最大不应超过";
+  --should-be: "应为";
+  --at-least: "至少";
+  --maximum: "最多";
   --fill-form: "填写表格";
+  --characters-long: "字符";
 }
 
 :root[lang=ru] {
@@ -276,9 +284,11 @@ ul, ol {
   --proteins: "белки";
   --carbs: "углеводы";
   --fats: "жиры";
-  --should-be-at-least: "должно быть не менее";
-  --should-be-maximum: "должно быть не более";
+  --should-be: "должно быть";
+  --at-least: "не менее";
+  --maximum: "не более";
   --fill-form: "заполните форму";
+  --characters-long: "символов";
 }
 
 :root[lang=es] {
@@ -325,7 +335,8 @@ ul, ol {
   --proteins: "proteínas";
   --carbs: "carbohidratos";
   --fats: "grasas";
-  --should-be-at-least: "debe ser al menos";
-  --should-be-maximum: "debe ser máximo";
-  --fill-form: "complete el formulario";
+  --should-be: "debe ser";
+  --at-least: "al menos";
+  --maximum: "máximo de";
+  --characters-long: "caracteres";
 }/*# sourceMappingURL=main.css.map */

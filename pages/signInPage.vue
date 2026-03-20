@@ -3,6 +3,7 @@
 // vue
 import { ref, computed } from "vue";
 // component
+import loadingCover from "@/common/ui/loadingCover.vue";
 import inp from "@/common/form/inp.vue";
 import dynamicIsland from "@/common/ui/dynamicIsland.vue";
 import inControl from "./signUpInFolder/inControl.vue";
@@ -71,13 +72,17 @@ const isFormValid = computed(() => {
 });
 
 // LOGIN
+const isLoading = ref(false);
 const handleSignIn = async () => {
+  if (isLoading.value) return;
   if (!isFormValid.value) return;
-  const result = await authStore.signIn(loginData.value.email, loginData.value.password);
-  if (result.success) {
-    router.push("/account");
-  } else {
-    console.log('Login failed');
+  isLoading.value = true;
+  try {
+    const result = await authStore.signIn(loginData.value.email, loginData.value.password);
+    if (result.success) router.push("/account");
+    else console.log('Login failed');
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -86,6 +91,7 @@ const handleSignIn = async () => {
   <div class="screen signin">
     <inControl @trySignIn="handleSignIn" />
     <dynamicIsland />
+    <loadingCover v-if="isLoading" />
     <inp v-bind="email" v-model="emailModel" />
     <inp v-bind="password" v-model="passwordModel" />
     <endUp />

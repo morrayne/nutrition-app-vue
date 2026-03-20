@@ -83,11 +83,11 @@ const validateNumber = (value: number): boolean => {
     return false
   }
   if (value < rules.minValue) {
-    errorMessage.value = [props.title, 'should-be-at-least', String(rules.minValue)];
+    errorMessage.value = [props.title, 'should-be', 'at-least', String(rules.minValue)];
     return false
   }
   if (value > rules.maxValue) {
-    errorMessage.value = [props.title, 'should-be-maximum', String(rules.maxValue)];
+    errorMessage.value = [props.title, 'should-be', 'maximum', String(rules.maxValue)];
     return false
   }
   return true

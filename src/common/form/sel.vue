@@ -26,9 +26,7 @@ const emit = defineEmits<{
 }>();
 // vars
 const selectedValue = ref<string | number>(
-  props.data.options[props.data.start]?.toEmit ??
-    props.data.options[0]?.toEmit ??
-    "",
+  props.data.options[props.data.start]?.toEmit ?? props.data.options[0]?.toEmit ?? "",
 );
 const selectedIndex = computed(() =>
   props.data.options.findIndex((opt) => opt.toEmit === selectedValue.value),
@@ -53,6 +51,12 @@ const getItemClass = (option: tSelOpt, index: number) => {
     act: index < selectedIndex.value,
   };
 };
+const barTop = computed(() => {
+  const itemHeight = 'calc(var(--mm) * 2.95)'; 
+  const initialOffset = 'calc(var(--mm) * 1.5)'; 
+  const index = selectedIndex.value; 
+  return `calc(${initialOffset} + (${itemHeight} * ${index}))`;
+});
 </script>
 
 <!-- prettier-ignore -->
@@ -60,11 +64,10 @@ const getItemClass = (option: tSelOpt, index: number) => {
   <div class="sel">
     <p class="title" :style="{ '--item-text': `var(--${props.title})` }"></p>
     <div class="s">
-      <div class="options">
-        <div class="item" :class="getItemClass(option, index)" v-for="(option, index) in data.options" :key="option.toEmit" @click="handleSelect(option.toEmit)">
-          <div class="cont">
-            <p class="text" :style="{ '--data-text': `var(--${option.title})` }"></p>
-          </div>
+      <div class="bar" :style="{ top: barTop }"></div>
+      <div class="item" :class="getItemClass(option, index)" v-for="(option, index) in data.options" :key="option.toEmit" @click="handleSelect(option.toEmit)">
+        <div class="cont">
+          <p class="text" :style="{ '--data-text': `var(--${option.title})` }"></p>
         </div>
       </div>
     </div>
@@ -98,8 +101,16 @@ const getItemClass = (option: tSelOpt, index: number) => {
     backdrop-filter: blur(6px);
     overflow: hidden;
 
+    .bar {
+      width: 0.5rem;
+      aspect-ratio: 1 / 1;
+      border-radius: 0.5rem;
+      background: var(--signup-sub-border);
+      position: absolute;
+      left: 0.675rem;
+    }
+
     .item {
-      flex: 1;
       color: var(--signup-sub-text);
       padding: 0 calc(var(--mm) * 1.5);
       cursor: pointer;
@@ -107,7 +118,7 @@ const getItemClass = (option: tSelOpt, index: number) => {
       .cont {
         display: flex;
         align-items: center;
-        padding: calc(var(--mm) * 0.75) 0;
+        padding: calc(var(--mm) * 0.8) calc(var(--mm) * 0.25);
         justify-content: space-between;
         border-bottom: solid 1px var(--signup-main-border);
 
@@ -131,9 +142,12 @@ const getItemClass = (option: tSelOpt, index: number) => {
       }
     }
 
-    .active .text {
-      color: var(--signup-main-text);
-      font-weight: 500;
+    .first {
+      padding-top: calc(var(--mm) * 0.125);
+    }
+
+    .last {
+      padding-bottom: calc(var(--mm) * 0.125);
     }
   }
 }

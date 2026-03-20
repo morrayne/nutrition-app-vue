@@ -14,28 +14,36 @@ const props = defineProps<{
   text?: string[];
 }>();
 
-// Преобразуем массив в строку: числа оставляем, CSS переменные заменяем значениями
-const displayText = computed(() => {
+// Преобразуем элемент
+const transformItem = (item: string): string => {
+  if (!isNaN(Number(item)) && item.trim() !== '') {
+    return item;
+  } else {
+    const cssVarName = item.startsWith('--') ? item : `--${item}`;
+    let cssVar = getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
+    cssVar = cssVar.replace(/["']/g, '');
+    return cssVar || item;
+  }
+};
+
+// Первые два элемента
+const firstTwoText = computed(() => {
   if (!props.text || props.text.length === 0) return '';
-  
-  return props.text.map(item => {
-    if (!isNaN(Number(item)) && item.trim() !== '') {
-      return item; 
-    } else {
-      const cssVarName = item.startsWith('--') ? item : `--${item}`;
-      let cssVar = getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
-      cssVar = cssVar.replace(/["']/g, '');
-      return cssVar || item;
-    }
-  }).join(' ');
+  const firstTwo = props.text.slice(0, 2);
+  return firstTwo.map(transformItem).join(' ');
+});
+
+// Остальные элементы (начиная с третьего)
+const restText = computed(() => {
+  if (!props.text || props.text.length <= 2) return '';
+  const rest = props.text.slice(2);
+  return rest.map(transformItem).join(' ');
 });
 
 watch(() => props.text, (newVal) => {
   if (newVal && newVal.length > 0) {
     messageQueue.value = [...newVal];
-    if (!isActive.value) {
-      showNextMessage();
-    }
+    if (!isActive.value) showNextMessage();
   } else {
     messageQueue.value = [];
     isActive.value = false;
@@ -61,8 +69,9 @@ const showNextMessage = () => {
 <template>
   <div class="dinamic-island">
     <div class="wrap">
-      <div :class="displayText ? 'popup' : 'camera'">
-        <p v-if="displayText" :style="{ '--item-text': `'${displayText}'` }"></p>
+      <div :class="firstTwoText || restText ? 'popup' : 'camera'">
+        <p v-if="firstTwoText" :style="{ '--item-text': `'${firstTwoText}'` }"></p>
+        <p v-if="restText" :style="{ '--item-text': `'${restText}'` }"></p>
       </div>
     </div>
   </div>
@@ -71,26 +80,31 @@ const showNextMessage = () => {
 <style scoped lang="scss">
 .dinamic-island {
   width: 100%;
-  height: 2.5rem;
+  height: 1.5rem;
   border-radius: 2.875rem 2.875rem 0 0;
   display: flex;
   align-items: center;
-  justify-content: center;
   position: absolute;
   z-index: 3;
-  top: 0;
+  top: 1rem;
   left: 0;
 
   .wrap {
     width: calc(100%);
     display: flex;
     justify-content: center;
+    position: absolute;
+    top: 0;
 
     .camera, .popup {
       transition: all 0.2s;
 
       p {
         color: #fff;
+        text-align: left;
+        white-space: normal;
+        word-wrap: break-word; 
+        overflow-wrap: break-word;
       }
 
       p::after {
@@ -114,13 +128,11 @@ const showNextMessage = () => {
       background: #000;
       box-shadow: var(--box-shadow);
       backdrop-filter: blur(6px);
-      color: var(--back-a);
       font-size: calc(var(--mm) * 0.8);
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
       position: relative;
-      top: var(--mm);
     }
   }
 }
