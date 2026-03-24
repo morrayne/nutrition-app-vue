@@ -110,7 +110,14 @@ export const useAuthStore = defineStore("auth", () => {
       const goalWithId = { ...goal, user_id: user_id };
       const { error: goalError } = await supabase.from("goal").insert(goalWithId);
       if (goalError) throw goalError;
-      const historyWithId = { user_id: user_id, active_days: [], meals: [], weight: []};
+      // history table
+      const today = new Date().toISOString().split('T')[0];
+      const weightHistoryRecord = {
+        date: today,
+        weight: body.weight,
+        bf: body.bf 
+      };
+      const historyWithId = { user_id: user_id, active_days: [today], meals: [], weight: [weightHistoryRecord]};
       const { error: historyError } = await supabase.from("history").insert(historyWithId);
       if (historyError) throw historyError;
     } catch (err) {

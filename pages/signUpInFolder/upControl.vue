@@ -5,7 +5,7 @@ import { computed } from "vue";
 // ui
 import glass from "@/common/ui/glass.vue";
 import arrow from "@/common/svg/arrow.vue";
-import account from "@/common/svg/account.vue";
+import user from "@/common/svg/user.vue";
 // router
 import router from "../../appSettings/router";
 import type { tAuth } from "../../stores/types";
@@ -44,7 +44,7 @@ const signupBtn = {
 }
 const more = {
   type: "svg" as const,
-  svg: account,
+  svg: user,
 }
 // previous slide
 const goBack = () => {

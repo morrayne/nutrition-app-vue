@@ -11,7 +11,7 @@ import type { tAuth } from "../../stores/types";
 import type { tUpdateViewArray } from "../signUpPage.vue";
 
 // ERROR
-const SCREEN_INDEX = 3; // для signup это экран 3
+const SCREEN_INDEX = 3;
 const hasErrors = ref(false);
 const errorMessage = ref<string[]>([]);
 const handleError = (err: string[]) => {

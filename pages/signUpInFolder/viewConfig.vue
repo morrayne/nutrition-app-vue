@@ -21,8 +21,8 @@ const emit = defineEmits<{
 }>()
 // language
 const avaliableLang: tSelOpt[] = [
-  { title: "russian", toEmit: "ru" },
   { title: "english", toEmit: "en" },
+  { title: "russian", toEmit: "ru" },
   { title: "espaniol", toEmit: "es" },
   { title: "mandarin", toEmit: "zh" },
 ];

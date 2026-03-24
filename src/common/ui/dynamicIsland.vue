@@ -102,9 +102,8 @@ const showNextMessage = () => {
       p {
         color: #fff;
         text-align: left;
-        white-space: normal;
-        word-wrap: break-word; 
-        overflow-wrap: break-word;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       p::after {

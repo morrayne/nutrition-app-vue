@@ -49,11 +49,11 @@ const validateText = (value: string): boolean => {
   const rules = props.rule.str;
   if (!rules) return true
   if (value.length < rules.minLength) {
-    errorMessage.value = [props.title, 'should-be-at-least', String(rules.minLength), 'characters-long'];
+    errorMessage.value = [props.title, 'should-be', 'at-least', String(rules.minLength), 'characters-long'];
     return false
   }
   if (value.length > rules.maxLength) {
-    errorMessage.value = [props.title, 'should-be-maximum', String(rules.maxLength), 'characters-long'];
+    errorMessage.value = [props.title, 'should-be', 'maximum', String(rules.maxLength), 'characters-long'];
     return false
   }
   for (const item of rules.toContain) {

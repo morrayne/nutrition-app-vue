@@ -51,12 +51,6 @@ const getItemClass = (option: tSelOpt, index: number) => {
     act: index < selectedIndex.value,
   };
 };
-const barTop = computed(() => {
-  const itemHeight = 'calc(var(--mm) * 2.95)'; 
-  const initialOffset = 'calc(var(--mm) * 1.5)'; 
-  const index = selectedIndex.value; 
-  return `calc(${initialOffset} + (${itemHeight} * ${index}))`;
-});
 </script>
 
 <!-- prettier-ignore -->
@@ -64,7 +58,6 @@ const barTop = computed(() => {
   <div class="sel">
     <p class="title" :style="{ '--item-text': `var(--${props.title})` }"></p>
     <div class="s">
-      <div class="bar" :style="{ top: barTop }"></div>
       <div class="item" :class="getItemClass(option, index)" v-for="(option, index) in data.options" :key="option.toEmit" @click="handleSelect(option.toEmit)">
         <div class="cont">
           <p class="text" :style="{ '--data-text': `var(--${option.title})` }"></p>
@@ -101,15 +94,6 @@ const barTop = computed(() => {
     backdrop-filter: blur(6px);
     overflow: hidden;
 
-    .bar {
-      width: 0.5rem;
-      aspect-ratio: 1 / 1;
-      border-radius: 0.5rem;
-      background: var(--signup-sub-border);
-      position: absolute;
-      left: 0.675rem;
-    }
-
     .item {
       color: var(--signup-sub-text);
       padding: 0 calc(var(--mm) * 1.5);
@@ -121,12 +105,15 @@ const barTop = computed(() => {
         padding: calc(var(--mm) * 0.8) calc(var(--mm) * 0.25);
         justify-content: space-between;
         border-bottom: solid 1px var(--signup-main-border);
+        overflow: hidden;
 
         .text {
+          color: var(--signup-sub-text);
           font-size: var(--mm);
         }
 
         .text::after {
+          width: fit-content;
           content: var(--data-text);
         }
 
@@ -140,6 +127,15 @@ const barTop = computed(() => {
       &.last .cont {
         border-bottom: none;
       }
+    }
+
+    .active .cont .text {
+      font-weight: 500;
+      color: var(--signup-main-text);
+    }
+
+    .active .cont {
+      border-bottom: solid 1px var(--signup-main-text);
     }
 
     .first {
