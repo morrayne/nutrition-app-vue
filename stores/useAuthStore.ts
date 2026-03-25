@@ -1,29 +1,19 @@
-// IMPORT
-// vue & pinia
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import type { AuthError, Session, User } from "@supabase/supabase-js";
-// store
 import { useCommonStore } from "./useCommonStore";
 import { useConfigStore } from "./useConfigStore";
 import { useBodyStore } from "./useBodyStore";
 import { useGoalStore } from "./useGoalStore";
 import { useHistoryStore } from "./useHistoryStore";
-// type
 import type { tAuth, tCommon, tConfig, tBody, tGoal } from "./types";
-
-// 
 const getRandomAvatarIndex = (): number => {
   const min = 0;
   const max = 27;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-// STORE
 export const useAuthStore = defineStore("auth", () => {
-  // STATE
   const user = ref<User | null>(null);
   const session = ref<Session | null>(null);
   const isLoading = ref(false);
@@ -34,9 +24,6 @@ export const useAuthStore = defineStore("auth", () => {
   const userId = computed(() => user.value?.id);
   const uid = computed(() => user.value?.id);
   const isReady = computed(() => !isLoading.value && isInitialized.value);
-
-  // ACTION
-  // load user data
   const loadUserData = async (userId: string) => {
     try {
       const { data: profile, error: profileError } = await supabase.from("common").select("*").eq("user_id", userId).maybeSingle();
@@ -55,7 +42,6 @@ export const useAuthStore = defineStore("auth", () => {
       error.value = (err as Error).message;
     }
   };
-  // update stores
   const updateStoresFromProfile = async (profile: any, config: any, body: any, goal: any, history: any) => {
     const commonStore = useCommonStore();
     const configStore = useConfigStore();
@@ -74,9 +60,6 @@ export const useAuthStore = defineStore("auth", () => {
       configStore.applyConfig(config);
     }
   };
-
-  // AUTH ACTIONS
-  // initialize
   const initialize = async () => {
     if (isInitialized.value) return;
     try {
@@ -95,7 +78,6 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = false;
     }
   };
-  // create user profile
   const createUserProfile = async (common: tCommon, config: tConfig, body: tBody, goal: tGoal, user_id: string) => {
     try {
       const commonWithId = { ...common, user_id: user_id, icon: getRandomAvatarIndex(), sub_tier: 0, online: true, first_login: false };
@@ -125,7 +107,6 @@ export const useAuthStore = defineStore("auth", () => {
       throw err;
     }
   };
-  // signup
   const signUp = async (auth: tAuth, common: tCommon, config: tConfig, body: tBody, goal: tGoal,) => {
     isLoading.value = true;
     error.value = null;
@@ -150,7 +131,6 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = false;
     }
   };
-  // sign in
   const signIn = async (email: string, password: string) => {
     isLoading.value = true;
     error.value = null;
@@ -172,7 +152,6 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = false;
     }
   };
-  // sign out
   const signOut = async () => {
     isLoading.value = true;
     error.value = null;
@@ -190,8 +169,6 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = false;
     }
   };
-
-  // LISTENERS & HELPERS
   const clearLocalStores = () => {
     const commonStore = useCommonStore();
     const configStore = useConfigStore();
@@ -203,19 +180,16 @@ export const useAuthStore = defineStore("auth", () => {
     bodyStore.clearBodyData?.();
     goalStore.clearGoal?.();
     historyStore.clearHistory?.(); 
-  document.documentElement.setAttribute("data-theme", "light");
-  document.documentElement.setAttribute("lang", "en");
-  document.documentElement.setAttribute("data-palette", "colorful");
-  document.documentElement.setAttribute("data-phone-color", "blue");
-  document.documentElement.setAttribute("data-mm", "16");
+    document.documentElement.setAttribute("data-theme", "light");
+    document.documentElement.setAttribute("lang", "en");
+    document.documentElement.setAttribute("data-palette", "colorful");
+    document.documentElement.setAttribute("data-phone-color", "blue");
+    document.documentElement.setAttribute("data-mm", "16");
   };
-  // 
   const clearLocalData = () => {
     user.value = null;
     session.value = null;
     clearLocalStores();
   };
-
-  // EXPORTS
   return { user, session, isLoading, error, isInitialized, isAuthenticated, userEmail, userId, uid, isReady, initialize, signUp, signIn, signOut };
 });

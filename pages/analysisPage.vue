@@ -1,5 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import endUp from "./signUpInFolder/endUp.vue";
+</script>
 
-<template></template>
+<template>
+  <div class="screen analysis">
+    <endUp />
+  </div>
+</template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.analysis {
+  padding: var(--mm);
+}
+</style>

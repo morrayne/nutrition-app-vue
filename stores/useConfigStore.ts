@@ -1,17 +1,9 @@
-// IMPORT
-// vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-// type
 import type { tConfig } from "./types";
-
-
-// STORE
 export const useConfigStore = defineStore("config", () => {
-  // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
   const config = ref<tConfig>({
@@ -20,8 +12,6 @@ export const useConfigStore = defineStore("config", () => {
     phone_color: "black",
     mm: "16",
   });
-
-  // ACTION
   const loadConfig = async () => {
     if (!authStore.user) return;
     try {
@@ -33,18 +23,15 @@ export const useConfigStore = defineStore("config", () => {
       console.error("Error loading config:", err);
     }
   };
-  // 
   const setConfig = (data: Partial<tConfig>) => {
     config.value = { ...config.value, ...data };
   };
-  // 
   const applyConfig = (data: Partial<tConfig>) => {
     if (data.language) document.documentElement.lang = data.language;
     if (data.theme) document.documentElement.setAttribute("data-theme", data.theme);
     if (data.phone_color) document.documentElement.setAttribute("data-phone-color", data.phone_color);
     if (data.mm) document.documentElement.setAttribute("data-mm", data.mm);
   };
-  // 
   const updateConfig = async (data: Partial<tConfig>) => {
     if (!authStore.user) return;
     try {
@@ -58,7 +45,6 @@ export const useConfigStore = defineStore("config", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const setLang = async (lang: string) => {
     await updateConfig({ language: lang });
   };
@@ -71,7 +57,6 @@ export const useConfigStore = defineStore("config", () => {
   const setMm = async (mm: string) => {
     await updateConfig({ mm });
   };
-  // 
   const resetToDefaults = async () => {
     await updateConfig({
       language: "en",
@@ -80,7 +65,5 @@ export const useConfigStore = defineStore("config", () => {
       mm: "16",
     });
   };
-
-  // EXPORT
   return { config, error, loadConfig, setConfig, updateConfig, setLang, setTheme, setPhoneColor, setMm, resetToDefaults, applyConfig };
 });

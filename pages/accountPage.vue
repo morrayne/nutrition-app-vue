@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import endUp from "./signUpInFolder/endUp.vue";
 import miniProfile from "./accountFolder/miniProfile.vue";
 import loadingCover from "@/common/ui/loadingCover.vue";
 import router from "../appSettings/router";
@@ -23,6 +24,7 @@ const signout = async () => {
     <loadingCover v-if="isLoading" />
     <miniProfile />
     <button class="signout" @click="signout"></button>
+    <endUp />
   </div>
 </template>
 

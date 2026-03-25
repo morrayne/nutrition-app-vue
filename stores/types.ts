@@ -1,5 +1,3 @@
-// TYPE
-// auth
 export interface tAuth {
   email: string;
   password: string;
@@ -35,7 +33,6 @@ export interface tGoal {
   weight: number | null;
   bf: number | null;
 }
-// history
 export interface tMealItem {
   name: string;
   weight: number;

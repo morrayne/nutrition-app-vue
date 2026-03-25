@@ -1,16 +1,9 @@
-// IMPORT
-// vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-// type
 import type { tGoal } from "./types";
-
-// STORE
 export const useGoalStore = defineStore("goal", () => {
-  // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
   const goal = ref<tGoal>({
@@ -21,8 +14,6 @@ export const useGoalStore = defineStore("goal", () => {
     weight: null,
     bf: null,
   });
-
-  // ACTION
   const loadGoal = async () => {
     if (!authStore.user) return;
     try {
@@ -33,7 +24,6 @@ export const useGoalStore = defineStore("goal", () => {
       error.value = (err as Error).message;
     }
   };
-  // 
   const createGoal = async (data: Omit<tGoal, "user_id">) => {
     if (!authStore.user) return;
     try {
@@ -48,7 +38,6 @@ export const useGoalStore = defineStore("goal", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const updateGoal = async (data: Partial<tGoal>) => {
     if (!authStore.user) return;
     try {
@@ -62,7 +51,6 @@ export const useGoalStore = defineStore("goal", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const clearGoal = () => {
     goal.value = {
       calories: 2000,
@@ -73,7 +61,5 @@ export const useGoalStore = defineStore("goal", () => {
       bf: null,
     };
   };
-
-  // EXPORT
   return { goal, error, loadGoal, createGoal, updateGoal, clearGoal };
 });

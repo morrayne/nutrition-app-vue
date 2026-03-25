@@ -1,16 +1,9 @@
-// IMPORT
-// vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-// type
 import type { tBody } from "./types";
-
-// STORE
 export const useBodyStore = defineStore("body", () => {
-  // STATE
   const authStore = useAuthStore();
   const error = ref<string | null>(null);
   const body = ref<tBody>({
@@ -21,8 +14,6 @@ export const useBodyStore = defineStore("body", () => {
     weight: null,
     bf: null,
   });
-
-  // ACTION
   const loadBodyData = async () => {
     if (!authStore.user) return;
     try {
@@ -34,11 +25,9 @@ export const useBodyStore = defineStore("body", () => {
       console.error("Error loading body data:", err);
     }
   };
-  // 
   const setBodyData = (data: Partial<tBody>) => {
     body.value = { ...body.value, ...data };
   };
-  // 
   const createBodyData = async (data: Omit<tBody, "user_id">) => {
     if (!authStore.user) return;
     try {
@@ -53,7 +42,6 @@ export const useBodyStore = defineStore("body", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const updateBodyData = async (data: Partial<tBody>) => {
     if (!authStore.user) return;
     try {
@@ -67,7 +55,6 @@ export const useBodyStore = defineStore("body", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const clearBodyData = () => {
     body.value = {
       gender: "male",
@@ -78,6 +65,5 @@ export const useBodyStore = defineStore("body", () => {
       bf: null,
     };
   };
-
   return { body, error, loadBodyData, setBodyData, createBodyData, updateBodyData, clearBodyData };
 });

@@ -1,16 +1,9 @@
-// IMPORT
-// vue & pinia
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-// type
 import type { tCommon } from "./types";
-
-// STORE
 export const useCommonStore = defineStore("common", () => {
-  // STATE
   const authStore = useAuthStore();
   const availableAvatars = ref<string[]>([]);
   const avatarsLoading = ref(false);
@@ -25,8 +18,6 @@ export const useCommonStore = defineStore("common", () => {
     sub_tier: null,
     first_login: false,
   });
-
-  // ACTION
   const loadProfile = async () => {
     if (!authStore.user) return;
     try {
@@ -37,11 +28,9 @@ export const useCommonStore = defineStore("common", () => {
       console.error("Error loading profile:", err);
     }
   };
-  // 
   const setProfile = (data: Partial<tCommon>) => {
     profile.value = { ...profile.value, ...data };
   };
-  // 
   const updateProfile = async (data: Partial<tCommon>) => {
     if (!authStore.user) return;
     try {
@@ -54,7 +43,6 @@ export const useCommonStore = defineStore("common", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const setOnline = async (status: boolean) => {
     profile.value.online = status;
     await updateProfile({ online: status });
@@ -75,7 +63,6 @@ export const useCommonStore = defineStore("common", () => {
     profile.value.first_login = value;
     await updateProfile({ first_login: value });
   };
-  // 
   const loadAvailableAvatars = async () => {
     avatarsLoading.value = true;
     try {
@@ -89,12 +76,10 @@ export const useCommonStore = defineStore("common", () => {
       avatarsLoading.value = false;
     }
   };
-  // 
   const getAvatarUrl = computed(() => {
     if (availableAvatars.value.length === 0) return "";
     return availableAvatars.value[profile.value.icon || 0] || "";
   });
-  // 
   const clearProfile = () => {
     profile.value = {
       online: false,
@@ -105,7 +90,5 @@ export const useCommonStore = defineStore("common", () => {
       first_login: false,
     };
   };
-
-  // EXPORT
   return { profile, availableAvatars, avatarsLoading, isSubscribed, userEmail, username, getAvatarUrl, loadProfile, setProfile, updateProfile, setOnline, setIcon, setUsername, setSubTier, setFirstLogin, loadAvailableAvatars, clearProfile };
 });

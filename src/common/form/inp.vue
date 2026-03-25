@@ -13,9 +13,9 @@ export interface tInp {
     str?: {
       minLength: number;
       maxLength: number;
-      toContain: string[];
-      noToContain: string[];
-      stringPattern: RegExp;
+      toContain?: string[];
+      noToContain?: string[];
+      stringPattern?: RegExp;
     };
     num?: {
       minValue: number;
@@ -56,21 +56,27 @@ const validateText = (value: string): boolean => {
     errorMessage.value = [props.title, 'should-be', 'maximum', String(rules.maxLength), 'characters-long'];
     return false
   }
-  for (const item of rules.toContain) {
-    if (!value.includes(item)) {
+  if (rules.toContain) {
+    for (const item of rules.toContain) {
+      if (!value.includes(item)) {
+        errorMessage.value = [props.title, 'has-wrong-format'];
+        return false
+      }
+    }
+  }
+  if (rules.noToContain) {
+    for (const item of rules.noToContain) {
+      if (value.includes(item)) {
+        errorMessage.value = [props.title, 'has-wrong-format'];
+        return false
+      }
+    }
+  }
+  if (rules.stringPattern) {
+    if (!rules.stringPattern.test(value)) {
       errorMessage.value = [props.title, 'has-wrong-format'];
       return false
     }
-  }
-  for (const item of rules.noToContain) {
-    if (value.includes(item)) {
-      errorMessage.value = [props.title, 'has-wrong-format'];
-      return false
-    }
-  }
-  if (!rules.stringPattern.test(value)) {
-    errorMessage.value = [props.title, 'has-wrong-format'];
-    return false
   }
   return true
 }

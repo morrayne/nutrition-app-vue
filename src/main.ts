@@ -1,34 +1,23 @@
-// IMPORT
-// vue & app
 import { createApp } from "vue";
 import App from "./App.vue";
-// router & pinia
 import router from "../appSettings/router.ts";
 import { createPinia } from "pinia";
-// store
-import { useAuthStore } from "../stores/useAuthStore";
-import { useCommonStore } from "../stores/useCommonStore";
-// import { useConfigStore } from "../stores/useConfigStore.ts";
-
-// USE
-// app
 const app = createApp(App);
-// router & pinia
+app.use(router);
 const pinia = createPinia();
 app.use(pinia);
-app.use(router);
-// store
+import { useAuthStore, useCommonStore, useHistoryStore } from "../stores/index.ts";
 const authStore = useAuthStore();
 const commonStore = useCommonStore();
-// const configStore = useConfigStore();
-
-// BOOTSTRAP
+const historyStore = useHistoryStore();
 const bootstrap = async () => {
   await authStore.initialize();
-  if (authStore.isAuthenticated) await commonStore.loadAvailableAvatars();
-  else router.push("/signup");
+  if (authStore.isAuthenticated) {
+    await commonStore.loadAvailableAvatars();
+    // @ts-ignore
+    historyStore.addActiveDay((new Date()).toISOString().split("T")[0]);
+    historyStore.updateHistory();
+  } else router.push("/signup");
   app.mount("#app");
 };
-
-// APP START
 bootstrap();

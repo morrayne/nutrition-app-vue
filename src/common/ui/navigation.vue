@@ -30,7 +30,7 @@ const handleNav = (data: tNav) => {
 <template>
   <div class="navigation">
     <div class="item" v-for="value in data" @click="handleNav(value)">
-      <component class="svg" :is="value.svg" color="var(--signup-sub-text)" :rotate="0" :scale="value.scale || 1" />
+      <component class="svg" :is="value.svg" color="var(--signup-sub-text)" :rotate="0" :scale="value.scale || 1" />  
       <div class="text" :style="`--item-text: var(--${value.title})`"></div>
     </div>
   </div>
@@ -38,18 +38,20 @@ const handleNav = (data: tNav) => {
 
 <style scoped lang="scss">
 .navigation {
-  width: calc(100% - calc(2 * var(--mm)));
-  padding: calc(0.5 * var(--mm)) var(--mm);
+  width: calc(100% - calc(3 * var(--mm)));
+  padding: 0 var(--mm);
+  height: 3rem;
   backdrop-filter: blur(6px);
   border: solid 1px var(--signup-main-border);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   border-radius: 2rem;
   position: absolute;
   z-index: 3;
-  bottom: var(--mm);
-  left: var(--mm);
+  bottom: calc(1.5 * var(--mm));
+  left: calc(1.5 * var(--mm));
 
   .item {
     display: flex;
@@ -58,7 +60,8 @@ const handleNav = (data: tNav) => {
     cursor: pointer;
 
     .svg {
-      width: 2rem;
+      width: 1.75rem;
+      height: 1.75rem;
     }
 
     .text {

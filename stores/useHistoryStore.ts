@@ -1,17 +1,9 @@
-// MAIN IMPORTS
-// vue & pinia
 import { ref } from "vue";
 import { defineStore } from "pinia";
-// supabase
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-// type
 import type { tHistory, tDailyMeal, tWeightEntry } from "./types";
-
-
-// STORE
 export const useHistoryStore = defineStore("history", () => {
-  // STORE
   const authStore = useAuthStore();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
@@ -21,8 +13,6 @@ export const useHistoryStore = defineStore("history", () => {
     meals: [],
     weight: [],
   });
-
-  // ACTION
   const loadHistory = async () => {
     if (!authStore.user) return;
     isLoading.value = true;
@@ -37,7 +27,6 @@ export const useHistoryStore = defineStore("history", () => {
       isLoading.value = false;
     }
   };
-  //   
   const createHistory = async () => {
     if (!authStore.user) return;
     try {
@@ -52,28 +41,25 @@ export const useHistoryStore = defineStore("history", () => {
       return { success: false, error: err };
     }
   };
-  //   
   const addActiveDay = (date: string) => {
     if (!history.value.active_days.includes(date)) {
-      history.value.active_days.push(date);
+      if (history.value.active_days.length >= 100) history.value.active_days.shift()
+      else history.value.active_days.push(date);
       history.value.active_days.sort();
     }
   };
-  // 
   const addMeal = (meal: tDailyMeal) => {
     const index = history.value.meals.findIndex((m) => m.date === meal.date);
     if (index === -1) history.value.meals.push(meal);
     else history.value.meals[index] = meal;
     history.value.meals.sort((a, b) => b.date.localeCompare(a.date));
   };
-  // 
   const addWeightEntry = (entry: tWeightEntry) => {
     const index = history.value.weight.findIndex((w) => w.date === entry.date);
     if (index === -1) history.value.weight.push(entry);
     else history.value.weight[index] = entry;
     history.value.weight.sort((a, b) => b.date.localeCompare(a.date));
   };
-  //   
   const updateHistory = async () => {
     if (!authStore.user) return;
     try {
@@ -86,7 +72,6 @@ export const useHistoryStore = defineStore("history", () => {
       return { success: false, error: err };
     }
   };
-  // 
   const clearHistory = () => {
     history.value = {
       user_id: "",
@@ -95,7 +80,5 @@ export const useHistoryStore = defineStore("history", () => {
       weight: [],
     };
   };
-
-  // EXPORT   
   return { history, isLoading, error, loadHistory, createHistory, addActiveDay, addMeal, addWeightEntry, updateHistory, clearHistory };
 });
