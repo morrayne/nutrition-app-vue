@@ -7,10 +7,14 @@
   --signup-sub-text: #363636;
   --signup-main-border: #e4e4e4;
   --signup-sub-border: #e4e4e4;
-  --swh-background: #64c24c;
-  --signout-background: #d44747;
   --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.5rem 1.5rem;
+  --red: #ff6b6b;
+  --pink: #a29bfe;
+  --pur: #ff99cc;
+  --cian: #55efc4;
+  --yellow: #ffeaa7;
 }
+
 // dark
 :root[data-theme="dark"] {
   --html-background: #161616;
@@ -19,9 +23,11 @@
   --signup-main-text: #f0f0f0;
   --signup-sub-text: #e0e0e0;
   --signup-main-border: #363636;
-  --signup-sub-border: #e4e4e4;
   --signup-sub-border: #646464;
-  --swh-background: #64c24c;
-  --signout-background: #d44747;
   --box-shadow: none;
+  --red: #e63946;
+  --pink: #6c5ce7;
+  --pur: #da3183;
+  --cian: #00b894;
+  --yellow: #e0a027;
 }

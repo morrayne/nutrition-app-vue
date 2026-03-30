@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useAssetStore } from "../stores";
 import { useAuthStore } from "../stores";
 import { useHistoryStore } from "../stores";
@@ -10,9 +10,19 @@ import sel from "@/common/form/sel.vue";
 import type { tSwh } from "@/common/form/swh.vue";
 import type { tInp } from "@/common/form/inp.vue";
 import type { tSel, tSelOpt } from "@/common/form/sel.vue";
+import type { tDailyMeal } from "../stores/types";
+
 const authStore = useAuthStore();
 const assetStore = useAssetStore();
 const historyStore = useHistoryStore();
+
+// Загрузка ассетов при монтировании
+onMounted(async () => {
+  if (authStore.userId) {
+    await assetStore.fetchAssets(authStore.userId);
+  }
+});
+
 const record = ref({
   save: "temp" as "temp" | "perm",
   productName: "",
@@ -23,7 +33,9 @@ const record = ref({
   portionType: "full-portion" as "full-portion" | "per-100-g",
   weight: 100,
 });
+
 let firstCaloriesCalc = true;
+
 const save: tSwh = {
   title: "save-asset",
   data: {
@@ -33,10 +45,12 @@ const save: tSwh = {
     off: "temp",
   },
 };
+
 const avaliableWeight: tSelOpt[] = [
   { title: "full-portion", toEmit: "full-portion" },
   { title: "per-100-g", toEmit: "per-100-g" },
 ];
+
 const portionType: tSel = {
   title: "portion-size",
   data: {
@@ -45,6 +59,7 @@ const portionType: tSel = {
     options: avaliableWeight,
   },
 };
+
 const weightInp: tInp = {
   title: "weight",
   data: {
@@ -54,16 +69,17 @@ const weightInp: tInp = {
   rule: {
     num: {
       minValue: 1,
-      maxValue: 5000
+      maxValue: 5000,
     },
   },
   width: { left: 65, right: 35 },
 };
+
 const productName: tInp = {
   title: "product-name",
   data: {
     type: "text" as const,
-    start: '',
+    start: "",
   },
   rule: {
     str: {
@@ -73,6 +89,7 @@ const productName: tInp = {
   },
   width: { left: 65, right: 35 },
 };
+
 const proteins: tInp = {
   title: "proteins",
   data: {
@@ -82,11 +99,12 @@ const proteins: tInp = {
   rule: {
     num: {
       minValue: 0,
-      maxValue: 300
+      maxValue: 300,
     },
   },
   width: { left: 65, right: 35 },
 };
+
 const carbs: tInp = {
   title: "carbs",
   data: {
@@ -96,11 +114,12 @@ const carbs: tInp = {
   rule: {
     num: {
       minValue: 0,
-      maxValue: 600
+      maxValue: 600,
     },
   },
   width: { left: 65, right: 35 },
 };
+
 const fats: tInp = {
   title: "fats",
   data: {
@@ -110,11 +129,12 @@ const fats: tInp = {
   rule: {
     num: {
       minValue: 0,
-      maxValue: 200
+      maxValue: 200,
     },
   },
   width: { left: 65, right: 35 },
 };
+
 const calories: tInp = {
   title: "calories",
   data: {
@@ -124,20 +144,27 @@ const calories: tInp = {
   rule: {
     num: {
       minValue: 0,
-      maxValue: 5000
+      maxValue: 5000,
     },
   },
   width: { left: 65, right: 35 },
 };
-watch([() => record.value.proteins, () => record.value.carbs, () => record.value.fats], 
+
+watch(
+  [
+    () => record.value.proteins,
+    () => record.value.carbs,
+    () => record.value.fats,
+  ],
   ([newProteins, newCarbs, newFats]) => {
     if (firstCaloriesCalc && newProteins > 0 && newCarbs > 0 && newFats > 0) {
       const calculated = newProteins * 4 + newCarbs * 4 + newFats * 9;
       record.value.calories = calculated;
       firstCaloriesCalc = false;
     }
-  }
+  },
 );
+
 const finalValues = computed(() => {
   const r = record.value;
   if (r.portionType === "full-portion") {
@@ -146,7 +173,7 @@ const finalValues = computed(() => {
       proteins: r.proteins,
       carbs: r.carbs,
       fats: r.fats,
-      weight: r.weight
+      weight: r.weight,
     };
   } else {
     const factor = r.weight / 100;
@@ -155,17 +182,91 @@ const finalValues = computed(() => {
       proteins: Math.round(r.proteins * factor),
       carbs: Math.round(r.carbs * factor),
       fats: Math.round(r.fats * factor),
-      weight: r.weight
+      weight: r.weight,
     };
   }
 });
-const addRecord = () => {
-  const { calories, proteins, carbs, fats, weight } = finalValues.value;
-  const todaysMeal = { productName: record.value.productName, calories, proteins, carbs, fats, weight: weight, type: record.value.save === "perm" ? "perm" : "temp" };
-  if (record.value.save === "perm") {
-    // save as asset
-    // assetStore.addAsset(authStore.userId!, todaysMeal)
+
+const addRecord = async () => {
+  if (!record.value.productName) {
+    console.warn("Product name is required");
+    return;
   }
+
+  if (!authStore.userId) {
+    console.warn("User not authenticated");
+    return;
+  }
+
+  const { calories, proteins, carbs, fats, weight } = finalValues.value;
+  const today = new Date().toISOString().split("T")[0];
+
+  // Находим существующую запись за сегодня
+  const existingMeal = historyStore.history.meals.find((m) => m.date === today);
+
+  // Создаем новый элемент приема пищи
+  const newItem = {
+    name: record.value.productName,
+    weight: weight,
+    calories: calories,
+    proteins: proteins,
+    carbs: carbs,
+    fats: fats,
+  };
+
+  let updatedMeal: tDailyMeal;
+
+  if (existingMeal) {
+    // Добавляем к существующей записи
+    const updatedItems = [...existingMeal.items, newItem];
+    const newTotal = updatedItems.reduce(
+      (acc, item) => {
+        acc.calories += item.calories;
+        acc.proteins += item.proteins;
+        acc.carbs += item.carbs;
+        acc.fats += item.fats;
+        return acc;
+      },
+      { calories: 0, proteins: 0, carbs: 0, fats: 0 },
+    );
+
+    updatedMeal = {
+      date: today!,
+      items: updatedItems,
+      total: newTotal,
+    };
+  } else {
+    // Создаем новую запись
+    updatedMeal = {
+      date: today!,
+      items: [newItem],
+      total: {
+        calories: calories,
+        proteins: proteins,
+        carbs: carbs,
+        fats: fats,
+      },
+    };
+  }
+
+  // Добавляем в store
+  historyStore.addMeal(updatedMeal);
+
+  // Сохраняем в базу данных
+  await historyStore.updateHistory();
+
+  // Если нужно сохранить как ассет
+  if (record.value.save === "perm") {
+    await assetStore.addAsset(authStore.userId, {
+      product_name: record.value.productName,
+      calories: record.value.calories,
+      proteins: record.value.proteins,
+      carbs: record.value.carbs,
+      fats: record.value.fats,
+    });
+  }
+
+  // Сброс формы
   record.value = {
     save: "temp",
     productName: "",

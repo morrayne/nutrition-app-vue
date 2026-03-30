@@ -37,8 +37,8 @@ const signout = async () => {
 
   .signout {
     padding: calc(0.5 * var(--mm));
-    background: var(--signout-background);
-    border: solid 1px var(--signout-background);
+    background: var(--red);
+    border: solid 1px var(--red);
     border-radius: calc(2.25 * var(--mm));
     color: #e4e4e4;
   }
