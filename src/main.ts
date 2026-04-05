@@ -1,23 +1,34 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "../appSettings/router.ts";
+
 import { createPinia } from "pinia";
 const app = createApp(App);
-app.use(router);
 const pinia = createPinia();
 app.use(pinia);
-import { useAuthStore, useCommonStore, useHistoryStore } from "../stores/index.ts";
-const authStore = useAuthStore();
-const commonStore = useCommonStore();
-const historyStore = useHistoryStore();
+
+import router from "../appSettings/router.ts";
+app.use(router);
+
+import { useAuthStore } from "../stores/main/useAuthStore.ts";
+import { useConfigStore } from "../stores/single/useConfigStore.ts";
+import { useActiveDayStore } from "../stores/array/useActiveDayStore.ts";
+import { useCommonStore } from "../stores/single/useCommonStore.ts";
+
 const bootstrap = async () => {
+  const authStore = useAuthStore();
+  const configStore = useConfigStore();
+  const commonStore = useCommonStore();
+  const activeDayStore = useActiveDayStore();
   await authStore.initialize();
-  if (authStore.isAuthenticated) {
-    await commonStore.loadAvailableAvatars();
-    // @ts-ignore
-    historyStore.addActiveDay((new Date()).toISOString().split("T")[0]);
-    historyStore.updateHistory();
-  } else router.push("/signup");
+  if (authStore.isAuthenticated && authStore.userId) {
+    configStore.changeVisualViaConfig(configStore.config);
+    await activeDayStore.addToday();
+    commonStore.common.online = true;
+    commonStore.updateCommon();
+  } else {
+    router.push("/signup");
+  }
   app.mount("#app");
 };
+
 bootstrap();

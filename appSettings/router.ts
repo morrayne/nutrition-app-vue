@@ -1,72 +1,21 @@
-// IMPORTS
-// vue router
 import { createRouter, createWebHistory } from "vue-router";
-import signUpPage from "../pages/signUpPage.vue";
-import signInPage from "../pages/signInPage.vue";
-import accountPage from "../pages/accountPage.vue";
-import reshapePage from "../pages/reshapePage.vue";
-import analysisPage from "../pages/analysisPage.vue";
-import homePage from "../pages/homePage.vue";
-import mealPage from "../pages/mealPage.vue";
-// pages
 
-// CONTENT
-// routes
+import signupPage from "../components/pages/signupMain.vue";
+import signinPage from "../components/pages/signinMain.vue";
+import accountPage from "../components/pages/accountMain.vue";
+import homePage from "../components/pages/homeMain.vue";
+
 const routes = [
-  {
-    path: "/",
-    name: "blank",
-    redirect: "signup",
-    meta: { showNav: false } 
-  },
-  {
-    path: "/signup",
-    name: "signup",
-    component: signUpPage,
-    meta: { showNav: false } 
-  },
-  {
-    path: "/signin",
-    name: "signin",
-    component: signInPage,
-    meta: { showNav: false } 
-  },
-  {
-    path: "/account",
-    name: "account",
-    component: accountPage,
-    meta: { showNav: true } 
-  },
-  {
-    path: "/reshape",
-    name: "reshape",
-    component: reshapePage,
-    meta: { showNav: true } 
-  },
-  {
-    path: "/analysis",
-    name: "analysis",
-    component: analysisPage,
-    meta: { showNav: true } 
-  },
-  {
-    path: "/meal",
-    name: "meal",
-    component: mealPage,
-    meta: { showNav: true } 
-  },
-  {
-    path: "/home",
-    name: "home",
-    component: homePage,
-    meta: { showNav: true } 
-  },
+  { path: "/", name: "blank", redirect: "signup", meta: { showNavigation: false } },
+  { path: "/signup", name: "signup", component: signupPage, meta: { showNavigation: false } },
+  { path: "/signin", name: "signin", component: signinPage, meta: { showNavigation: false } },
+  { path: "/account", name: "account", component: accountPage, meta: { showNavigation: true } },
+  { path: "/home", name: "home", component: homePage, meta: { showNavigation: true } },
 ];
 
-// EXPORTS
-// router
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory("https://xjitwqdszairtfchtlgm.supabase.co"),
   routes,
 });
+
 export default router;
