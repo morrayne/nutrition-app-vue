@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import localText from "../../ui/localText.vue";
 
 const props = defineProps<{ activeDate: string }>();
@@ -10,16 +10,19 @@ interface week {
   weekday: string;
   fullDate: string;
 }
-const lastWeek: week[] = [];
-for (let i = 6; i >= 0; i--) {
+const lastMonth: week[] = [];
+for (let i = 30; i >= 0; i--) {
   const date = new Date();
   date.setDate(date.getDate() - i);
-  lastWeek.push({
+  lastMonth.push({
     date: date.getDate(),
-    weekday: date.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase(),
-    fullDate: date.toISOString().split("T")[0]!.replace(/-/g, ".")
+    weekday: date
+      .toLocaleDateString("en-US", { weekday: "long" })
+      .toLowerCase(),
+    fullDate: date.toISOString().split("T")[0]!.replace(/-/g, "."),
   });
 }
+lastMonth.reverse();
 
 const handleClick = (data: string) => {
   emits("change", data);
@@ -70,24 +73,22 @@ const getMacroGoal = (key: macro["key"]) => {
 <template>
   <div class="short">
     <div class="week">
-      <div v-for="value in lastWeek" :key="value.fullDate" :class="activeDate === value.fullDate ? 'day active' : 'day'" @click="handleClick(value.fullDate)">
+      <div v-for="value in lastMonth" :key="value.fullDate" :class="activeDate === value.fullDate ? 'day active' : 'day'" @click="handleClick(value.fullDate)">
         <p class="date">{{ value.date }}</p>
         <localText :text="value.weekday" size="s" />
       </div>
     </div>
-    <div class="stats">
-      <div class="grid">
-        <div class="card" v-for="macro in macros" :key="macro.key">
-          <localText :text="macro.label" size="s" />
-          <div class="circle">
-            <svg class="progress" viewBox="0 0 40 40">
-              <circle cx="20" cy="20" r="16" fill="none" stroke="var(--sub-background)" stroke-width="2.5" />
-              <circle cx="20" cy="20" r="16" fill="none" :stroke="`var(--${macro.color})`" stroke-width="2.5" :stroke-dasharray="circumference" :stroke-dashoffset="getOffset(getMacroValue(macro.key), getMacroGoal(macro.key))" stroke-linecap="round" />
-            </svg>
-            <span class="percent">{{ Math.round(getPercentage(getMacroValue(macro.key), getMacroGoal(macro.key))) }}%</span>
-          </div>
-          <div class="value">{{ getMacroValue(macro.key) }} / {{ getMacroGoal(macro.key) }}</div>
+    <div class="grid">
+      <div class="card" v-for="macro in macros" :key="macro.key">
+        <localText :text="macro.label" size="s" />
+        <div class="circle">
+          <svg class="progress" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="16" fill="none" stroke="var(--sub-background)" stroke-width="2.5" />
+            <circle cx="20" cy="20" r="16" fill="none" :stroke="`var(--${macro.color})`" stroke-width="2.5" :stroke-dasharray="circumference" :stroke-dashoffset="getOffset(getMacroValue(macro.key), getMacroGoal(macro.key))" stroke-linecap="round" />
+          </svg>
+          <span class="percent">{{ Math.round(getPercentage(getMacroValue(macro.key), getMacroGoal(macro.key))) }}%</span>
         </div>
+        <div class="value">{{ getMacroValue(macro.key) }} / {{ getMacroGoal(macro.key) }}</div>
       </div>
     </div>
   </div>
@@ -96,8 +97,8 @@ const getMacroGoal = (key: macro["key"]) => {
 <style scoped lang="scss">
 .short {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  max-height: 14rem;
+  flex-direction: row-reverse;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-radius: calc(2 * var(--newrem));
@@ -106,22 +107,26 @@ const getMacroGoal = (key: macro["key"]) => {
   box-shadow: var(--box-shadow);
 
   .week {
-    display: flex;
-    justify-content: space-between;
+    flex: 1;
+    flex-direction: column;
+    align-items: end;
     gap: 0.25rem;
+    overflow: scroll;
 
     .day {
-      flex: 1;
+      max-width: 36px;
+      width: 100%;
+      padding: 0.5rem 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0.5rem 0;
-      border-radius: calc(3 * var(--newrem));
+      justify-content: center;
+      border-radius: 2rem;
       border: solid 1px var(--ex-background);
       cursor: pointer;
 
       .date {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 500;
       }
     }
@@ -131,49 +136,52 @@ const getMacroGoal = (key: macro["key"]) => {
     }
   }
 
-  .stats {
-    .grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
+  .week::-webkit-scrollbar {
+    display: none;
+  }
 
-      .card {
-        aspect-ratio: 1 / 1;
-        background: var(--ex-background);
-        border-radius: 1rem;
-        padding: 0.125rem;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+
+    .card {
+      max-width: 92px;
+      aspect-ratio: 1 / 1;
+      background: var(--ex-background);
+      border-radius: 1rem;
+      padding: 0.125rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.125rem;
+
+      .circle {
+        width: 3.5rem;
+        height: 3.5rem;
+        position: relative;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.125rem;
 
-        .circle {
-          width: 4rem;
-          height: 4rem;
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .progress {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-          }
-
-          .percent {
-            position: absolute;
-            font-size: var(--size-m);
-          }
+        .progress {
+          width: 100%;
+          height: 100%;
+          transform: rotate(-90deg);
         }
 
-        .value {
-          font-size: var(--size-xs);
-          white-space: nowrap;
-          text-align: center;
+        .percent {
+          font-weight: 500;
+          position: absolute;
+          font-size: 14px;
         }
+      }
+
+      .value {
+        font-size: 10px;
+        white-space: nowrap;
+        text-align: center;
       }
     }
   }

@@ -58,7 +58,7 @@ const data: tNav[] = [
       aspect-ratio: 1 / 1;
       padding: 0.25rem;
       border-radius: var(--newrem);
-      background: var(--sub-background);
+      background: #ffffff40;
       border: solid 1px var(--ex-background);
       cursor: pointer;
     }

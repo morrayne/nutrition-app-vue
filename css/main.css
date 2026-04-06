@@ -82,11 +82,11 @@
   --html-background: #ffffff;
   --main-background: #ffffff;
   --sub-background: #f0f0f0;
-  --ex-background: #d6d6d6;
+  --ex-background: #e2e2e2;
   --main-color: #242424;
   --sub-color: #363636;
   --ex-color: #484848;
-  --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.5rem 1.5rem;
+  --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.25rem 0.5rem;
   --re: #ff6b6b;
   --pu: #a29bfe;
   --pi: #ff99cc;
@@ -261,6 +261,14 @@ input::placeholder {
   --short-proteins: "p";
   --short-fats: "f";
   --short-carbs: "c";
+  --log: "log";
+  --add: "add";
+  --saved: "saved";
+  --save: "save";
+  --send: "send";
+  --send-to-log: "push to log";
+  --product-name: "product name";
+  --full-size: "full size";
 }
 
 :root[lang=ru] {
@@ -301,6 +309,21 @@ input::placeholder {
   --username: "имя";
   --email: "почта";
   --password: "пароль";
+  --monday: "пн";
+  --tuesday: "вт";
+  --wednesday: "ср";
+  --thursday: "чт";
+  --friday: "пт";
+  --saturday: "сб";
+  --sunday: "вс";
+  --short-calories: "к";
+  --short-proteins: "б";
+  --short-fats: "ж";
+  --short-carbs: "у";
+  --log: "корзина";
+  --create: "создать";
+  --saved: "меню";
+  --send: "отправить";
 }
 
 :root[lang=es] {

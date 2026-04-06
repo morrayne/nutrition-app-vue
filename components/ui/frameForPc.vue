@@ -62,6 +62,7 @@ const showNavigation = computed(() => {
       height: 100%;
       background: var(--html-background);
       border-radius: 2.875rem;
+      overflow: hidden;
     }
   }
 }
@@ -76,7 +77,7 @@ const showNavigation = computed(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 2.875rem;
+  // border-radius: 2.875rem;
   overflow: hidden;
 }
 </style>

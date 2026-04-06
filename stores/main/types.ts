@@ -1,6 +1,7 @@
 export interface tAsset {
   id: string;
-  product_name: string;
+  name: string;
+  weight: number;
   calories: number;
   proteins: number;
   carbs: number;

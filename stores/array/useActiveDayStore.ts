@@ -30,9 +30,11 @@ export const useActiveDayStore = defineStore("activeDay", () => {
   };
   
   const addToday = async () => {
-    if (activeDays.value.length >= 100) activeDays.value.shift(); 
-    activeDays.value.push(today);
-    await updateActiveDays();
+    if (!activeDays.value.includes(today)) {
+      if (activeDays.value.length >= 100) activeDays.value.shift(); 
+      activeDays.value.push(today);
+      await updateActiveDays();
+    }
   };
 
   const clearActiveDays = async () => {
