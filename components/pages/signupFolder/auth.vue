@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import lorem from "../../ui/lorem.vue";
+import id from "@/svg/signup/id.vue";
+import localText from "../../ui/localText.vue";
 import end from "../../ui/end.vue";
 import rowInput from "../../form/rowInput.vue";
 import type { tRowInput } from "../../form/rowInput.vue";
@@ -67,10 +68,19 @@ const password: tRowInput = {
 
 <template>
   <div class="hw100 auth">
-    <rowInput v-bind="username" :modelValue="modelValue.username" @update:modelValue="updateAuth('username', $event)" />
-    <lorem />
-    <rowInput v-bind="email" :modelValue="modelValue.email" @update:modelValue="updateAuth('email', $event)" />
-    <rowInput v-bind="password" :modelValue="modelValue.password" @update:modelValue="updateAuth('password', $event)" />
+    <div class="grand-svg-holder">
+      <id color="bl" :rotate="0" />
+    </div>
+    <localText text="sign-up-with" :weight="500" style="margin-top: 1.25rem; text-align: center" />
+    <rowInput v-bind="username" :modelValue="modelValue.username" @update:modelValue="updateAuth('username', $event)" style="margin-top: 0.5rem" />
+    <rowInput v-bind="email" :modelValue="modelValue.email" @update:modelValue="updateAuth('email', $event)" style="margin-top: 1.25rem" />
+    <rowInput v-bind="password" :modelValue="modelValue.password" @update:modelValue="updateAuth('password', $event)" style="margin-top: 1.25rem" />
     <end />
   </div>
 </template>
+
+<style scoped lang="scss">
+.auth {
+  gap: 0;
+}
+</style>

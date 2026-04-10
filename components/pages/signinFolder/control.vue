@@ -41,6 +41,14 @@ const trySignIn = () => {
     cursor: pointer;
   }
 
+  .wider:hover, .round:hover {
+    transform: scale(1);
+  }
+
+  .wider:active, .round:active {
+    transform: scale(0.9);
+  }
+
   .round {
     height: 100%;
     aspect-ratio: 1 / 1;

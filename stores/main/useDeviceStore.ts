@@ -15,9 +15,12 @@ export const useDeviceStore = defineStore("device", () => {
   const init = () => {
     window.addEventListener("resize", getSystemData);
   };
+  const updateWidth = () => {
+    width.value = window.innerWidth;
+  };
   const destroy = () => {
     window.removeEventListener("resize", getSystemData);
   };
   
-  return { width, height, theme, getSystemData, init, destroy };
+  return { width, height, theme, getSystemData, init, updateWidth, destroy };
 });

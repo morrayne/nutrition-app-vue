@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import create from "./mealFolder/create.vue";
 import end from "../ui/end.vue";
 import rowSelect from "../form/rowSelect.vue";
@@ -61,17 +61,17 @@ const addTodayMeal = () => {
 </script>
 
 <template>
-  <div class="screen meal">
+  <div class="screen default-screen meal">
     <rowSelect v-bind="tab" :modelValue="activeTab" @update:modelValue="handleUpdate" />
     <div class="display" v-if="activeTab === 'log'">
-      <asset v-for="value in log" :meal="value" />
+      <asset v-for="value in log" :meal="value" :edit="false" :x="true" />
       <button class="send" v-if="log.length !== 0" @click="addTodayMeal"></button>
     </div>
     <div class="display" v-if="activeTab === 'add'">
       <create @create="createAsset" />
     </div>
     <div class="display" v-if="activeTab === 'saved'">
-      <asset v-for="value in assetStore.assets" :meal="value" @click="handleAssetClick(value)" :style="{ cursor: 'pointer' }" />
+      <asset v-for="value in assetStore.assets" :meal="value" @click="handleAssetClick(value)" :edit="true" :x="true" :style="{ cursor: 'pointer' }" />
     </div>
     <end />
   </div>
@@ -79,10 +79,6 @@ const addTodayMeal = () => {
 
 <style scoped lang="scss">
 .meal {
-  padding: 1.25rem;
-  flex-direction: column;
-  gap: 0.75rem;
-  overflow-y: scroll;
 
   .display {
     flex: 1;
@@ -104,9 +100,5 @@ const addTodayMeal = () => {
       content: var(--send);
     }
   }
-}
-
-.meal::-webkit-scrollbar {
-  display: none;
 }
 </style>

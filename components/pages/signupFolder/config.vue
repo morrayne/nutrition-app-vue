@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import lorem from "../../ui/lorem.vue";
+import localText from "../../ui/localText.vue";
+import globe from "@/svg/signup/globe.vue";
 import end from "../../ui/end.vue";
 import { useConfigStore } from "../../../stores/single/useConfigStore";
 const configStore = useConfigStore();
@@ -54,6 +55,7 @@ const newremOpt: tColSelectOpt[] = [
 ];
 const newrem: tColSelect = {
   title: "font-size",
+  desc: "recomended-font",
   data: {
     type: "number" as const,
     start: 2,
@@ -69,6 +71,7 @@ const phoneColorOpt: tColSelectOpt[] = [
 ];
 const phoneColor: tColSelect = {
   title: "phone-color",
+  desc: "pc-only",
   data: {
     type: "string" as const,
     start: 2,
@@ -79,10 +82,12 @@ const phoneColor: tColSelect = {
 
 <template>
   <div class="hw100 config">
+    <div class="grand-svg-holder">
+      <globe color="bl" :rotate="0" />
+    </div>
     <colSelect v-bind="language" :modelValue="modelValue.language" @update:modelValue="updateConfig('language', $event)" />
     <rowSwitch v-bind="theme" :modelValue="modelValue.theme" @update:modelValue="updateConfig('theme', $event)" />
     <colSelect v-bind="newrem" :modelValue="modelValue.newrem" @update:modelValue="updateConfig('newrem', $event)" />
-    <lorem />
     <colSelect v-bind="phoneColor" :modelValue="modelValue.phoneColor" @update:modelValue="updateConfig('phoneColor', $event)" />
     <end />
   </div>

@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import localText from "./localText.vue";
 import type { tSingleMeal } from "../../stores/main/types";
+import x from "../../src/svg/x.vue";
+import edit from "../../src/svg/edit.vue";
 
-const props = defineProps<{ meal: tSingleMeal }>();
+const props = defineProps<{
+  meal: tSingleMeal,
+  x: boolean,
+  edit: boolean
+}>();
 
 const getBackground = () => {
   const m = props.meal;
-  if (m.weight / 15 <= m.proteins) return "pu";
-  if (m.weight / 20 <= m.fats) return "ye";
+  if (m.calories / 15 <= m.proteins) return "pu";
+  if (m.calories / 20 <= m.fats) return "ye";
+  else return "gr";
+};
+const getDotBackground = (data: number) => {
+  if (data === 0) return "re";
+  if (data === 1) return "pu";
+  if (data === 2) return "ye";
   else return "gr";
 };
 
@@ -25,20 +37,26 @@ const macros: macro[] = [
 </script>
 
 <template>
-  <div class="asset">
-    <div class="left">
-      <div class="dot" :style="{ background: `var(--${getBackground()})` }"></div>
-    </div>
-    <div class="right">
-      <div class="top">
-        <p class="name"> {{ props.meal.name }} </p>
-        <p class="weight"> {{ props.meal.weight }}g </p>
+  <div class="mini-wrap asset">
+    <div class="top">
+      <div class="left"> {{ props.meal.name }} </div>
+      <div class="right">
+        <edit color="ex-color" :rotate="0" :scale="0.8" v-if="props.edit" />
+        <x color="ex-color" :rotate="0" v-if="props.x" />
       </div>
-      <div class="bot">
-        <div class="stat" v-for="mac in macros">
-          <div class="dot"></div>
-          <p> {{ props.meal[mac.key] }} </p>
-          <localText :text="mac.label" />
+    </div>
+    <!-- <div class="mid">
+      <div class="left"> {{ props.meal.calories }} </div>
+      <localText text="short-calories" size="s" />
+      <div class="right"></div>
+    </div> -->
+    <div class="bot">
+      <div class="row" v-for="row in macros" :key="row.color">
+        <div class="dot" :style="{background: `var(--${row.color})`}"></div>
+        <localText :text="row.key" size="s" />
+        <div class="numbers">
+          <p class="t"></p>
+          <p class="val"> {{ props.meal[row.key] }} </p>
         </div>
       </div>
     </div>
@@ -47,50 +65,69 @@ const macros: macro[] = [
 
 <style scoped lang="scss">
 .asset {
+  padding: 0.75rem;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: calc(0.75 * var(--newrem)) calc(1.25 * var(--newrem));
-  border: solid 1px var(--ex-background);
-  border-radius: calc(1.5 * var(--newrem));
-  background: var(--sub-background);
-  box-shadow: var(--box-shadow);
 
-  .left {
+  .top {
     align-items: center;
-    height: calc(1.5 * var(--size-m));
+    justify-content: space-between;
 
-    .dot {
-      height: calc(0.5 * var(--newrem));
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
+    .left {
+      font-weight: 500;
+      font-size: var(--size-m);
+    }
+
+    .right {
+      height: calc(1.5 * var(--size-m));
+      background: var(--ex-background);
+      border-radius: 1.5rem;
+      padding: 0.25rem;
+      gap: 0.25rem;
+
+      svg {
+        cursor: pointer;
+      }
     }
   }
 
-  .right {
-    width: 100%;
-    flex-direction: column;
-    gap: 0.25rem;
+  .mid {
+    gap: calc(0.6 * var(--size-s));
 
-    .top {
-      width: 100%;
-      justify-content: space-between;
-      gap: 0.5rem;
-
-      .name, .weight {
-        font-weight: 500;
-      }
+    .left {
+      font-weight: 500;
+      font-size: var(--size-s);
     }
 
-    .bot {
-      gap: var(--newrem);
-      
-      .stat {
-        font-size: var(--size-s);
+    // .right {}
+  }
 
-        .dot {
+  .bot {
+    flex-wrap: wrap;
+    gap: calc(0.65 * var(--size-s));
 
+    .row {
+      padding: 0.25rem 0.5rem;
+      gap: calc(0.65 * var(--size-s));
+      justify-content: space-between;
+      align-items: center;
+      border: solid 1px var(--ex-background);
+      border-radius: 1rem;
+
+      .dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--ex-background);
+      }
+
+      .numbers {
+
+        .b {
+          font-size: var(--size-s);
         }
 
-        p {
+        .val {
           font-size: var(--size-s);
         }
       }

@@ -27,11 +27,11 @@ export interface tAllMeals {
 }
 export interface tBody {
   gender: string;
-  age: number;
-  height: number;
+  age?: number;
+  height?: number;
   activity: number;
-  weight: number;
-  bf: number;
+  weight?: number;
+  bf?: number;
 }
 export interface tCommon {
   username: string;
@@ -46,12 +46,12 @@ export interface tConfig {
   phoneColor: string;
 }
 export interface tGoal {
-  calories: number;
-  proteins: number;
-  carbs: number;
-  fats: number;
-  weight: number;
-  bf: number;
+  calories?: number;
+  proteins?: number;
+  carbs?: number;
+  fats?: number;
+  weight?: number;
+  bf?: number;
 }
 export interface tAuth {
   email: string;

@@ -9,6 +9,7 @@ export interface tColSelectOpt {
 }
 export interface tColSelect {
   title?: string;
+  desc?: string;
   data: {
     type: "string" | "number";
     start: number;
@@ -28,22 +29,23 @@ const handleClick = (data: tColSelectOpt) => {
 
 <template>
   <div class="col-select">
-    <localText class="col-select-title" v-if="props.title" :text="props.title" />
+    <localText class="col-select-title" v-if="props.title" :text="props.title" :weight="500" />
     <div class="col-select-opt">
       <div class="opt-holder">
         <div class="opt" v-for="option in props.data.options" :key="option.toEmit" @click="handleClick(option)">
           <localText :text="option.title" />
-          <div class="svg-holder"><selectArrow :color="option.toEmit !== activeValue ? 'var(--ex-background)' : 'var(--sub-color)'" :rotate="0" /></div>
+          <div class="svg-holder"><selectArrow :color="option.toEmit !== activeValue ? 'ex-background' : 'sub-color'" :rotate="0" /></div>
         </div>
       </div>
     </div>
+    <localText class="under-desc" v-if="props.desc" :text="props.desc" size="s" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .col-select {
   flex-direction: column;
-  gap: calc(0.75 * var(--newrem));
+  gap: 0.5rem;
 
   .col-select-title {
     font-size: var(--size-l);
@@ -77,6 +79,12 @@ const handleClick = (data: tColSelectOpt) => {
         margin-left: auto;
       }
     }
+  }
+
+  .under-desc {
+    text-align: center;
+    margin-top: 0.25rem;
+    color: var(--ex-color);
   }
 }
 </style>

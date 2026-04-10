@@ -2,9 +2,9 @@
 import router from "../../appSettings/router";
 import type { Component } from "vue";
 
-import notebook from "@/svg/notebook.vue";
-import chart from "@/svg/chart.vue";
-import apple from "@/svg/apple.vue";
+import home from "@/svg/navigation/home.vue";
+import chart from "@/svg/navigation/chart.vue";
+import apple from "@/svg/navigation/apple.vue";
 import edit from "@/svg/edit.vue";
 import user from "@/svg/user.vue";
 
@@ -15,10 +15,10 @@ interface tNav {
   scale?: number;
 }
 const data: tNav[] = [
-  { title: "home", route: "/home", svg: notebook },
+  { title: "home", route: "/home", svg: home },
   { title: "meal", route: "/meal", svg: apple },
   { title: "analysis", route: "/analysis", svg: chart, scale: 0.9 },
-  { title: "reshape", route: "/reshape", svg: edit },
+  // { title: "reshape", route: "/reshape", svg: edit },
   { title: "account", route: "/account", svg: user },
 ];
 </script>

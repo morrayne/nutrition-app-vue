@@ -71,6 +71,7 @@
   --ex-color: #b0b0b0;
   --box-shadow: none;
   --re: #ff6b6b;
+  --bl: #4b74e4;
   --pu: #a29bfe;
   --pi: #ff99cc;
   --gr: #43c449;
@@ -88,6 +89,7 @@
   --ex-color: #484848;
   --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.25rem 0.5rem;
   --re: #ff6b6b;
+  --bl: #4b74e4;
   --pu: #a29bfe;
   --pi: #ff99cc;
   --gr: #43c449;
@@ -173,15 +175,18 @@ input::placeholder {
 
 .screen {
   width: 100%;
+  max-width: 640px;
   height: 100%;
   background: var(--main-background);
   position: relative;
+  overflow: hidden;
 }
 
 .view {
   max-width: 100%;
   min-width: 100%;
   height: 100%;
+  flex-direction: column;
   position: absolute;
   left: 0;
   top: 0;
@@ -191,13 +196,41 @@ input::placeholder {
   height: 100%;
   width: 100%;
   flex-direction: column;
-  padding: 6rem 1.25rem 1.25rem;
-  gap: 1rem;
+  gap: 1.25rem;
+  padding: 5.5rem 1.25rem 1.25rem;
   overflow-y: scroll;
+}
+.hw100 .grand-svg-holder {
+  min-width: 6rem;
+  min-height: 6rem;
+  max-width: 6rem;
+  max-height: 6rem;
+  margin: 0 auto;
 }
 
 .hw100::-webkit-scrollbar {
   display: none;
+}
+
+.default-screen {
+  width: 100%;
+  height: 100%;
+  padding: 3rem 1.25rem 1.25rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: scroll;
+}
+
+.default-screen::-webkit-scrollbar {
+  display: none;
+}
+
+.mini-wrap {
+  border-radius: 1.5rem;
+  padding: 0.5rem;
+  background: var(--sub-background);
+  border: solid 1px var(--ex-background);
+  box-shadow: var(--box-shadow);
 }
 
 :root {
@@ -257,10 +290,10 @@ input::placeholder {
   --friday: "fr";
   --saturday: "sa";
   --sunday: "su";
-  --short-calories: "c";
-  --short-proteins: "p";
-  --short-fats: "f";
-  --short-carbs: "c";
+  --short-calories: "cal";
+  --short-proteins: "pro";
+  --short-fats: "fat";
+  --short-carbs: "car";
   --log: "log";
   --add: "add";
   --saved: "saved";
@@ -269,12 +302,30 @@ input::placeholder {
   --send-to-log: "push to log";
   --product-name: "product name";
   --full-size: "full size";
+  --sign-in-with: "sign in with";
+  --sign-up-with: "sign up with";
+  --sign-up-failed: "fail";
+  --sign-in-failed: "fail";
+  --please-check-form: "please check the form";
+  --length: "length";
+  --should-be: "should be";
+  --longer: "longer";
+  --shorter: "shorter";
+  --wrong-format: "wraong format";
+  --more-than: "more than";
+  --less-than: "less than";
+  --approximately: "approximately";
+  --lbs: "lbs";
+  --ft: "ft";
+  --recomended-font: "medium is recomended";
+  --pc-only: "only for pc version";
+  --we-start-you-finish: "we start, you finish. if there is something you'd like to change you can go ahead!";
 }
 
 :root[lang=ru] {
   --continue: "продолжить";
   --language: "язык";
-  --dark-mode: "темный режим";
+  --dark-mode: "тёмная тема";
   --font-size: "размер шрифта";
   --very-small: "очень маленький";
   --small: "маленький";
@@ -282,22 +333,22 @@ input::placeholder {
   --big: "большой";
   --large: "очень большой";
   --phone-color: "цвет телефона";
-  --black: "черный";
+  --black: "чёрный";
   --white: "белый";
-  --green: "зеленый";
+  --green: "зелёный";
   --blue: "синий";
   --purple: "фиолетовый";
   --gender: "пол";
   --male: "мужской";
   --female: "женский";
-  --none: "не указан";
+  --none: "не указано";
   --activity-level: "уровень активности";
-  --activity-level-1: "легкие прогулки";
+  --activity-level-1: "лёгкие прогулки";
   --activity-level-2: "низкая активность";
-  --activity-level-3: "умеренные нагрузки";
+  --activity-level-3: "умеренные тренировки";
   --activity-level-4: "активный образ жизни";
   --activity-level-5: "очень активный";
-  --activity-level-6: "экстремальный спорт";
+  --activity-level-6: "экстремальные нагрузки";
   --age: "возраст";
   --height: "рост";
   --weight: "вес";
@@ -307,7 +358,7 @@ input::placeholder {
   --carbs: "углеводы";
   --fats: "жиры";
   --username: "имя";
-  --email: "почта";
+  --email: "электронная почта";
   --password: "пароль";
   --monday: "пн";
   --tuesday: "вт";
@@ -316,18 +367,41 @@ input::placeholder {
   --friday: "пт";
   --saturday: "сб";
   --sunday: "вс";
-  --short-calories: "к";
-  --short-proteins: "б";
-  --short-fats: "ж";
-  --short-carbs: "у";
-  --log: "дневник";
+  --short-calories: "ккал";
+  --short-proteins: "бел";
+  --short-fats: "жир";
+  --short-carbs: "угл";
+  --log: "журнал";
   --add: "добавить";
-  --saved: "сохраненное";
+  --saved: "сохранено";
   --save: "сохранить";
   --send: "отправить";
-  --send-to-log: "в дневник";
-  --product-name: "название";
-  --full-size: "целиком";
+  --send-to-log: "в журнал";
+  --product-name: "название продукта";
+  --full-size: "полный размер";
+  --sign-in-with: "войти через";
+  --sign-up-with: "зарегистрироваться через";
+  --sign-up-failed: "ошибка";
+  --sign-in-failed: "ошибка";
+  --please-check-form: "проверьте форму";
+  --length: "длина";
+  --should-be: "нужно быть";
+  --longer: "длиннее";
+  --shorter: "короче";
+  --wrong-format: "неверный формат";
+  --more-than: "больше чем";
+  --less-than: "меньше чем";
+  --approximately: "примерно";
+  --lbs: "фунтов";
+  --ft: "футов";
+  --recomended-font: "рекомендуется средний размер";
+  --pc-only: "только для пк версии";
+  --we-start-you-finish: "мы начинаем, вы заканчиваете. если хотите что-то изменить, вы можете это сделать!";
+  --last-3-weeks: "результаты за 3 недели";
+  --daily-report: "дневной отчет";
+  --your-goals: "ваши цели";
+  --goal-succes: "успешность выполнения целей";
+  --nothing-on-date: "ничего на эту дату";
 }
 
 :root[lang=es] {

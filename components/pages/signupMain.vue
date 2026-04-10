@@ -3,12 +3,17 @@ import { ref, watch } from "vue";
 import router from "../../appSettings/router";
 import control from "./signupFolder/control.vue";
 import loadingCover from "../ui/loadingCover.vue";
+import signinError from "./signupFolder/siginError.vue";
+
+import { useConfigStore } from "../../stores/single/useConfigStore";
+const configStore = useConfigStore();
+console.log(configStore.config.theme)
 import { useAuthStore } from "../../stores/main/useAuthStore";
 const authStore = useAuthStore();
 
 import type { tConfig } from "../../stores/main/types";
 const config = ref<tConfig>({
-  theme: "light",
+  theme: configStore.config.theme || "light",
   phoneColor: "green",
   language: "en",
   newrem: "16",
@@ -33,24 +38,25 @@ watch(auth, () => {
 import type { tBody } from "../../stores/main/types";
 const body = ref<tBody>({
   gender: "male",
-  age: 21,
-  height: 180,
+  age: undefined,
+  height: undefined,
   activity: 1.2,
-  weight: 72,
-  bf: 12,
+  weight: undefined,
+  bf: undefined,
 });
 import type { tGoal } from "../../stores/main/types";
 const goal = ref<tGoal>({
-  calories: 2515,
-  proteins: 200,
-  carbs: 250,
-  fats: 80,
-  weight: 82,
-  bf: 10,
+  calories: undefined,
+  proteins: undefined,
+  carbs: undefined,
+  fats: undefined,
+  weight: undefined,
+  bf: undefined,
 });
 
 const viewCurrent = ref(0);
 const loading = ref(false);
+const loginError = ref(false);
 watch(viewCurrent, async (newVal) => {
   if (newVal < 0) {
     viewCurrent.value = 0;
@@ -58,11 +64,18 @@ watch(viewCurrent, async (newVal) => {
   }
   if (newVal > 3) {
     viewCurrent.value = 3;
+    if (loginError.value) return
     loading.value = true;
     console.warn('signup attempt: ', auth.value, common.value, config.value, body.value, goal.value);
     const result = await authStore.signUp(auth.value, common.value, config.value, body.value, goal.value);
     if (result.success) router.push('/account');
-    else loading.value = false;
+    else {
+      loading.value = false;
+      loginError.value = true;
+      setTimeout(() => {
+        loginError.value = false;
+      }, 5000);
+    };
   }
 });
 const viewTransformStyle = (index: number) => {
@@ -81,6 +94,7 @@ import authView from "./signupFolder/auth.vue";
   <div class="screen signup">
     <control v-model="viewCurrent" />
     <loadingCover v-if="loading" />
+    <signinError :error="loginError" />
     <div class="view" :style="{ transform: viewTransformStyle(0) }">
       <configView v-model="config" />
     </div>
@@ -88,7 +102,7 @@ import authView from "./signupFolder/auth.vue";
       <bodyView v-model="body" />
     </div>
     <div class="view" :style="{ transform: viewTransformStyle(2) }">
-      <goalView v-model="goal" />
+      <goalView v-model="goal" :body="body" />
     </div>
     <div class="view" :style="{ transform: viewTransformStyle(3) }">
       <authView v-model="auth" />

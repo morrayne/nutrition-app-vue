@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import lorem from "../../ui/lorem.vue";
+import { ref } from "vue";
+import fingerprint from "@/svg/signup/fingerprint.vue";
 import end from "../../ui/end.vue";
 import colSelect from "../../form/colSelect.vue";
 import type { tColSelect, tColSelectOpt } from "../../form/colSelect.vue";
@@ -22,7 +23,6 @@ const updateBody = (key: keyof tBody, value: any) => {
 const genderOpt: tRowSelectOpt[] = [
   { title: "male", toEmit: "male" },
   { title: "female", toEmit: "female" },
-  { title: "none", toEmit: "none" },
 ];
 const gender: tRowSelect = {
   title: "gender",
@@ -37,7 +37,7 @@ const age: tRowInput = {
   title: "age",
   data: {
     type: "number",
-    start: 21,
+    start: undefined,
     placeholder: "age",
   },
   rule: {
@@ -52,7 +52,7 @@ const height: tRowInput = {
   title: "height",
   data: {
     type: "number",
-    start: 180,
+    start: undefined,
     placeholder: "height",
   },
   rule: {
@@ -67,7 +67,7 @@ const weight: tRowInput = {
   title: "weight",
   data: {
     type: "number",
-    start: 72,
+    start: undefined,
     placeholder: "weight",
   },
   rule: {
@@ -82,7 +82,7 @@ const bodyFat: tRowInput = {
   title: "body-fat",
   data: {
     type: "number",
-    start: 12,
+    start: undefined,
     placeholder: "body-fat",
   },
   rule: {
@@ -109,17 +109,35 @@ const activity: tColSelect = {
     options: activityOpt,
   },
 };
+
+import errorManager from "../signupFolder/errorManager.vue";
+import type { err } from "../signupFolder/errorManager.vue";
+
+const errorV = ref<err | undefined>({
+  interaction: "nothing",
+  page: 0,
+  field: 'test',
+  text: [],
+  errValue: '',
+});
+
+const updateError = (data: err) => {
+  errorV.value = data;
+};
 </script>
 
 <template>
   <div class="hw100 body">
-    <lorem />
+    <errorManager :error="errorV" />
+    <div class="grand-svg-holder">
+      <fingerprint color="bl" :rotate="0" />
+    </div>
     <rowSelect v-bind="gender" :modelValue="modelValue.gender" @update:modelValue="updateBody('gender', $event)" />
-    <rowInput v-bind="age" :modelValue="modelValue.age" @update:modelValue="updateBody('age', $event)" />
-    <rowInput v-bind="height" :modelValue="modelValue.height" @update:modelValue="updateBody('height', $event)" />
-    <rowInput v-bind="weight" :modelValue="modelValue.weight" @update:modelValue="updateBody('weight', $event)" />
-    <rowInput v-bind="bodyFat" :modelValue="modelValue.bf" @update:modelValue="updateBody('bf', $event)" />
+    <rowInput v-bind="age" :modelValue="modelValue.age" @update:modelValue="updateBody('age', $event)" @err="updateError" />
+    <rowInput v-bind="height" :modelValue="modelValue.height" @update:modelValue="updateBody('height', $event)" @err="updateError" />
+    <rowInput v-bind="weight" :modelValue="modelValue.weight" @update:modelValue="updateBody('weight', $event)" @err="updateError" />
     <colSelect v-bind="activity" :modelValue="modelValue.activity" @update:modelValue="updateBody('activity', $event)" />
+    <rowInput v-bind="bodyFat" :modelValue="modelValue.bf" @update:modelValue="updateBody('bf', $event)" @err="updateError" />
     <end />
   </div>
 </template>

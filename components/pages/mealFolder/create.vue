@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import lorem from "../../ui/lorem.vue";
 import rowInput from "../../form/rowInput.vue";
 import type { tRowInput } from "../../form/rowInput.vue";
 import rowSwitch from "../../form/rowSwitch.vue";
@@ -169,15 +168,12 @@ const clearForm = () => {
 
 <template>
   <div :style="{flexDirection: 'column', gap: '0.75rem'}">
-    <lorem />
     <rowInput v-bind="nameProduct" v-model="name" />
     <rowInput v-bind="weightProduct" v-model="weight" />
     <rowSwitch v-bind="sizeProduct" v-model="size" />
-    <lorem />
     <rowInput v-bind="proteinsProduct" v-model="proteins" />
     <rowInput v-bind="fatsProduct" v-model="fats" />
     <rowInput v-bind="carbsProduct" v-model="carbs" />
-    <lorem />
     <rowInput v-bind="caloriesProduct" v-model="calories" />
     <rowSwitch v-bind="saveProduct" v-model="save" />
     <rowSwitch v-bind="logProduct" v-model="log" />

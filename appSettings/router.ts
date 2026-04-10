@@ -15,9 +15,5 @@ const routes = [
   { path: "/meal", name: "meal", component: mealPage, meta: { showNavigation: true } },
 ];
 
-const router = createRouter({
-  history: createWebHistory("https://xjitwqdszairtfchtlgm.supabase.co"),
-  routes,
-});
-
+const router = createRouter({ history: createWebHistory(), routes });
 export default router;

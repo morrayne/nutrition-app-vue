@@ -1,14 +1,35 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import navigation from "./navigation.vue";
 import { useRoute } from "vue-router";
-import { useDeviceStore } from "../../stores/main/useDeviceStore";
 
-const deviceStore = useDeviceStore();
-const isMobile = ref(false);
+const renderStyle = ref(0);
+const effectiveWidth = ref(window.innerWidth);
+
+const updateEffectiveWidth = () => {
+  // Учитываем масштаб страницы
+  const zoom = window.devicePixelRatio;
+  const physicalWidth = window.innerWidth;
+  const logicalWidth = physicalWidth / zoom;
+  
+  effectiveWidth.value = logicalWidth;
+  
+  if (logicalWidth < 540) renderStyle.value = 0;
+  else if (logicalWidth <= 1440) renderStyle.value = 1;
+  else renderStyle.value = 2;
+  
+  console.log(`Physical: ${physicalWidth}, Logical: ${logicalWidth}, Zoom: ${zoom}, Style: ${renderStyle.value}`);
+};
 
 onMounted(() => {
-  isMobile.value = deviceStore.width <= 540;
+  updateEffectiveWidth();
+  window.addEventListener('resize', updateEffectiveWidth);
+  window.addEventListener('load', updateEffectiveWidth);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateEffectiveWidth);
+  window.removeEventListener('load', updateEffectiveWidth);
 });
 
 const route = useRoute();
@@ -18,9 +39,13 @@ const showNavigation = computed(() => {
 </script>
 
 <template>
-  <div v-if="!isMobile" class="frame">
+  <!-- <div class="inner-content"></div> -->
+
+  <!-- pc -->
+  <div v-if="renderStyle" class="frame">
     <div class="black-outline">
       <div class="back-screen">
+        <div class="island-wrap"><div class="island"></div></div>
         <div class="content">
           <navigation v-if="showNavigation" />
           <slot></slot>
@@ -28,6 +53,8 @@ const showNavigation = computed(() => {
       </div>
     </div>
   </div>
+  
+  <!-- tablet -->
   <div v-else class="no-frame">
     <div class="border-blur"></div>
     <div class="content">
@@ -35,6 +62,8 @@ const showNavigation = computed(() => {
       <slot></slot>
     </div>
   </div>
+  <!-- mobile -->
+
 </template>
 
 <style lang="scss">
@@ -63,6 +92,34 @@ const showNavigation = computed(() => {
       background: var(--html-background);
       border-radius: 2.875rem;
       overflow: hidden;
+
+      .island-wrap {
+        width: calc(100% - 0.25rem);
+        height: 3.5rem;
+        padding: 1rem 0;
+        justify-content: center;
+        pointer-events: none;
+        position: absolute;
+        z-index: 2;
+        top: 0;
+
+        .island {
+          width: 6rem;
+          height: 100%;
+          pointer-events: all;
+          background: #000000;
+          border-radius: 1rem;
+          cursor: pointer;
+        }
+
+        .island:hover {
+          transform: scale(1.05);
+        }
+
+        .island:active {
+          transform: scale(0.95);
+        }
+      }
     }
   }
 }

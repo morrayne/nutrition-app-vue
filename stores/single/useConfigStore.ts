@@ -4,11 +4,15 @@ import { supabase } from "../../appSettings/supabase";
 import { useAuthStore } from "../main/useAuthStore";
 import type { tConfig } from "../main/types";
 
+import { useDeviceStore } from "../main/useDeviceStore";
+
 export const useConfigStore = defineStore("config", () => {
   const authStore = useAuthStore();
+  const deviceStore = useDeviceStore();
+
   const config = ref<tConfig>({
     language: "en",
-    theme: "light",
+    theme: deviceStore.theme,
     newrem: "16",
     phoneColor: "blue",
   });
@@ -18,7 +22,10 @@ export const useConfigStore = defineStore("config", () => {
     try {
       const { data, error } = await supabase.from("config").select("*").eq("user_id", authStore.user.id).maybeSingle();
       if (error) throw error;
-      if (data) setConfig(data);
+      if (data) {
+        setConfig(data);
+        changeVisualViaConfig(data);
+      }
     } catch (err) {
       console.error("Error at 'getConfig': ", err);
     }
@@ -45,6 +52,11 @@ export const useConfigStore = defineStore("config", () => {
     document.documentElement.setAttribute("data-newrem", newConfig.newrem);
   }
 
+  const changeTheme = (data: string) => {
+    config.value.theme = data;
+    changeVisualViaConfig(config.value);
+  }
+
   const clearConfig = () => {
     config.value = {
       language: "en",
@@ -54,5 +66,5 @@ export const useConfigStore = defineStore("config", () => {
     };
   };
 
-  return { config, getConfig, updateConfig, setConfig, changeVisualViaConfig, clearConfig };
+  return { config, getConfig, updateConfig, setConfig, changeVisualViaConfig, clearConfig, changeTheme };
 });

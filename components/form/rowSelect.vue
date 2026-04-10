@@ -8,6 +8,7 @@ export interface tRowSelectOpt {
 }
 export interface tRowSelect {
   title?: string;
+  desc?: string;
   data: {
     type: "string" | "number";
     start: number;
@@ -39,7 +40,7 @@ const handleClick = (data: tRowSelectOpt) => {
 <style scoped lang="scss">
 .row-select {
   flex-direction: column;
-  gap: calc(0.75 * var(--newrem));
+  gap: 0.5rem;
 
   .row-select-title {
     font-size: var(--size-l);
