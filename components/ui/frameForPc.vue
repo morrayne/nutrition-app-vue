@@ -12,7 +12,7 @@ const updateEffectiveWidth = () => {
   if (htmlWidth < 540) renderStyle.value = 0;
   else if (htmlWidth <= 1440) renderStyle.value = 1;
   else renderStyle.value = 2;
-  // console.log("html width:", htmlWidth, "renderStyle:", renderStyle.value);
+  console.log("html width:", htmlWidth, "renderStyle:", renderStyle.value);
 };
 
 onMounted(() => {
@@ -168,6 +168,23 @@ const showNavigation = computed(() => {
           transform: scale(0.95);
         }
       }
+    }
+  }
+}
+
+// phone
+.phone-wrap {
+  width: 100vw;
+  height: 100vh;
+  .phone {
+    width: 100%;
+    height: 100%;
+    .max-wrap {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background: var(--main-background);
     }
   }
 }

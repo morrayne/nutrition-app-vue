@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import router from "../../appSettings/router";
 import type { Component } from "vue";
 
@@ -21,13 +22,18 @@ const data: tNav[] = [
   // { title: "reshape", route: "/reshape", svg: edit },
   { title: "account", route: "/account", svg: user },
 ];
+
+const route = useRoute();
+const isActive = (itemRoute: string) => {
+  return route.path === itemRoute;
+};
 </script>
 
 <template>
   <div class="navigation">
     <div class="wrap">
-      <div class="item" v-for="(value, index) in data" :key="index" @click="router.push(value.route)">
-        <component :is="value.svg" :scale="value.scale || 1" color="sub-color" :rotate="0" />
+      <div class="item" v-for="(value, index) in data" :key="index" @click="router.push(value.route)" :style="{background: isActive(value.route) ? 'var(--bl)' : 'var(--sub-background)', border: isActive(value.route) ? 'solid 1px var(--bl)' : 'solid 1px var(--ex-background)'}">
+        <component :is="value.svg" :scale="value.scale || 1" :color="isActive(value.route) ? 'ex-background' : 'ex-color'" :rotate="0" />
       </div>
     </div>
   </div>
@@ -48,6 +54,7 @@ const data: tNav[] = [
     height: 100%;
     justify-content: space-between;
     backdrop-filter: blur(2px);
+    background: #ffffff20;
     border: solid 1px var(--ex-background);
     border-radius: calc(2 * var(--newrem));
     padding: calc(0.25 * var(--newrem)) calc(0.75 * var(--newrem));
@@ -56,7 +63,6 @@ const data: tNav[] = [
       aspect-ratio: 1 / 1;
       padding: 0.25rem;
       border-radius: var(--newrem);
-      background: #ffffff40;
       border: solid 1px var(--ex-background);
       cursor: pointer;
     }
