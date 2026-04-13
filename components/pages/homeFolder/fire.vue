@@ -52,8 +52,8 @@ const last21Days = computed(() => {
   gap: 0.125rem;
   grid-template-columns: repeat(21, 1fr);
   .item {
-    width: 0.65rem;
-    height: 0.65rem;
+    flex: 1;
+    aspect-ratio: 1 / 1;
     background: var(--ex-background);
     border-radius: 0.5rem;
   }

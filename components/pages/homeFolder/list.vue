@@ -14,7 +14,7 @@ const currentDayMeals = computed(() => {
 
 <template>
   <TransitionGroup name="fade" tag="div" class="list">
-    <asset v-for="value in currentDayMeals" :key="value.name" :meal="value" v-if="currentDayMeals.length !== 0" :edit="false" :x="true" />
+    <asset v-for="value in currentDayMeals" :key="value.name" :meal="value" v-if="currentDayMeals.length !== 0" :edit="false" :x="false" />
     <div class="mini-wrap empty" v-else>
       <div class="dot"></div>
       <localText text="nothing-here" size="s" />

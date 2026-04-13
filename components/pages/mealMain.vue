@@ -37,21 +37,9 @@ const handleAssetClick = (value: tAsset) => {
 };
 
 const createAsset = (data: any) => {
-  const asset : tAsset = {
-    id: crypto.randomUUID(),
-    name: data.name,
-    weight: data.weight,
-    calories: data.calories,
-    proteins: data.proteins,
-    fats: data.fats,
-    carbs: data.carbs,
-  }
-  if (data.log === 'send') {
-    log.value.push(asset);
-  }
-  if (data.save === 'save') {
-    assetStore.addAsset(asset);
-  }
+  const asset : tAsset = { id: crypto.randomUUID(), name: data.name, weight: data.weight, calories: data.calories, proteins: data.proteins, fats: data.fats, carbs: data.carbs }
+  if (data.log === 'send') log.value.push(asset);
+  if (data.save === 'save') assetStore.addAsset(asset);
 }
 
 const addTodayMeal = () => {
@@ -91,7 +79,7 @@ const deleteFromSave = (data: string) => {
     <!-- saved -->
     <div v-if="activeTab === 'saved'">
       <TransitionGroup v-if="assetStore.assets.length !== 0" name="fade" tag="div" class="display">
-        <asset v-for="value in assetStore.assets" :key="value.id" :meal="value" :edit="true" :x="true" @click="handleAssetClick(value)" @delete="deleteFromSave"  />
+        <asset v-for="value in assetStore.assets" :key="value.id" :meal="value" :edit="false" :x="true" @click="handleAssetClick(value)" @delete="deleteFromSave"  />
       </TransitionGroup>
       <TransitionGroup tag="div" style="width: 100%" v-else>
         <div class="mini-wrap empty" key=1>

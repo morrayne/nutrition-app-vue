@@ -12,7 +12,7 @@ const emits = defineEmits<{
 
 const name = ref("");
 const weight = ref<number | ''>('');
-const size = ref("per-100-g");
+const size = ref("full-size");
 const proteins = ref<number | ''>('');
 const fats = ref<number | ''>('');
 const carbs = ref<number | ''>('');
@@ -56,8 +56,8 @@ const sizeProduct: tRowSwitch = {
     size: 's',
     type: "text",
     start: "off",
-    on: "full-size",
-    off: "per-100-g",
+    on: "per-100-g",
+    off: "full-size",
   },
 };
 const caloriesProduct: tRowInput = {
@@ -139,18 +139,17 @@ const logProduct: tRowSwitch = {
 
 const addRecord = () => {
   if (log.value === 'nosend' && save.value === 'nosave') return;
-  if (!name.value || !weight.value || !proteins.value || !fats.value || !carbs.value || !calories.value) return;
+  if (!name.value || !weight.value || !calories.value) return;
   const weightNum = Number(weight.value);
   const proteinsNum = Number(proteins.value);
   const fatsNum = Number(fats.value);
   const carbsNum = Number(carbs.value);
   const caloriesNum = Number(calories.value);
-  let finalValues: any = { name: name.value, weight: weightNum, size: size.value, calories: caloriesNum, proteins: proteinsNum, carbs: carbsNum, fats: fatsNum, save: save.value, log: log.value };
-  console.log(size.value);
+  let finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number(caloriesNum.toFixed(1)), proteins: Number(proteinsNum.toFixed(1)), carbs: Number(carbsNum.toFixed(1)), fats: Number(fatsNum.toFixed(1)), save: save.value, log: log.value }
   if (size.value === 'per-100-g') {
     const weightMod = weightNum / 100;
     finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number((caloriesNum * weightMod).toFixed(1)), proteins: Number((proteinsNum * weightMod).toFixed(1)), carbs: Number((carbsNum * weightMod).toFixed(1)), fats: Number((fatsNum * weightMod).toFixed(1)), save: save.value, log: log.value };
-  } else finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number(caloriesNum.toFixed(1)), proteins: Number(proteinsNum.toFixed(1)), carbs: Number(carbsNum.toFixed(1)), fats: Number(fatsNum.toFixed(1)), save: save.value, log: log.value };
+  }
   emits('create', finalValues);
   clearForm();
 };
@@ -170,8 +169,8 @@ let caloriesTimer: any = null;
 watch([proteins, fats, carbs], () => {
   if (caloriesTimer) clearTimeout(caloriesTimer);
   caloriesTimer = setTimeout(() => {
-    if (proteins.value && fats.value && carbs.value) {
-      const calculated = proteins.value * 4 + carbs.value * 4 + fats.value * 9;
+    if (proteins.value !== '' && fats.value !== '' && carbs.value !== '') {
+      const calculated = (proteins.value || 0) * 4 + (carbs.value || 0) * 4 + (fats.value || 0) * 9;
       calories.value = Number(calculated.toFixed(1));
     }
   }, 500);

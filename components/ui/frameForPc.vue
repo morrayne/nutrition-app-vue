@@ -36,6 +36,7 @@ const showNavigation = computed(() => {
   <div class="pc-wrap" v-if="renderStyle === 2">
     <div class="pc">
       <div class="max-wrap">
+        <navigation v-if="showNavigation" />
         <div class="island-wrap"><div class="island"></div></div>
         <slot />
       </div>
@@ -55,6 +56,7 @@ const showNavigation = computed(() => {
   <div class="phone-wrap" v-if="renderStyle === 0">
     <div class="phone">
       <div class="max-wrap">
+        <navigation v-if="showNavigation" />
         <slot />
       </div>
     </div>
