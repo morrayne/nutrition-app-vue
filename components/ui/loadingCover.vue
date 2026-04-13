@@ -19,7 +19,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   .block {
     width: 6rem;
     aspect-ratio: 1 / 1;
@@ -29,7 +28,6 @@
     align-items: center;
     justify-content: center;
   }
-  
   .spinner {
     width: 3rem;
     height: 3rem;
@@ -40,7 +38,6 @@
     animation: spin 1s linear infinite;
   }
 }
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

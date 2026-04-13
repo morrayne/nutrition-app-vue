@@ -1,6 +1,5 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 :root[data-phone-color=black] {
   --frame: #6c6c6d;
 }
@@ -108,12 +107,12 @@
 }
 
 :root {
-  --main-font: "JetBrains Mono", monospace;
-  --size-xs: calc(0.6 * var(--newrem));
+  --main-font: "Manrope", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --size-xs: calc(0.7 * var(--newrem));
   --size-s: calc(0.8 * var(--newrem));
   --size-m: var(--newrem);
   --size-l: calc(1.2 * var(--newrem));
-  --size-xl: calc(1.4 * var(--newrem));
+  --size-xl: calc(1.3 * var(--newrem));
 }
 
 * {
@@ -175,7 +174,6 @@ input::placeholder {
 
 .screen {
   width: 100%;
-  max-width: 640px;
   height: 100%;
   background: var(--main-background);
   position: relative;
@@ -183,18 +181,20 @@ input::placeholder {
 }
 
 .view {
-  max-width: 100%;
+  max-width: 720px;
   min-width: 100%;
   height: 100%;
   flex-direction: column;
+  align-items: center;
   position: absolute;
   left: 0;
   top: 0;
 }
 
 .hw100 {
-  height: 100%;
+  max-width: 720px;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   gap: 1.25rem;
   padding: 5.5rem 1.25rem 1.25rem;
@@ -218,6 +218,8 @@ input::placeholder {
   padding: 3rem 1.25rem 1.25rem;
   flex-direction: column;
   gap: 0.75rem;
+  position: relative;
+  z-index: 2;
   overflow-y: scroll;
 }
 
@@ -234,7 +236,6 @@ input::placeholder {
 }
 
 :root {
-  --main-font: "JetBrains Mono", monospace;
   --english: "english";
   --russian: "русский";
   --mandarin: "中文";
@@ -300,7 +301,7 @@ input::placeholder {
   --save: "save";
   --send: "send";
   --send-to-log: "push to log";
-  --product-name: "product name";
+  --product-name: "name";
   --full-size: "full size";
   --sign-in-with: "sign in with";
   --sign-up-with: "sign up with";
@@ -377,8 +378,8 @@ input::placeholder {
   --save: "сохранить";
   --send: "отправить";
   --send-to-log: "в журнал";
-  --product-name: "название продукта";
-  --full-size: "полный размер";
+  --product-name: "название";
+  --full-size: "пересчитать учитывая вес";
   --sign-in-with: "войти через";
   --sign-up-with: "зарегистрироваться через";
   --sign-up-failed: "ошибка";
@@ -400,8 +401,14 @@ input::placeholder {
   --last-3-weeks: "результаты за 3 недели";
   --daily-report: "дневной отчет";
   --your-goals: "ваши цели";
-  --goal-succes: "успешность выполнения целей";
-  --nothing-on-date: "ничего на эту дату";
+  --goal-succes: "успех выполнения целей";
+  --nothing-here: "здесь сейчас ничего нет";
+  --g: "г";
+  --recal-product-desc: "при включении этой фукнции бжу будет перерасчитано с учетом коэффициента веса";
+  --save-product-desc: "сохранить для переиспользования";
+  --log-product-desc: "сразу добавить в журнал";
+  --settings: "параметры";
+  --account: "аккаунт";
 }
 
 :root[lang=es] {

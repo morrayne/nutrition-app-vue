@@ -35,7 +35,6 @@ const handleClick = (data: string) => {
   justify-content: space-between;
   padding: 0.5rem 0.75rem;
   gap: 0.25rem;
-
   .item {
     flex: 1;
     padding: 0.5rem 0;
@@ -43,13 +42,11 @@ const handleClick = (data: string) => {
     align-items: center;
     border-radius: 0.65rem;
     cursor: pointer;
-
     .date {
       font-size: var(--size-s);
       font-weight: 500;
     }
   }
-
   .active {
     background: var(--ex-background);
   }

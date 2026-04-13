@@ -28,7 +28,6 @@ const trySignIn = () => {
   gap: calc(0.5 * var(--newrem));
   bottom: calc(1.5 * var(--newrem));
   left: calc(1.5 * var(--newrem));
-
   .wider,
   .round {
     align-items: center;
@@ -40,25 +39,20 @@ const trySignIn = () => {
     border: solid 1px var(--ex-background);
     cursor: pointer;
   }
-
   .wider:hover, .round:hover {
     transform: scale(1);
   }
-
   .wider:active, .round:active {
     transform: scale(0.9);
   }
-
   .round {
     height: 100%;
     aspect-ratio: 1 / 1;
   }
-
   .wider {
     font-weight: 700;
     flex: 1;
   }
-
   .wider::after {
     content: var(--continue);
   }

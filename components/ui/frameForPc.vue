@@ -4,95 +4,90 @@ import navigation from "./navigation.vue";
 import { useRoute } from "vue-router";
 
 const renderStyle = ref(0);
-const effectiveWidth = ref(window.innerWidth);
+const effectiveWidth = ref(document.documentElement.clientWidth);
 
 const updateEffectiveWidth = () => {
-  // Учитываем масштаб страницы
-  const zoom = window.devicePixelRatio;
-  const physicalWidth = window.innerWidth;
-  const logicalWidth = physicalWidth / zoom;
-  
-  effectiveWidth.value = logicalWidth;
-  
-  if (logicalWidth < 540) renderStyle.value = 0;
-  else if (logicalWidth <= 1440) renderStyle.value = 1;
+  const htmlWidth = document.documentElement.clientWidth;
+  effectiveWidth.value = htmlWidth;
+  if (htmlWidth < 540) renderStyle.value = 0;
+  else if (htmlWidth <= 1440) renderStyle.value = 1;
   else renderStyle.value = 2;
-  
-  console.log(`Physical: ${physicalWidth}, Logical: ${logicalWidth}, Zoom: ${zoom}, Style: ${renderStyle.value}`);
+  // console.log("html width:", htmlWidth, "renderStyle:", renderStyle.value);
 };
 
 onMounted(() => {
   updateEffectiveWidth();
-  window.addEventListener('resize', updateEffectiveWidth);
-  window.addEventListener('load', updateEffectiveWidth);
+  window.addEventListener("resize", updateEffectiveWidth);
+  window.addEventListener("load", updateEffectiveWidth);
 });
-
 onUnmounted(() => {
-  window.removeEventListener('resize', updateEffectiveWidth);
-  window.removeEventListener('load', updateEffectiveWidth);
+  window.removeEventListener("resize", updateEffectiveWidth);
+  window.removeEventListener("load", updateEffectiveWidth);
 });
 
 const route = useRoute();
 const showNavigation = computed(() => {
-  return route.meta!.showNavigation;
+  return route.meta?.showNavigation === true;
 });
 </script>
 
 <template>
-  <!-- <div class="inner-content"></div> -->
-
   <!-- pc -->
-  <div v-if="renderStyle" class="frame">
-    <div class="black-outline">
-      <div class="back-screen">
+  <div class="pc-wrap" v-if="renderStyle === 2">
+    <div class="pc">
+      <div class="max-wrap">
         <div class="island-wrap"><div class="island"></div></div>
-        <div class="content">
-          <navigation v-if="showNavigation" />
-          <slot></slot>
-        </div>
+        <slot />
       </div>
     </div>
   </div>
-  
   <!-- tablet -->
-  <div v-else class="no-frame">
-    <div class="border-blur"></div>
-    <div class="content">
-      <navigation v-if="showNavigation" />
-      <slot></slot>
+  <div class="tablet-wrap" v-if="renderStyle === 1">
+    <div class="tablet">
+      <div class="max-wrap">
+        <navigation v-if="showNavigation" />
+        <div class="island-wrap"><div class="island"></div></div>
+        <slot />
+      </div>
     </div>
   </div>
-  <!-- mobile -->
-
+  <!-- phone -->
+  <div class="phone-wrap" v-if="renderStyle === 0">
+    <div class="phone">
+      <div class="max-wrap">
+        <slot />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
-.frame {
-  width: fit-content;
-  padding: 0.375rem;
-  border-radius: 3.5rem;
-  border: solid 3px #00000020;
+.pc-wrap {
+  max-width: 1440px;
+  width: 100%;
+  max-height: 800px;
+  height: 100%;
+  padding: 0.5rem;
+  border-radius: 3.75rem;
+  border: solid 0.125rem #00000020;
   background: var(--frame);
   position: relative;
-  transition: 0.2s;
-
-  .black-outline {
-    width: 320px;
+  .pc {
+    width: 100%;
     aspect-ratio: 20 / 39;
     background: #000000;
     outline: solid 3px #ffffff80;
     padding: 0.25rem;
-    border-radius: 3.125rem;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    .back-screen {
+    border-radius: 3.25rem;
+    justify-content: center;
+    .max-wrap {
+      width: 100%;
       height: 100%;
-      background: var(--html-background);
-      border-radius: 2.875rem;
+      border-radius: 3rem;
+      justify-content: center;
       overflow: hidden;
-
+      position: relative;
+      background: var(--main-background);
       .island-wrap {
         width: calc(100% - 0.25rem);
         height: 3.5rem;
@@ -100,9 +95,9 @@ const showNavigation = computed(() => {
         justify-content: center;
         pointer-events: none;
         position: absolute;
-        z-index: 2;
+        z-index: 5;
         top: 0;
-
+        left: 0;
         .island {
           width: 6rem;
           height: 100%;
@@ -111,11 +106,9 @@ const showNavigation = computed(() => {
           border-radius: 1rem;
           cursor: pointer;
         }
-
         .island:hover {
           transform: scale(1.05);
         }
-
         .island:active {
           transform: scale(0.95);
         }
@@ -123,18 +116,57 @@ const showNavigation = computed(() => {
     }
   }
 }
-.no-frame {
-  width: 100%;
-  height: 100%;
-  background: var(--html-background);
+
+// tablet
+.tablet-wrap {
+  padding: 0.5rem;
+  border-radius: 3.75rem;
+  border: solid 0.125rem #00000020;
+  background: var(--frame);
   position: relative;
-}
-.content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  // border-radius: 2.875rem;
-  overflow: hidden;
+  .tablet {
+    width: 360px;
+    aspect-ratio: 20 / 39;
+    background: #000000;
+    outline: solid 3px #ffffff80;
+    padding: 0.25rem;
+    border-radius: 3.25rem;
+    flex-direction: column;
+    position: relative;
+    .max-wrap {
+      width: 100%;
+      max-width: 720px;
+      height: 100%;
+      border-radius: 3rem;
+      overflow: hidden;
+      position: relative;
+      background: var(--main-background);
+      .island-wrap {
+        width: calc(100% - 0.25rem);
+        height: 3.5rem;
+        padding: 1rem 0;
+        justify-content: center;
+        pointer-events: none;
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        left: 0;
+        .island {
+          width: 6rem;
+          height: 100%;
+          pointer-events: all;
+          background: #000000;
+          border-radius: 1rem;
+          cursor: pointer;
+        }
+        .island:hover {
+          transform: scale(1.05);
+        }
+        .island:active {
+          transform: scale(0.95);
+        }
+      }
+    }
+  }
 }
 </style>

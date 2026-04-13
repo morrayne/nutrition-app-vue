@@ -38,9 +38,9 @@ const getSuccessRate = (macro: 'calories' | 'proteins' | 'fats' | 'carbs'): numb
 };
 
 const stats = computed(() => [
-  { color: "re", text: "short-calories", rate: getSuccessRate('calories') },
-  { color: "pu", text: "short-proteins", rate: getSuccessRate('proteins') },
+  { color: "pi", text: "short-calories", rate: getSuccessRate('calories') },
   { color: "ye", text: "short-fats", rate: getSuccessRate('fats') },
+  { color: "pu", text: "short-proteins", rate: getSuccessRate('proteins') },
   { color: "gr", text: "short-carbs", rate: getSuccessRate('carbs') },
 ]);
 </script>
@@ -66,12 +66,10 @@ const stats = computed(() => [
   flex-direction: column;
   padding: 0.75rem;
   gap: 0.5rem;
-
   .bot {
     display: grid;
     gap: calc(0.65 * var(--size-s));
     grid-template-columns: repeat(2, 1fr);
-
     .row {
       padding: 0.25rem 0.5rem;
       gap: calc(0.65 * var(--size-s));
@@ -79,16 +77,13 @@ const stats = computed(() => [
       align-items: center;
       border: solid 1px var(--ex-background);
       border-radius: 1rem;
-
       .dot {
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 50%;
         background: var(--ex-background);
       }
-
       .numbers {
-
         .b {
           font-size: var(--size-s);
         }

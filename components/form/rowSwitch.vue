@@ -5,6 +5,7 @@ import localText from "../ui/localText.vue";
 export interface tRowSwitch {
   title: string;
   data: {
+    size?: string;
     type: "text" | "number";
     start: "on" | "off";
     on: string | number;
@@ -35,7 +36,7 @@ watch(() => props.modelValue, (newVal) => {
 
 <template>
   <div class="row-switch">
-    <localText :text="props.title" />
+    <localText :text="props.title" :size="props.data.size || 'm'" />
     <div :class="isActive ? 'switch active' : 'switch'" @click="handleSwitch">
       <div class="gap"></div>
       <div class="runner"></div>
@@ -52,14 +53,12 @@ watch(() => props.modelValue, (newVal) => {
   border-radius: calc(1.5 * var(--newrem));
   background: var(--sub-background);
   box-shadow: var(--box-shadow);
-
   .switch {
     width: 2.75rem;
     border-radius: 1rem;
     padding: 3px;
     background: var(--ex-background);
     cursor: pointer;
-
     .runner {
       width: 1.5rem;
       background: var(--main-background);
@@ -67,14 +66,11 @@ watch(() => props.modelValue, (newVal) => {
       height: 100%;
     }
   }
-
   .active.switch {
     background: var(--gr);
   }
-
   .active .gap {
     flex: 1;
   }
-  
 }
 </style>

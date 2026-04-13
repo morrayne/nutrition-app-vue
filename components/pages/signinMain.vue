@@ -70,8 +70,8 @@ const trySignin = async () => {
 </script>
 
 <template>
+  <loadingCover v-if="loading" />
   <div class="screen hw100 signin">
-    <loadingCover v-if="loading" />
     <siginError :error="loginError" />
     <div class="grand-svg-holder">
       <id color="bl" :rotate="0" />

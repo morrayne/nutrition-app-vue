@@ -8,6 +8,7 @@ export interface tAsset {
   fats: number;
 }
 export interface tSingleMeal {
+  id?: string;
   name: string;
   weight: number;
   calories: number;

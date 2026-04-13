@@ -46,41 +46,34 @@ const handleClick = (data: tColSelectOpt) => {
 .col-select {
   flex-direction: column;
   gap: 0.5rem;
-
   .col-select-title {
     font-size: var(--size-l);
     font-weight: 500;
   }
-
   .col-select-opt {
     border-radius: calc(1.5 * var(--newrem));
     background: var(--sub-background);
     border: solid 1px var(--ex-background);
     box-shadow: var(--box-shadow);
-
     .opt-holder {
       width: 100%;
       padding: calc(0.5 * var(--newrem)) calc(1.25 * var(--newrem));
       flex-direction: column;
-
       .opt {
         padding: calc(0.5 * var(--newrem)) 0;
         border-bottom: solid 1px var(--ex-background);
         color: var(--ex-color);
         cursor: pointer;
       }
-
       .opt:last-child {
         border-bottom: none;
       }
-
       .svg-holder {
         width: 1.5rem;
         margin-left: auto;
       }
     }
   }
-
   .under-desc {
     text-align: center;
     margin-top: 0.25rem;

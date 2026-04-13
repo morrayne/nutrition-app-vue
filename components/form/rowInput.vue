@@ -7,6 +7,8 @@ export interface tRowInput {
   title: string;
   desc?: string;
   data: {
+    paddingScale?: boolean;
+    displayExternal?: boolean;
     type: "string" | "number";
     start?: string | number;
     placeholder?: string;
@@ -45,21 +47,12 @@ const handleInput = (event: Event) => {
 };
 
 const checkInput = (target: string | number) => {
-  const errorMessege : err = {
-    interaction: 'err-fix',
-    page: 0,
-    field: props.title,
-    text: [],
-    errValue: ''
-  } 
-  
+  const errorMessege : err = { interaction: 'err-fix', page: 0, field: props.title, text: [], errValue: '' } 
   errorMessege.errValue = target;
-
   if (props.data.type === "string") {
     const rules = props.rule.string;
     if (!rules) return errorMessege;
     const str = String(target);
-
     if (str.length < rules.minLength) {
       errorMessege.interaction = 'err';
       errorMessege.text.push('length', 'should-be', 'longer');
@@ -84,7 +77,6 @@ const checkInput = (target: string | number) => {
     const rules = props.rule.number;
     if (!rules) return errorMessege;
     const num = Number(target);
-
     if (isNaN(num)) {
       errorMessege.interaction = 'err';
       errorMessege.text.push('wrong-format');
@@ -151,10 +143,10 @@ const kgToLbs = (kg: number) => {
 
 <template>
   <div class="row-input">
-    <div class="input">
+    <div :class="props.data.paddingScale ? 'input small' : 'input big'">
       <input :type="props.data.type === 'number' ? 'number' : 'text'" :placeholder="placeholderText" :value="inputValue" @input="handleInput" />
     </div>
-    <div class="bottom" v-if="props.title === 'weight' || props.title === 'height'">
+    <div class="bottom" v-if="props.data.displayExternal">
       <localText v-if="props.title === 'weight' || props.title === 'height'" text="approximately" size="s" />
       <div class="transition" v-if="(props.data.type === 'number') && (props.title === 'weight')">{{ kgToLbs(Number(inputValue))}}</div>
       <localText v-if="(props.data.type === 'number') && (props.title === 'weight')" text="lbs" size="s" />
@@ -169,34 +161,33 @@ const kgToLbs = (kg: number) => {
 .row-input {
   flex-direction: column;
   gap: 0.5rem;
-
   .input {
     font-size: var(--size-m);
-    padding: calc(0.75 * var(--newrem)) calc(1.25 * var(--newrem));
     border: solid 1px var(--ex-background);
     border-radius: calc(1.5 * var(--newrem));
     background: var(--sub-background);
     box-shadow: var(--box-shadow);
-
     input {
       width: 100%;
     }
   }
-
+  .big {
+    padding: calc(0.75 * var(--newrem)) calc(1.25 * var(--newrem));
+  }
+  .small {
+    padding: calc(0.5 * var(--newrem)) calc(0.75 * var(--newrem));
+  }
   .bottom {
     justify-content: center;
     color: var(--ex-color);
     gap: calc(0.65 * var(--size-s));
-
     .transition {
       font-size: var(--size-s);
     }
   }
-
   .under-desc {
     margin-top: 0.25rem;
     color: var(--ex-color);
   }
 }
-
 </style>

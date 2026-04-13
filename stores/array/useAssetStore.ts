@@ -36,9 +36,9 @@ export const useAssetStore = defineStore("asset", () => {
     await updateAssets();
   }
 
-  const delAsset = async (data: tAsset) => {
+  const delAsset = async (assetId: string) => {
     if (!authStore.user) return;
-    assets.value = assets.value.filter(item => item.id !== data.id);
+    assets.value = assets.value.filter(item => item.id !== assetId);
     await updateAssets();
   };
 

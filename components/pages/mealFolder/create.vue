@@ -1,24 +1,29 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import localText from "../../ui/localText.vue";
 import rowInput from "../../form/rowInput.vue";
 import type { tRowInput } from "../../form/rowInput.vue";
 import rowSwitch from "../../form/rowSwitch.vue";
 import type { tRowSwitch } from "../../form/rowSwitch.vue";
 
+const emits = defineEmits<{
+  (e: 'create', value: any): void;
+}>();
+
 const name = ref("");
-const weight = ref<number | undefined>(undefined);
-const size = ref("full-size");
-const proteins = ref<number | undefined>(undefined);
-const fats = ref<number | undefined>(undefined);
-const carbs = ref<number | undefined>(undefined);
-const calories = ref<number | undefined>(undefined);
+const weight = ref<number | ''>('');
+const size = ref("per-100-g");
+const proteins = ref<number | ''>('');
+const fats = ref<number | ''>('');
+const carbs = ref<number | ''>('');
+const calories = ref<number | ''>('');
 const save = ref("save");
 const log = ref("send");
-let firstCaloriesCalc = true;
 
 const nameProduct: tRowInput = {
   title: "product-name",
   data: {
+    paddingScale: true,
     type: "string",
     placeholder: "product-name",
   },
@@ -33,6 +38,8 @@ const nameProduct: tRowInput = {
 const weightProduct: tRowInput = {
   title: "weight",
   data: {
+    paddingScale: true,
+    displayExternal: false,
     type: "number",
     placeholder: "weight",
   },
@@ -43,20 +50,20 @@ const weightProduct: tRowInput = {
     },
   },
 };
-
 const sizeProduct: tRowSwitch = {
   title: "full-size",
   data: {
+    size: 's',
     type: "text",
-    start: "on",
+    start: "off",
     on: "full-size",
     off: "per-100-g",
   },
 };
-
 const caloriesProduct: tRowInput = {
   title: "calories",
   data: {
+    paddingScale: true,
     type: "number",
     placeholder: "calories",
   },
@@ -67,10 +74,10 @@ const caloriesProduct: tRowInput = {
     },
   },
 };
-
 const proteinsProduct: tRowInput = {
   title: "proteins",
   data: {
+    paddingScale: true,
     type: "number",
     placeholder: "proteins",
   },
@@ -81,10 +88,10 @@ const proteinsProduct: tRowInput = {
     },
   },
 };
-
 const carbsProduct: tRowInput = {
   title: "carbs",
   data: {
+    paddingScale: true,
     type: "number",
     placeholder: "carbs",
   },
@@ -95,10 +102,10 @@ const carbsProduct: tRowInput = {
     },
   },
 };
-
 const fatsProduct: tRowInput = {
   title: "fats",
   data: {
+    paddingScale: true,
     type: "number",
     placeholder: "fats",
   },
@@ -109,20 +116,20 @@ const fatsProduct: tRowInput = {
     },
   },
 };
-
 const saveProduct: tRowSwitch = {
   title: "save",
   data: {
+    size: 's',
     type: "text",
     start: "on",
     on: "save",
     off: "nosave",
   },
 };
-
 const logProduct: tRowSwitch = {
   title: "send-to-log",
   data: {
+    size: 's',
     type: "text",
     start: "on",
     on: "send",
@@ -130,58 +137,98 @@ const logProduct: tRowSwitch = {
   },
 };
 
-const emits = defineEmits<{
-  (e: 'create', value: any): void;
-}>();
 const addRecord = () => {
-  if (log.value === 'nosend' && save.value === 'nosave') return
-  if (!name.value || !weight.value || !proteins.value || !fats.value || !carbs.value || !calories.value) return
+  if (log.value === 'nosend' && save.value === 'nosave') return;
+  if (!name.value || !weight.value || !proteins.value || !fats.value || !carbs.value || !calories.value) return;
   const weightNum = Number(weight.value);
   const proteinsNum = Number(proteins.value);
   const fatsNum = Number(fats.value);
   const carbsNum = Number(carbs.value);
   const caloriesNum = Number(calories.value);
   let finalValues: any = { name: name.value, weight: weightNum, size: size.value, calories: caloriesNum, proteins: proteinsNum, carbs: carbsNum, fats: fatsNum, save: save.value, log: log.value };
+  console.log(size.value);
   if (size.value === 'per-100-g') {
     const weightMod = weightNum / 100;
     finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number((caloriesNum * weightMod).toFixed(1)), proteins: Number((proteinsNum * weightMod).toFixed(1)), carbs: Number((carbsNum * weightMod).toFixed(1)), fats: Number((fatsNum * weightMod).toFixed(1)), save: save.value, log: log.value };
-  } else {
-    finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number(caloriesNum.toFixed(1)), proteins: Number(proteinsNum.toFixed(1)), carbs: Number(carbsNum.toFixed(1)), fats: Number(fatsNum.toFixed(1)), save: save.value, log: log.value };
-  }
+  } else finalValues = { name: name.value, weight: weightNum, size: size.value, calories: Number(caloriesNum.toFixed(1)), proteins: Number(proteinsNum.toFixed(1)), carbs: Number(carbsNum.toFixed(1)), fats: Number(fatsNum.toFixed(1)), save: save.value, log: log.value };
   emits('create', finalValues);
   clearForm();
 };
-
 const clearForm = () => {
   name.value = "";
-  weight.value = undefined;
+  weight.value = '';
   size.value = "full-size";
-  proteins.value = undefined;
-  fats.value = undefined;
-  carbs.value = undefined;
-  calories.value = undefined;
+  proteins.value = '';
+  fats.value = '';
+  carbs.value = '';
+  calories.value = '';
   save.value = "save";
   log.value = "send";
-  firstCaloriesCalc = true;
 };
+
+let caloriesTimer: any = null;
+watch([proteins, fats, carbs], () => {
+  if (caloriesTimer) clearTimeout(caloriesTimer);
+  caloriesTimer = setTimeout(() => {
+    if (proteins.value && fats.value && carbs.value) {
+      const calculated = proteins.value * 4 + carbs.value * 4 + fats.value * 9;
+      calories.value = Number(calculated.toFixed(1));
+    }
+  }, 500);
+});
 </script>
 
 <template>
-  <div :style="{flexDirection: 'column', gap: '0.75rem'}">
-    <rowInput v-bind="nameProduct" v-model="name" />
-    <rowInput v-bind="weightProduct" v-model="weight" />
-    <rowSwitch v-bind="sizeProduct" v-model="size" />
-    <rowInput v-bind="proteinsProduct" v-model="proteins" />
-    <rowInput v-bind="fatsProduct" v-model="fats" />
-    <rowInput v-bind="carbsProduct" v-model="carbs" />
-    <rowInput v-bind="caloriesProduct" v-model="calories" />
-    <rowSwitch v-bind="saveProduct" v-model="save" />
-    <rowSwitch v-bind="logProduct" v-model="log" />
-    <button class="send" @click="addRecord"></button>
+  <rowSwitch v-bind="sizeProduct" v-model="size" />
+  <localText text="recal-product-desc" :wrap="true" size="s" />
+  <div class="mini-wrap pre-asset">
+    <div class="top">
+      <rowInput v-bind="nameProduct" v-model="name" style="width: 70%" />
+      <rowInput v-bind="weightProduct" v-model="weight" style="width: 30%" />
+    </div>
+    <div class="bot">
+      <rowInput v-bind="proteinsProduct" v-model="proteins" />
+      <rowInput v-bind="fatsProduct" v-model="fats" />
+      <rowInput v-bind="carbsProduct" v-model="carbs" />
+      <rowInput v-bind="caloriesProduct" v-model="calories" />
+    </div>
   </div>
+  <rowSwitch v-bind="saveProduct" v-model="save" />
+  <localText text="save-product-desc" :wrap="true" size="s" />
+  <rowSwitch v-bind="logProduct" v-model="log" />
+  <localText text="log-product-desc" :wrap="true" size="s" />
+  <button class="send" @click="addRecord"></button>
 </template>
 
 <style scoped lang="scss">
+.pre-asset {
+  padding: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  input {
+    border-radius: 2rem;
+    background: var(--ex-background);
+    padding: 0.25rem 0.5rem;
+  }
+  .top {
+    gap: 0.5rem;
+    .name {
+      width: 70%;
+    }
+    .gram {
+      width: 30%;
+    }
+  }
+  .bot {
+    width: 100%;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    input {
+      width: 100%;
+    }
+  }
+}
 .send {
   margin-top: auto;
   font-size: var(--size-m);
@@ -192,7 +239,6 @@ const clearForm = () => {
   background: var(--sub-background);
   box-shadow: var(--box-shadow);
 }
-
 .send::after {
   content: var(--send);
 }

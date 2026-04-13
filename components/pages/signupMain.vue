@@ -7,7 +7,6 @@ import signinError from "./signupFolder/siginError.vue";
 
 import { useConfigStore } from "../../stores/single/useConfigStore";
 const configStore = useConfigStore();
-console.log(configStore.config.theme)
 import { useAuthStore } from "../../stores/main/useAuthStore";
 const authStore = useAuthStore();
 
@@ -57,6 +56,7 @@ const goal = ref<tGoal>({
 const viewCurrent = ref(0);
 const loading = ref(false);
 const loginError = ref(false);
+
 watch(viewCurrent, async (newVal) => {
   if (newVal < 0) {
     viewCurrent.value = 0;
@@ -64,7 +64,7 @@ watch(viewCurrent, async (newVal) => {
   }
   if (newVal > 3) {
     viewCurrent.value = 3;
-    if (loginError.value) return
+    if (loginError.value) return;
     loading.value = true;
     console.warn('signup attempt: ', auth.value, common.value, config.value, body.value, goal.value);
     const result = await authStore.signUp(auth.value, common.value, config.value, body.value, goal.value);
@@ -75,14 +75,9 @@ watch(viewCurrent, async (newVal) => {
       setTimeout(() => {
         loginError.value = false;
       }, 5000);
-    };
+    }
   }
 });
-const viewTransformStyle = (index: number) => {
-  if (index < viewCurrent.value) return "translateX(-100%)";
-  else if (index > viewCurrent.value) return "translateX(100%)";
-  else return "translateX(0%)";
-};
 
 import configView from "./signupFolder/config.vue";
 import bodyView from "./signupFolder/body.vue";
@@ -91,21 +86,48 @@ import authView from "./signupFolder/auth.vue";
 </script>
 
 <template>
+  <loadingCover v-if="loading" />
   <div class="screen signup">
     <control v-model="viewCurrent" />
-    <loadingCover v-if="loading" />
     <signinError :error="loginError" />
-    <div class="view" :style="{ transform: viewTransformStyle(0) }">
+    <div class="view" :class="{ prev: 0 < viewCurrent, current: 0 === viewCurrent, next: 0 > viewCurrent }">
       <configView v-model="config" />
     </div>
-    <div class="view" :style="{ transform: viewTransformStyle(1) }">
+    <div class="view" :class="{ prev: 1 < viewCurrent, current: 1 === viewCurrent, next: 1 > viewCurrent }">
       <bodyView v-model="body" />
     </div>
-    <div class="view" :style="{ transform: viewTransformStyle(2) }">
+    <div class="view" :class="{ prev: 2 < viewCurrent, current: 2 === viewCurrent, next: 2 > viewCurrent }">
       <goalView v-model="goal" :body="body" />
     </div>
-    <div class="view" :style="{ transform: viewTransformStyle(3) }">
+    <div class="view" :class="{ prev: 3 < viewCurrent, current: 3 === viewCurrent, next: 3 > viewCurrent }">
       <authView v-model="auth" />
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.signup {
+  position: relative;
+  overflow: hidden;
+  .view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+    &.prev {
+      transform: translateX(-100%);
+      visibility: hidden;
+    }
+    &.current {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    &.next {
+      transform: translateX(100%);
+      visibility: hidden;
+    }
+  }
+}
+</style>

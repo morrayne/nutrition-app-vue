@@ -10,6 +10,7 @@ export interface tRowSelect {
   title?: string;
   desc?: string;
   data: {
+    size?: string;
     type: "string" | "number";
     start: number;
     options: tRowSelectOpt[];
@@ -31,7 +32,7 @@ const handleClick = (data: tRowSelectOpt) => {
     <localText class="row-select-title" v-if="props.title" :text="props.title" />
     <div class="row-select-opt">
       <div v-for="option in props.data.options" :class="option.toEmit === activeValue ? 'active opt' : 'opt'" :style="{width: `${100 / props.data.options.length}%`}" @click="handleClick(option)">
-        <localText :text="option.title" />
+        <localText :text="option.title" :size="props.data.size || 'm'" />
       </div>
     </div>
   </div>
@@ -41,12 +42,10 @@ const handleClick = (data: tRowSelectOpt) => {
 .row-select {
   flex-direction: column;
   gap: 0.5rem;
-
   .row-select-title {
     font-size: var(--size-l);
     font-weight: 500;
   }
-
   .row-select-opt {
     gap: 0.25rem;
     border-radius: calc(1.5 * var(--newrem));
@@ -54,14 +53,12 @@ const handleClick = (data: tRowSelectOpt) => {
     background: var(--sub-background);
     border: solid 1px var(--ex-background);
     box-shadow: var(--box-shadow);
-
     .opt {
       padding: calc(0.375 * var(--newrem));
       justify-content: center;
       align-items: center;
       cursor: pointer;
     }
-
     .active {
       background: var(--ex-background);
       border-radius: calc(1.5 * var(--newrem));

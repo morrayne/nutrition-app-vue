@@ -35,15 +35,14 @@ const data: tNav[] = [
 
 <style scoped lang="scss">
 .navigation {
-  width: calc(100% - calc(3 * var(--newrem)));
+  width: calc(100% - calc(2.5 * var(--newrem)));
   height: calc(3.5 * var(--newrem));
   padding: calc(0.25 * var(--newrem));
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   gap: calc(0.5 * var(--newrem));
-  bottom: calc(1.5 * var(--newrem));
-  left: calc(1.5 * var(--newrem));
-
+  bottom: calc(1.25 * var(--newrem));
+  left: calc(1.25 * var(--newrem));
   .wrap {
     width: 100%;
     height: 100%;
@@ -52,7 +51,6 @@ const data: tNav[] = [
     border: solid 1px var(--ex-background);
     border-radius: calc(2 * var(--newrem));
     padding: calc(0.25 * var(--newrem)) calc(0.75 * var(--newrem));
-
     .item {
       height: 100%;
       aspect-ratio: 1 / 1;

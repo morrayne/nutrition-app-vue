@@ -15,7 +15,6 @@ const props = defineProps<{
 svg:hover {
   transform: scale(1.05);
 }
-
 svg:active {
   transform: scale(0.95);
 }

@@ -2,7 +2,6 @@
 import { computed } from "vue";
 
 const props = defineProps<{ color: string, current: number, goal: number, text: string }>();
-
 const circleRound = 18;
 const circumference = 2 * Math.PI * 18;
 
@@ -19,7 +18,6 @@ const getPercentage = (current: number, goal: number) => {
   if (!goal || goal === 0) return 0;
   return Math.min((current / goal) * 100, 100);
 };
-
 const strokeColor = computed(() => {
   if (props.current > props.goal * 1.1) return `var(--re)`;
   return `var(--${props.color})`;
@@ -44,7 +42,6 @@ const strokeColor = computed(() => {
   flex: 1;
   aspect-ratio: 1 / 1;
   position: relative;
-
   .short {
     width: 100%;
     height: 100%;
@@ -52,17 +49,14 @@ const strokeColor = computed(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     .top {
       font-size: var(--size-s);
       font-weight: 500;
     }
-
     .bot {
       font-size: var(--size-xs);
     }
   }
-
   .progres {
     transform: rotate(-90deg);
   }

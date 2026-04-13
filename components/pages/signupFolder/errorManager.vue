@@ -12,9 +12,7 @@ export interface err {
 
 const props = defineProps<{ error?: err }>();
 const errLog = ref<err[]>([]);
-
 const timers = ref(new Map());
-
 const hasActiveErrors = computed(() => {
   return errLog.value.some(err => err.interaction === 'err');
 });
@@ -23,7 +21,6 @@ const everyThingEmpty = computed(() => {
   return errLog.value.every(err => (err.errValue === '' && err.interaction === 'err'));
 });
 
-// Отфильтрованные видимые ошибки для анимации
 const visibleErrors = computed(() => {
   return errLog.value.filter(err => 
     hasActiveErrors.value && 
@@ -49,7 +46,6 @@ watch(() => props.error, (newError) => {
     }
     return;
   }
-  
   if (timers.value.has(field)) clearTimeout(timers.value.get(field)!);
   timers.value.set(field, setTimeout(() => {
     const existingIndex = errLog.value.findIndex(e => e.field === field);
@@ -86,7 +82,6 @@ onUnmounted(() => {
   top: 0.75rem;
   left: 1.25rem;
 }
-
 .error-manager {
   width: 100%;
   max-width: 100%;
@@ -98,35 +93,29 @@ onUnmounted(() => {
   border-radius: calc(2.5 * var(--newrem));
   overflow: hidden;
   z-index: 3;
-
   .desc {
     gap: calc(0.65 * var(--size-s));
     opacity: 1;
   }
-
   .err-value {
     font-size: var(--size-s);
     color: white;
   }
 }
-
 .error-enter-from {
   width: 6rem;
   max-width: 6rem;
   height: 1.5rem;
   max-height: 1.5rem;
-  
   .desc {
     opacity: 0;
   }
 }
-
 .error-leave-to {
   width: 6rem;
   max-width: 6rem;
   height: 1.5rem;
   max-height: 1.5rem;
-  
   .desc {
     opacity: 0;
   }

@@ -14,19 +14,6 @@ const emits = defineEmits<{
   (e: 'update:modelValue', value: tGoal): void;
 }>();
 
-const isManualEdit = ref(false);
-let manualEditTimer: NodeJS.Timeout | null = null;
-const updateGoal = (key: keyof tGoal, value: any) => {
-  if (key === 'calories' || key === 'proteins' || key === 'fats' || key === 'carbs') {
-    isManualEdit.value = true;
-    if (manualEditTimer) clearTimeout(manualEditTimer);
-    manualEditTimer = setTimeout(() => {
-      isManualEdit.value = false;
-    }, 3000);
-  }
-  emits('update:modelValue', { ...props.modelValue, [key]: value });
-};
-
 const weight: tRowInput = {
   title: "weight",
   data: {
@@ -166,6 +153,19 @@ const calculateMacros = () => {
   isUpdatingFromMacros.value = true;
   emits('update:modelValue', { ...props.modelValue, ...result });
   nextTick(() => { isUpdatingFromMacros.value = false });
+};
+
+const isManualEdit = ref(false);
+let manualEditTimer: any = null;
+const updateGoal = (key: keyof tGoal, value: any) => {
+  if (key === 'calories' || key === 'proteins' || key === 'fats' || key === 'carbs') {
+    isManualEdit.value = true;
+    if (manualEditTimer) clearTimeout(manualEditTimer);
+    manualEditTimer = setTimeout(() => {
+      isManualEdit.value = false;
+    }, 3000);
+  }
+  emits('update:modelValue', { ...props.modelValue, [key]: value });
 };
 
 watch(() => [props.modelValue.weight, props.modelValue.bf], () => {

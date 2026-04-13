@@ -46,7 +46,6 @@ onUnmounted(() => {
   top: 0.75rem;
   left: 1.25rem;
 }
-
 .error-manager {
   width: 100%;
   max-width: 100%;
@@ -57,30 +56,25 @@ onUnmounted(() => {
   padding: calc(0.75 * var(--newrem)) calc(1.25 * var(--newrem));
   border-radius: calc(2.5 * var(--newrem));
   overflow: hidden;
-
   .desc {
     gap: calc(0.65 * var(--size-s));
     opacity: 1;
   }
 }
-
 .error-enter-from {
   width: 6rem;
   max-width: 6rem;
   height: 1.5rem;
   max-height: 1.5rem;
-  
   .desc {
     opacity: 0;
   }
 }
-
 .error-leave-to {
   width: 6rem;
   max-width: 6rem;
   height: 1.5rem;
   max-height: 1.5rem;
-  
   .desc {
     opacity: 0;
   }

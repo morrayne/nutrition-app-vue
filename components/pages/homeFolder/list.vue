@@ -4,7 +4,6 @@ import localText from "../../ui/localText.vue";
 import asset from "../../ui/asset.vue";
 
 const props = defineProps<{ activeDate: string }>();
-
 import { useMealStore } from "../../../stores/array/useMealStore";
 const mealStore = useMealStore();
 
@@ -18,7 +17,7 @@ const currentDayMeals = computed(() => {
     <asset v-for="value in currentDayMeals" :key="value.name" :meal="value" v-if="currentDayMeals.length !== 0" :edit="false" :x="true" />
     <div class="mini-wrap empty" v-else>
       <div class="dot"></div>
-      <localText text="nothing-on-date" size="s" />
+      <localText text="nothing-here" size="s" />
     </div>
   </TransitionGroup>
 </template>
@@ -27,12 +26,10 @@ const currentDayMeals = computed(() => {
 .list {
   flex-direction: column-reverse;
   gap: 0.75rem;
-
   .empty {
     padding: 0.5rem 0.75rem;
     align-items: center;
     gap: 1rem;
-
     .dot {
       width: 0.5rem;
       height: 0.5rem;
@@ -41,12 +38,10 @@ const currentDayMeals = computed(() => {
     }
   }
 }
-
 .fade-enter-from {
   opacity: 0;
   transform: translateY(-10px);
 }
-
 .fade-leave-to {
   opacity: 0;
   transform: translateY(10px);

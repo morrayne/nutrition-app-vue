@@ -14,7 +14,7 @@ export const useConfigStore = defineStore("config", () => {
     language: "en",
     theme: deviceStore.theme,
     newrem: "16",
-    phoneColor: "blue",
+    phoneColor: "green",
   });
 
   const getConfig = async () => {
@@ -62,7 +62,7 @@ export const useConfigStore = defineStore("config", () => {
       language: "en",
       theme: "light",
       newrem: "16",
-      phoneColor: "blue",
+      phoneColor: "green",
     };
   };
 
