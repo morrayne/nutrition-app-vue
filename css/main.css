@@ -1,68 +1,106 @@
-@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
-:root[data-phone-color=black] {
-  --frame: #6c6c6d;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
 }
 
-:root[data-phone-color=white] {
-  --frame: #f1f2ed;
+:root {
+  --font-size-base: 24px;
+  --size-xs: calc(0.7 * var(--font-size));
+  --size-s: calc(0.85 * var(--font-size));
+  --size-m: calc(1 * var(--font-size));
+  --size-l: calc(1.15 * var(--font-size));
+  --size-xl: calc(1.3 * var(--font-size));
 }
 
-:root[data-phone-color=green] {
-  --frame: #c4cfa7;
+:root[data-font-size="0.8"] {
+  --font-size: calc(var(--font-size-base) * 0.8);
 }
 
-:root[data-phone-color=blue] {
-  --frame: #b5c6de;
+:root[data-font-size="0.9"] {
+  --font-size: calc(var(--font-size-base) * 0.9);
 }
 
-:root[data-phone-color=purple] {
-  --frame: #ebe2f1;
+:root[data-font-size="1"] {
+  --font-size: calc(var(--font-size-base) * 1);
 }
 
-:root[data-newrem="14"] {
-  --newrem: 14px;
+:root[data-font-size="1.1"] {
+  --font-size: calc(var(--font-size-base) * 1.1);
 }
 
-:root[data-newrem="15"] {
-  --newrem: 15px;
+:root[data-font-size="1.2"] {
+  --font-size: calc(var(--font-size-base) * 1.2);
 }
 
-:root[data-newrem="16"] {
-  --newrem: 16px;
+:root[data-font-size="1.3"] {
+  --font-size: calc(var(--font-size-base) * 1.3);
 }
 
-:root[data-newrem="17"] {
-  --newrem: 17px;
+:root[data-font-size="1.4"] {
+  --font-size: calc(var(--font-size-base) * 1.4);
 }
 
-:root[data-newrem="18"] {
-  --newrem: 18px;
+:root[data-font-size="1.5"] {
+  --font-size: calc(var(--font-size-base) * 1.5);
 }
 
-:root[data-phone-color=black] {
-  --frame: #6c6c6d;
+@media (max-width: 1440px) {
+  :root {
+    --font-size-base: 20px;
+  }
+}
+@media (max-width: 1024px) {
+  :root {
+    --font-size-base: 18px;
+  }
+}
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 16px;
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --font-size-base: 14px;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 12px;
+  }
+}
+:root {
+  --white: #ffffff;
+  --black: #000000;
 }
 
-:root[data-phone-color=white] {
-  --frame: #f1f2ed;
-}
-
-:root[data-phone-color=green] {
-  --frame: #c4cfa7;
-}
-
-:root[data-phone-color=blue] {
-  --frame: #b5c6de;
-}
-
-:root[data-phone-color=purple] {
-  --frame: #ebe2f1;
+:root[data-theme=light] {
+  --focus: #a29bfe;
+  --main-background: #ffffff;
+  --sub-background-tr: #f0f0f080;
+  --sub-background: #f0f0f0;
+  --ex-background: #e2e2e2;
+  --main-color: #242424;
+  --sub-color: #363636;
+  --ex-color: #484848;
+  --box-shadow: none;
+  --re: #ff6b6b;
+  --bl: #4b74e4;
+  --pu: #a29bfe;
+  --pi: #ff99cc;
+  --gr: #43c449;
+  --ci: #55efc4;
+  --ye: #ffeaa7;
 }
 
 :root[data-theme=dark] {
-  --html-background: #161616;
+  --focus: #a29bfe;
   --main-background: #161616;
+  --sub-background-tr: #24242480;
   --sub-background: #242424;
   --ex-background: #363636;
   --main-color: #f0f0f0;
@@ -78,50 +116,17 @@
   --ye: #ffeaa7;
 }
 
-:root[data-theme=light] {
-  --html-background: #ffffff;
-  --main-background: #ffffff;
-  --sub-background: #f0f0f0;
-  --ex-background: #e2e2e2;
-  --main-color: #242424;
-  --sub-color: #363636;
-  --ex-color: #484848;
-  --box-shadow: rgba(156, 156, 156, 0.2) 0px 0.25rem 0.5rem;
-  --re: #ff6b6b;
-  --bl: #4b74e4;
-  --pu: #a29bfe;
-  --pi: #ff99cc;
-  --gr: #43c449;
-  --ci: #55efc4;
-  --ye: #ffeaa7;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: none;
-  outline: none;
-}
-
 :root {
-  --main-font: "Manrope", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --size-xs: calc(0.7 * var(--newrem));
-  --size-s: calc(0.8 * var(--newrem));
-  --size-m: var(--newrem);
-  --size-l: calc(1.2 * var(--newrem));
-  --size-xl: calc(1.3 * var(--newrem));
+  --main-font: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
-  font-family: var(--main-font);
-  color: var(--main-color);
-  font-weight: 300;
-  font-size: var(--size-m);
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
   display: flex;
-  transition: 0.2s ease-in-out;
+  transition: 0.2s;
 }
 
 html {
@@ -135,11 +140,18 @@ head {
   display: none;
 }
 
-html,
-body {
+html, body {
   width: 100%;
   height: 100%;
   scroll-behavior: smooth;
+}
+
+p, button {
+  font-family: var(--main-font);
+  font-size: var(--size-m);
+  color: var(--main-color);
+  font-weight: 300;
+  white-space: nowrap;
 }
 
 button {
@@ -148,448 +160,189 @@ button {
   background: none;
 }
 
-ul,
-ol {
+ul, ol {
   list-style: none;
 }
 
 input {
   background: none;
+  font-size: var(--size-m);
+  color: var(--main-color);
 }
 
 input::-moz-placeholder {
-  font-family: var(--main-font);
+  font-size: var(--size-m);
+  color: var(--ex-color);
 }
 
 input::placeholder {
-  font-family: var(--main-font);
+  font-size: var(--size-m);
+  color: var(--ex-color);
 }
 
 #app {
   width: 100%;
   height: 100%;
+  background: var(--main-background);
   justify-content: center;
   align-items: center;
 }
 
-.screen {
+.dnd-kit-preview-container {
+  transition: 0s !important;
+}
+.dnd-kit-preview-container .dnd-kit-preview {
+  transition: 0s !important;
+}
+
+.h2 {
+  font-weight: 500;
+  font-size: var(--size-xl);
+}
+
+.h3 {
+  font-weight: 400;
+  font-size: var(--size-m);
+}
+
+.full-screen {
   width: 100%;
   height: 100%;
-  background: var(--main-background);
   position: relative;
-  overflow: hidden;
+}
+
+.pc-max-frame {
+  max-width: 960px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.pc-max-frame::-webkit-scrollbar {
+  display: none;
 }
 
 .view {
-  max-width: 720px;
   min-width: 100%;
   height: 100%;
   flex-direction: column;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.hw100 {
-  max-width: 720px;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 5.5rem 1.25rem 1.25rem;
-  overflow-y: scroll;
-}
-.hw100 .grand-svg-holder {
-  min-width: 6rem;
-  min-height: 6rem;
-  max-width: 6rem;
-  max-height: 6rem;
-  margin: 0 auto;
-}
-
-.hw100::-webkit-scrollbar {
-  display: none;
-}
-
-.default-screen {
-  width: 100%;
-  height: 100%;
-  padding: 3rem 1.25rem 1.25rem;
-  flex-direction: column;
-  gap: 0.75rem;
-  position: relative;
-  z-index: 2;
+  gap: 1rem;
+  overflow: hidden;
   overflow-y: scroll;
 }
 
-.default-screen::-webkit-scrollbar {
+.view::-webkit-scrollbar {
   display: none;
+}
+
+.view-center {
+  padding-top: 6rem;
+  justify-content: center;
 }
 
 .mini-wrap {
-  border-radius: 1.5rem;
-  padding: 0.5rem;
   background: var(--sub-background);
   border: solid 1px var(--ex-background);
   box-shadow: var(--box-shadow);
 }
 
-:root {
-  --english: "english";
-  --russian: "русский";
-  --mandarin: "中文";
-  --espaniol: "español";
+.bounce:hover {
+  scale: 1.05;
 }
 
-:root[lang=en] {
-  --continue: "continue";
-  --language: "language";
-  --dark-mode: "dark mode";
-  --font-size: "font size";
-  --very-small: "very small";
-  --small: "small";
-  --medium: "medium";
-  --big: "big";
-  --large: "large";
-  --phone-color: "phone color";
-  --black: "black";
-  --white: "white";
-  --green: "green";
-  --blue: "blue";
-  --purple: "purple";
-  --gender: "gender";
-  --male: "male";
-  --female: "female";
-  --none: "none";
-  --activity-level: "activity level";
-  --activity-level-1: "light walking";
-  --activity-level-2: "low activity";
-  --activity-level-3: "moderate exercise";
-  --activity-level-4: "active lifestyle";
-  --activity-level-5: "very active";
-  --activity-level-6: "extreme athlete";
-  --age: "age";
-  --height: "height";
-  --weight: "weight";
-  --body-fat: "body fat";
-  --calories: "calories";
-  --proteins: "protein";
-  --carbs: "carbs";
-  --fats: "fats";
-  --username: "username";
-  --email: "email";
-  --password: "password";
-  --monday: "mo";
-  --tuesday: "tu";
-  --wednesday: "we";
-  --thursday: "th";
-  --friday: "fr";
-  --saturday: "sa";
-  --sunday: "su";
-  --short-calories: "kcal";
-  --short-proteins: "protein";
-  --short-fats: "fat";
-  --short-carbs: "carbs";
-  --log: "log";
-  --add: "add";
-  --saved: "saved";
-  --save: "save";
-  --send: "send";
-  --send-to-log: "add to log";
-  --product-name: "name";
-  --full-size: "recalculate with weight";
-  --sign-in-with: "sign in with";
-  --sign-up-with: "sign up with";
-  --sign-up-failed: "error";
-  --sign-in-failed: "error";
-  --please-check-form: "please check the form";
-  --length: "length";
-  --should-be: "should be";
-  --longer: "longer";
-  --shorter: "shorter";
-  --wrong-format: "invalid format";
-  --more-than: "more than";
-  --less-than: "less than";
-  --approximately: "approximately";
-  --lbs: "lbs";
-  --ft: "ft";
-  --recomended-font: "medium size recommended";
-  --pc-only: "desktop version only";
-  --we-start-you-finish: "we start, you finish. if you want to change something, you can!";
-  --last-3-weeks: "3 weeks results";
-  --daily-report: "daily report";
-  --your-goals: "your goals";
-  --goal-succes: "goal success rate";
-  --nothing-here: "nothing here yet";
-  --g: "g";
-  --recal-product-desc: "when enabled, macros will be recalculated based on weight factor";
-  --save-product-desc: "save for reuse";
-  --log-product-desc: "add to log immediately";
-  --settings: "settings";
-  --account: "account";
+.bounce:active {
+  scale: 0.95;
 }
 
-:root[lang=ru] {
-  --continue: "продолжить";
-  --language: "язык";
-  --dark-mode: "тёмная тема";
-  --font-size: "размер шрифта";
-  --very-small: "очень маленький";
-  --small: "маленький";
-  --medium: "средний";
-  --big: "большой";
-  --large: "очень большой";
-  --phone-color: "цвет телефона";
-  --black: "чёрный";
-  --white: "белый";
-  --green: "зелёный";
-  --blue: "синий";
-  --purple: "фиолетовый";
-  --gender: "пол";
-  --male: "мужской";
-  --female: "женский";
-  --none: "не указано";
-  --activity-level: "уровень активности";
-  --activity-level-1: "лёгкие прогулки";
-  --activity-level-2: "низкая активность";
-  --activity-level-3: "умеренные тренировки";
-  --activity-level-4: "активный образ жизни";
-  --activity-level-5: "очень активный";
-  --activity-level-6: "экстремальные нагрузки";
-  --age: "возраст";
-  --height: "рост";
-  --weight: "вес";
-  --body-fat: "процент жира";
-  --calories: "калории";
-  --proteins: "белки";
-  --carbs: "углеводы";
-  --fats: "жиры";
-  --username: "имя";
-  --email: "электронная почта";
-  --password: "пароль";
-  --monday: "пн";
-  --tuesday: "вт";
-  --wednesday: "ср";
-  --thursday: "чт";
-  --friday: "пт";
-  --saturday: "сб";
-  --sunday: "вс";
-  --short-calories: "ккал";
-  --short-proteins: "бел";
-  --short-fats: "жир";
-  --short-carbs: "угл";
-  --log: "журнал";
-  --add: "добавить";
-  --saved: "сохранено";
-  --save: "сохранить";
-  --send: "отправить";
-  --send-to-log: "в журнал";
-  --product-name: "название";
-  --full-size: "пересчитать учитывая вес";
-  --sign-in-with: "войти через";
-  --sign-up-with: "зарегистрироваться через";
-  --sign-up-failed: "ошибка";
-  --sign-in-failed: "ошибка";
-  --please-check-form: "проверьте форму";
-  --length: "длина";
-  --should-be: "нужно быть";
-  --longer: "длиннее";
-  --shorter: "короче";
-  --wrong-format: "неверный формат";
-  --more-than: "больше чем";
-  --less-than: "меньше чем";
-  --approximately: "примерно";
-  --lbs: "фунтов";
-  --ft: "футов";
-  --recomended-font: "рекомендуется средний размер";
-  --pc-only: "только для пк версии";
-  --we-start-you-finish: "мы начинаем, вы заканчиваете. если хотите что-то изменить, вы можете это сделать!";
-  --last-3-weeks: "результаты за 3 недели";
-  --daily-report: "дневной отчет";
-  --your-goals: "ваши цели";
-  --goal-succes: "успех выполнения целей";
-  --nothing-here: "здесь сейчас ничего нет";
-  --g: "г";
-  --recal-product-desc: "при включении этой фукнции бжу будет перерасчитано с учетом коэффициента веса";
-  --save-product-desc: "сохранить для переиспользования";
-  --log-product-desc: "сразу добавить в журнал";
-  --settings: "параметры";
-  --account: "аккаунт";
+.invard-wrap {
+  min-width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  gap: 1rem;
+}
+.invard-wrap .mini-wrap {
+  border-radius: 1.5rem;
+}
+.invard-wrap .left {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 100%;
+}
+.invard-wrap .left .cont {
+  width: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 2rem;
+  padding: 1rem;
+  position: sticky;
+  top: 2rem;
+}
+.invard-wrap .left .cont * {
+  position: relative;
+  z-index: 3;
+}
+.invard-wrap .left .cont .filler {
+  width: 100%;
+  height: 3rem;
+  color: var(--ex-background);
+  background: var(--sub-background);
+  border: 2px dashed var(--ex-background);
+  border-radius: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+.invard-wrap .left .cont .send {
+  width: 100%;
+  font-size: var(--size-s);
+  color: var(--white);
+  background: var(--focus);
+  padding: 0.5rem 0;
+  border-radius: 1rem;
+  justify-content: center;
+  cursor: pointer;
+}
+.invard-wrap .right {
+  flex: 1;
+  flex-direction: column;
+  height: -moz-fit-content;
+  height: fit-content;
+  gap: 1rem;
+}
+.invard-wrap .right .top {
+  width: 100%;
+  height: 4rem;
+  position: sticky;
+  top: 2rem;
+  z-index: 3;
+}
+.invard-wrap .right .bot {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 0 0.5rem;
+  gap: 1rem;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.invard-wrap .right .bot::-webkit-scrollbar {
+  display: none;
 }
 
-:root[lang=es] {
-  --continue: "continuar";
-  --language: "idioma";
-  --dark-mode: "modo oscuro";
-  --font-size: "tamaño de fuente";
-  --very-small: "muy pequeño";
-  --small: "pequeño";
-  --medium: "mediano";
-  --big: "grande";
-  --large: "muy grande";
-  --phone-color: "color del teléfono";
-  --black: "negro";
-  --white: "blanco";
-  --green: "verde";
-  --blue: "azul";
-  --purple: "morado";
-  --gender: "género";
-  --male: "hombre";
-  --female: "mujer";
-  --none: "ninguno";
-  --activity-level: "nivel de actividad";
-  --activity-level-1: "caminatas ligeras";
-  --activity-level-2: "baja actividad";
-  --activity-level-3: "ejercicio moderado";
-  --activity-level-4: "estilo de vida activo";
-  --activity-level-5: "muy activo";
-  --activity-level-6: "deportista extremo";
-  --age: "edad";
-  --height: "altura";
-  --weight: "peso";
-  --body-fat: "grasa corporal";
-  --calories: "calorías";
-  --proteins: "proteínas";
-  --carbs: "carbohidratos";
-  --fats: "grasas";
-  --username: "nombre";
-  --email: "correo";
-  --password: "contraseña";
-  --monday: "lu";
-  --tuesday: "ma";
-  --wednesday: "mi";
-  --thursday: "ju";
-  --friday: "vi";
-  --saturday: "sá";
-  --sunday: "do";
-  --short-calories: "kcal";
-  --short-proteins: "proteína";
-  --short-fats: "grasa";
-  --short-carbs: "carbos";
-  --log: "registro";
-  --add: "añadir";
-  --saved: "guardado";
-  --save: "guardar";
-  --send: "enviar";
-  --send-to-log: "añadir al registro";
-  --product-name: "nombre";
-  --full-size: "recalcular con peso";
-  --sign-in-with: "iniciar sesión con";
-  --sign-up-with: "registrarse con";
-  --sign-up-failed: "error";
-  --sign-in-failed: "error";
-  --please-check-form: "revise el formulario";
-  --length: "longitud";
-  --should-be: "debe ser";
-  --longer: "más largo";
-  --shorter: "más corto";
-  --wrong-format: "formato inválido";
-  --more-than: "más de";
-  --less-than: "menos de";
-  --approximately: "aproximadamente";
-  --lbs: "lbs";
-  --ft: "ft";
-  --recomended-font: "tamaño medio recomendado";
-  --pc-only: "solo versión de escritorio";
-  --we-start-you-finish: "nosotros empezamos, tú terminas. ¡si quieres cambiar algo, puedes hacerlo!";
-  --last-3-weeks: "resultados de 3 semanas";
-  --daily-report: "informe diario";
-  --your-goals: "tus metas";
-  --goal-succes: "tasa de éxito";
-  --nothing-here: "no hay nada aquí";
-  --g: "g";
-  --recal-product-desc: "al activarlo, los macros se recalcularán según el factor de peso";
-  --save-product-desc: "guardar para reutilizar";
-  --log-product-desc: "añadir al registro inmediatamente";
-  --settings: "ajustes";
-  --account: "cuenta";
+.basket-list {
+  flex-direction: column;
+  gap: 0.5rem;
 }
-
-:root[lang=zh] {
-  --continue: "继续";
-  --language: "语言";
-  --dark-mode: "深色模式";
-  --font-size: "字体大小";
-  --very-small: "非常小";
-  --small: "小";
-  --medium: "中等";
-  --big: "大";
-  --large: "特大";
-  --phone-color: "手机颜色";
-  --black: "黑色";
-  --white: "白色";
-  --green: "绿色";
-  --blue: "蓝色";
-  --purple: "紫色";
-  --gender: "性别";
-  --male: "男";
-  --female: "女";
-  --none: "未指定";
-  --activity-level: "活动水平";
-  --activity-level-1: "轻度步行";
-  --activity-level-2: "低活动量";
-  --activity-level-3: "适度运动";
-  --activity-level-4: "积极生活方式";
-  --activity-level-5: "非常活跃";
-  --activity-level-6: "极限运动";
-  --age: "年龄";
-  --height: "身高";
-  --weight: "体重";
-  --body-fat: "体脂率";
-  --calories: "卡路里";
-  --proteins: "蛋白质";
-  --carbs: "碳水化合物";
-  --fats: "脂肪";
-  --username: "用户名";
-  --email: "邮箱";
-  --password: "密码";
-  --monday: "周一";
-  --tuesday: "周二";
-  --wednesday: "周三";
-  --thursday: "周四";
-  --friday: "周五";
-  --saturday: "周六";
-  --sunday: "周日";
-  --short-calories: "千卡";
-  --short-proteins: "蛋白";
-  --short-fats: "脂肪";
-  --short-carbs: "碳水";
-  --log: "日志";
-  --add: "添加";
-  --saved: "已保存";
-  --save: "保存";
-  --send: "发送";
-  --send-to-log: "添加到日志";
-  --product-name: "名称";
-  --full-size: "按重量重新计算";
-  --sign-in-with: "登录方式";
-  --sign-up-with: "注册方式";
-  --sign-up-failed: "错误";
-  --sign-in-failed: "错误";
-  --please-check-form: "请检查表单";
-  --length: "长度";
-  --should-be: "应为";
-  --longer: "更长";
-  --shorter: "更短";
-  --wrong-format: "格式错误";
-  --more-than: "大于";
-  --less-than: "小于";
-  --approximately: "大约";
-  --lbs: "磅";
-  --ft: "英尺";
-  --recomended-font: "建议使用中等尺寸";
-  --pc-only: "仅桌面版";
-  --we-start-you-finish: "我们开始，您完成。如果您想更改，可以随时调整！";
-  --last-3-weeks: "三周结果";
-  --daily-report: "每日报告";
-  --your-goals: "您的目标";
-  --goal-succes: "目标达成率";
-  --nothing-here: "暂无内容";
-  --g: "克";
-  --recal-product-desc: "启用后，将根据重量系数重新计算营养成分";
-  --save-product-desc: "保存以备重复使用";
-  --log-product-desc: "立即添加到日志";
-  --settings: "设置";
-  --account: "账户";
+.basket-list .item {
+  width: 16rem;
+  height: 3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  color: var(--ex-color);
+  font-size: var(--size-s);
+  border: solid 1px var(--ex-background);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }/*# sourceMappingURL=main.css.map */

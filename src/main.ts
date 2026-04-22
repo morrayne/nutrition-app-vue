@@ -1,48 +1,59 @@
 import { createApp } from "vue";
-import App from "./App.vue";
-
 import { createPinia } from "pinia";
+
+import App from "./App.vue";
+import router from "../appSettings/router";
+
+import { useAuthStore } from "../stores/useAuthStore";
+import { useConfigStore } from "../stores/useConfigStore";
+import { useCommonStore } from "../stores/useCommonStore";
+import { useBodyStore } from "../stores/useBodyStore";
+import { useGoalStore } from "../stores/useGoalStore";
+import { useWeightLogStore } from "../stores/useWeightLogStore";
+import { useMealAssetSavedStore } from "../stores/useMealAssetSavedStore";
+import { useMealAssetGroupStore } from "../stores/useMealAssetGroupStore";
+import { useMealTableStore } from "../stores/useMealTableStore";
+
+import { i18n } from "../appSettings/locales/local";
+
 const app = createApp(App);
 const pinia = createPinia();
+
 app.use(pinia);
-
-import router from "../appSettings/router.ts";
 app.use(router);
+app.use(i18n);
 
-import { useAuthStore } from "../stores/main/useAuthStore.ts";
-import { useActiveDayStore } from "../stores/array/useActiveDayStore.ts";
-import { useCommonStore } from "../stores/single/useCommonStore.ts";
-import { useConfigStore } from "../stores/single/useConfigStore.ts";
-
-window.addEventListener('beforeunload', () => {
-  const authStore = useAuthStore();
-  const commonStore = useCommonStore();
-  const activeDayStore = useActiveDayStore();
-  
-  if (authStore.isAuthenticated && authStore.userId) {
-    commonStore.common.online = false;
-    commonStore.updateCommon();
-    activeDayStore.addToday().catch(console.error);
-  }
-});
+const applyConfig = (config: any) => {
+  if (!config) return;
+  const configStore = useConfigStore();
+  configStore.changeAttrByStore(config);
+  if (config.language && i18n.global) i18n.global.locale.value = config.language;
+};
 
 const bootstrap = async () => {
   const authStore = useAuthStore();
-  const commonStore = useCommonStore();
-  const activeDayStore = useActiveDayStore();
   const configStore = useConfigStore();
-  configStore.changeVisualViaConfig(configStore.config); 
-
+  const commonStore = useCommonStore();
+  const bodyStore = useBodyStore();
+  const goalStore = useGoalStore();
+  const weightLogStore = useWeightLogStore();
+  const mealAssetSavedStore = useMealAssetSavedStore();
+  const mealAssetGroupStore = useMealAssetGroupStore();
+  const mealTableStore = useMealTableStore();
   await authStore.initialize();
   if (authStore.isAuthenticated && authStore.userId) {
-    await configStore.getConfig();       
-    configStore.changeVisualViaConfig(configStore.config); 
-    await activeDayStore.addToday();
-    commonStore.common.online = true;
-    commonStore.updateCommon();
-  } else {
-    router.push("/signup");
-  }
+    await Promise.all([
+      configStore.getStore(),
+      commonStore.getStore(),
+      bodyStore.getStore(),
+      goalStore.getStore(),
+      weightLogStore.getStore(),
+      mealAssetSavedStore.getStore(),
+      mealAssetGroupStore.getStore(),
+      mealTableStore.getStore()
+    ]);
+    applyConfig(configStore.config);
+  } else router.push("/auth");
   app.mount("#app");
 };
 
