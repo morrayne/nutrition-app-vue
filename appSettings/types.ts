@@ -122,20 +122,20 @@ export interface tMealAssetSaved {
   fats: number;
 }
 export interface tMealAssetUnsaved {
-  name: string;
-  weight: number;
-  calories: number;
-  proteins: number;
-  carbs: number;
-  fats: number;
+  name?: string;
+  weight?: number;
+  calories?: number;
+  proteins?: number;
+  carbs?: number;
+  fats?: number;
 }
 export interface tMealAssetGroup {
-  id: string;
-  name: string;
-  list: string[];
+  id?: string;
+  name?: string;
+  list?: string[];
 }
 export interface tMealTableItem {
-  id: string;
+  id?: string;
   date: string;
   saved: string[];         
   unsaved: tMealAssetUnsaved[];  

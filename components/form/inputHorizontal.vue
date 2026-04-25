@@ -4,7 +4,6 @@ import { X } from "@lucide/vue";
 import type { tInputHorizontal } from "../../appSettings/types";
 
 import { useI18n } from "vue-i18n";
-import { p } from "vue-router/dist/index-Cu9B0wDz.mjs";
 const { t } = useI18n();
 
 const props = defineProps<tInputHorizontal & { modelValue?: string | number }>();
@@ -82,34 +81,36 @@ watch(() => props.modelValue, (newVal) => {
 </script>
 
 <template>
-  <div class="input-horizontal">
-    <input class="mini-wrap input" :type="props.data.dataType" :placeholder="t(props.title)" :value="inputValue" @input="handleInput" />
-    <div :class="hasError ? 'error-wrap open' : 'error-wrap close'">
-      <div class="error">
+  <div class="fl-col prz-2 input-horizontal" :style="{marginBottom: props.st.displayExternal ? 'var(--size-m)' : '0'}">
+    <input class="solid-wrap input" :type="props.data.dataType" :placeholder="t(props.title)" :value="inputValue" @input="handleInput" />
+    <div :class="hasError ? 'center error-wrap open' : 'center error-wrap close'">
+      <div class="wh-100 error">
         <X color="var(--white)" />
       </div>
     </div>
-    <p class="lbs" v-if="props.st.displayExternal === 'weight-kg'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 2.2).toFixed(1) + ' ' + t('lbs') }} </p>
-    <p class="lbs" v-if="props.st.displayExternal === 'height-cm'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 0.033).toFixed(1) + ' ' + t('ft') }} </p>
+    <p class="center lbs" v-if="props.st.displayExternal === 'weight-kg'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 2.2).toFixed(1) + ' ' + t('lbs') }} </p>
+    <p class="center lbs" v-if="props.st.displayExternal === 'height-cm'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 0.033).toFixed(1) + ' ' + t('ft') }} </p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .input-horizontal {
   width: 100%;
-  flex-direction: column;
-  position: relative;
-  .lbs {
-    width: 100%;
-    font-size: var(--size-xs);
-    justify-content: center;
-  }
+  gap: 0.25rem !important;
   .title {
     font-size: var(--size-l);
     font-weight: 500;
   }
   .desc {
-    font-size: var(--size-s);
+    font-size: var(--size-m);
+    font-weight: 400;
+  }
+  .lbs {
+    width: 100%;
+    font-weight: 400;
+    position: absolute;
+    top: calc(2.5rem + var(--size-m));
+    font-size: var(--size-xs);
   }
   .input {
     width: 100%;
@@ -118,13 +119,12 @@ watch(() => props.modelValue, (newVal) => {
   }
   .error-wrap {
     height: 100%;
-    align-items: center;
+    aspect-ratio: 1 / 1;
+    padding: 0.75rem;
     position: absolute;
-    top: 0rem;
-
+    top: 0;
+    right: 0;
     .error {
-      width: calc(2 * var(--size-m));
-      height: calc(2 * var(--size-m));
       background: var(--re);
       border-radius: 2rem;
       align-items: center;
@@ -132,11 +132,9 @@ watch(() => props.modelValue, (newVal) => {
     }
   }
   .open {
-    right: 0.75rem;
     opacity: 1;
   }
   .close {
-    right: -1rem;
     opacity: 0;
   }
 }

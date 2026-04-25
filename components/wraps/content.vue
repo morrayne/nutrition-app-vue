@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <div class="wrap">
-    <div class="content-wrap">
-      <div class="wrap">
+  <div class="wh-100 wrap">
+    <div class="wh-100 prz-2 content-wrap">
+      <div class="wh-100 small-wrap">
         <slot></slot>
       </div>
     </div>
@@ -15,23 +15,24 @@
 <style scoped lang="scss">
 .wrap {
   max-width: 1920px;
-  width: 100%;
-  max-height: 1080px;
-  height: 100%;
+  max-height: 920px;
   .content-wrap {
-    width: 100%;
-    height: 100%;
     padding: 0.5rem;
-    position: relative;
-    z-index: 2;
-    .wrap {
-      width: 100%;
-      height: 100%;
-      background: var(--main-background);
+    .small-wrap {
+      background: var(---background);
       border: solid 1px var(--sub-background);
       box-shadow: var(--box-shadow);
       border-radius: 2rem;
       overflow: hidden;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap .content-wrap {
+    padding: 0;
+    .small-wrap {
+      border: none;
     }
   }
 }

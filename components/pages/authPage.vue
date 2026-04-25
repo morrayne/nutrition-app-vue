@@ -4,7 +4,7 @@ import { ref, computed, watch, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-import { languageSelect, themeSwitcher, fontSizeSwitcher, weightInput, genderSelect, activitySelect, bfInput, heightInput, ageInput, caloriesInput, proteinsInput, fatsInput, carbsInput, usernameInput, emailInput, passwordInput } from "../../appSettings/defaultExport";
+import { languageSelect, themeSwitcher, fontSizeSwitcher, weightInput, genderSelect, signSelect, activitySelect, bfInput, heightInput, ageInput, caloriesInput, proteinsInput, fatsInput, carbsInput, usernameInput, emailInput, passwordInput } from "../../appSettings/defaultExport";
 import type { tCommon, tConfig, tGoal, tBody, tAuth, tGoalWeightBoadyFat } from "../../appSettings/types";
 
 import uniNavigation from "../ui/uniNavigation.vue";
@@ -22,10 +22,10 @@ const authStore = useAuthStore();
 import selectVertical from "../form/selectVertical.vue";
 import selectHorizontal from "../form/selectHorizontal.vue";
 import switcherHorizontal from "../form/switcherHorizontal.vue";
-// import colorHorizontal from "../form/colorHorizontal.vue";
 import inputHorizontal from "../form/inputHorizontal.vue";
 
 const current = ref<number>(0);
+const mode = ref<string>('signUp');
 const stArray = [languageSelect, themeSwitcher, fontSizeSwitcher, weightInput, genderSelect, activitySelect, bfInput, heightInput, ageInput, caloriesInput, proteinsInput, fatsInput, carbsInput, usernameInput, emailInput, passwordInput];
 for (const item of stArray) {
   item.st = { fontSize: 'm' }; 
@@ -72,16 +72,17 @@ watch(() => auth.value.email, (newEmail) => {
   if (newEmail) common.value.email = newEmail;
 });
 
-const validationSignUp = computed(() => {
-  const c = common.value;
-  const b = body.value;
-  const g = goal.value;
-  const a = auth.value;
-  return Boolean(c.username && a.email && a.password && b.weight && b.bodyFat && b.height && b.age && g.weight && g.bodyFat && g.calories && g.carbs && g.fats && g.proteins);
-});
-const validationSignIn = computed(() => {
-  const s = signin.value;
-  return Boolean(s.email && s.password);
+const validationSign = computed(() => {
+  if (mode.value === 'signUp') {
+    const c = common.value;
+    const b = body.value;
+    const g = goal.value;
+    const a = auth.value;
+    return Boolean(c.username && a.email && a.password && b.weight && b.bodyFat && b.height && b.age && g.weight && g.bodyFat && g.calories && g.carbs && g.fats && g.proteins);
+  } else {
+    const s = auth.value;
+    return Boolean(s.email && s.password);
+  }
 });
 
 let isAutoUpdating = false;
@@ -118,17 +119,21 @@ watch(() => config.value, (newConfig) => {
 }, { deep: true });
 
 const loading = ref<boolean>(false);
+const trySign = async () => {
+  if (mode.value === 'signUp') trySignUp();
+  else trySignIn();
+}
 const trySignUp = async () => {
-  if (!validationSignUp.value) return;
+  if (!validationSign.value) return;
   loading.value = true;
   const result = await authStore.signUp(auth.value, common.value, config.value, body.value, goal.value);
   if (result.success) router.push('/dashboard');
   else loading.value = false;
 }
 const trySignIn = async () => {
-  if (!validationSignIn.value) return;
+  if (!validationSign.value) return;
   loading.value = true;
-  const s = signin.value;
+  const s = auth.value;
   const result = await authStore.signIn(s.email!, s.password!);
   if (result.success) router.push('/dashboard');
   else loading.value = false;
@@ -136,56 +141,48 @@ const trySignIn = async () => {
 </script>
 
 <template>
-  <div class="full-screen auth-page">
+  <div class="wh-100 center prz-2 auth-page">
     <loadingWrap v-show="loading" :style="{opacity: loading ? '1' : '0'}" />
     <uniNavigation v-model="current" :left="authNavigationArray" :right="authNavigationItem" />
-    <div class="pc-max-frame">
-      <TransitionGroup name="auth" tag="div" class="views-container" mode="out-in">
-        <div class="view view-center" :key="0" v-show="current === 0">
+      <TransitionGroup name="auth" tag="div" class="wh-100 max-width-720 prz-2 transition-container" mode="out-in">
+        <div class="wh-100 fl-col" :key="0" v-show="current === 0">
           <selectVertical v-bind="languageSelect" v-model="config.language" />
-        </div>
-        <div class="view view-center" :key="1" v-show="current === 1">
+          <!-- <p class="h2"> {{ t('youWillSettings') }} </p> -->
           <switcherHorizontal v-bind="themeSwitcher" v-model="config.theme" />
           <selectVertical v-bind="fontSizeSwitcher" v-model="config.fontSize" />
-          <!-- <colorHorizontal v-model="config.focusColor" /> -->
         </div>
-        <div class="view view-center" :key="2" v-show="current === 2">
-          <p class="body-desc"> {{ t('bodyTop') }} </p>
+        <div class="wh-100 fl-col" :key="1" v-show="current === 1">
           <selectHorizontal v-bind="genderSelect" v-model="body.gender" />
+          <p class="h2"> {{ t('bodyTop') }} </p>
           <inputHorizontal v-bind="weightInput" v-model="body.weight" />
           <inputHorizontal v-bind="bfInput" v-model="body.bodyFat" />
-          <p class="body-desc"> {{ t('bodyBot') }} </p>
-          <inputHorizontal v-bind="heightInput" v-model="body.height" />
+          <p class="h2"> {{ t('bodyBot') }} </p>
           <inputHorizontal v-bind="ageInput" v-model="body.age" />
+          <inputHorizontal v-bind="heightInput" v-model="body.height" />
         </div>
-        <div class="view view-center" :key="3" v-show="current === 3">
-          <p class="body-desc"> {{ t('goalAffect') }} </p>
+        <div class="wh-100 fl-col" :key="2" v-show="current === 2">
+          <p class="h2"> {{ t('mostEff') }} </p>
           <inputHorizontal v-bind="weightInput" v-model="goal.weight" />
           <inputHorizontal v-bind="bfInput" v-model="goal.bodyFat" />
           <selectVertical v-bind="activitySelect" v-model="body.activity" />
         </div>
-        <div class="view view-center" :key="4" v-show="current === 4">
-          <p class="body-desc"> {{ t('canAdjust') }} </p>
+        <div class="wh-100 fl-col" :key="3" v-show="current === 3">
+          <p class="h2"> {{ t('canAdjust') }} </p>
           <inputHorizontal v-bind="caloriesInput" v-model="goal.calories" />
           <inputHorizontal v-bind="proteinsInput" v-model="goal.proteins" />
           <inputHorizontal v-bind="fatsInput" v-model="goal.fats" />
           <inputHorizontal v-bind="carbsInput" v-model="goal.carbs" />
+          <p class="h2"> {{ t('plsNote') }} </p>
         </div>
-        <div class="view view-center" :key="5" v-show="current === 5">
-          <p class="body-desc"> {{ t('createAcc') }} </p>
-          <inputHorizontal v-bind="usernameInput" v-model="common.username" />
+        <div class="wh-100 fl-col center" :key="-1" v-show="current === -1">
+          <!-- <p class="h2"> {{ t('logInto') }} </p> -->
+          <selectHorizontal v-bind="signSelect" v-model="mode" />
+          <inputHorizontal v-bind="usernameInput" v-model="common.username" v-if="mode === 'signUp'" />
           <inputHorizontal v-bind="emailInput" v-model="auth.email" />
           <inputHorizontal v-bind="passwordInput" v-model="auth.password" />
-          <button :disabled="!validationSignUp" :class="validationSignUp ? 'mini-wrap sign active' : 'mini-wrap sign'" @click="trySignUp"> {{ t('signUp') }} </button>
-        </div>
-        <div class="view view-center" :key="-1" v-show="current === -1">
-          <p class="body-desc"> {{ t('logInto') }} </p>
-          <inputHorizontal v-bind="emailInput" v-model="signin.email" />
-          <inputHorizontal v-bind="passwordInput" v-model="signin.password" />
-          <button :disabled="!validationSignIn" :class="validationSignIn ? 'mini-wrap sign active' : 'mini-wrap sign'" @click="trySignIn"> {{ t('signIn') }} </button>
+          <button :disabled="!validationSign" :class="validationSign ? 'solid-wrap center sign active' : 'solid-wrap center sign'" @click="trySign"> {{ t('signIn') }} </button>
         </div>
       </TransitionGroup>
-    </div>
   </div>
 </template>
 
@@ -204,45 +201,35 @@ const trySignIn = async () => {
   opacity: 0;
 }
 .auth-page {
-  position: relative;
   padding: 1rem;
-  .pc-max-frame {
-    max-width: 640px;
-    position: relative;
-    overflow: hidden;
-    min-height: 400px;
-  }
-  .views-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    .view {
+  .transition-container {
+    .wh-100 {
+      min-width: 100%;
+      padding-top: 6rem;
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
-      .body-desc {
-        font-weight: 500;
-        font-size: var(--size-l);
-        white-space: wrap;
-      }
-      .mini-wrap {
-        width: 100%;
-        padding: 1rem 0;
-        border-radius: 2.5rem;
-      }
-      .sign {
-        justify-content: center;
-        font-weight: 500;
-        cursor: not-allowed;
-      }
-      .active {
-        background: var(--focus);
-        border: solid 1px var(--focus);
-        color: var(--white);
-        cursor: pointer;
-      }
+      overflow-y: scroll;
     }
+    .wh-100::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .fl-col {
+    gap: 1.5rem;
+  }
+  .body-desc {
+    width: 100%;
+  }
+  .sign {
+    width: 100%;
+    font-weight: 500;
+    cursor: not-allowed;
+  }
+  .active {
+    background: var(--focus);
+    border: solid 1px var(--focus);
+    color: var(--white);
+    cursor: pointer;
   }
 }
 </style>

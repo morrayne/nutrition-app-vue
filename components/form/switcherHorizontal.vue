@@ -21,12 +21,13 @@ const handleSwitch = () => {
 </script>
 
 <template>
-  <div class="mini-wrap switcher-horizontal">
-    <div class="switcher">
-      <p>{{ t(props.title) }}</p>
-      <div class="item bounce" :style="{background: active ? 'var(--focus)' : 'var(--ex-background)'}" @click="handleSwitch">
-        <div class="gap" :style="{flex: active ? '1' : '0'}"></div>
+  <div class="solid-wrap switcher-horizontal">
+    <div class="wh-100 center">
+      <p class="title">{{ t(props.title) }}</p>
+      <div class="item bounce" :style="{ background: active ? 'var(--focus)' : 'var(--ex-background-tr)' }" @click="handleSwitch">
+        <div :style="{flex: active ? '1' : '0'}"></div>
         <div class="runner"></div>
+        <div :style="{flex: active ? '0' : '1'}"></div>
       </div>
     </div>
   </div>
@@ -35,27 +36,23 @@ const handleSwitch = () => {
 <style scoped lang="scss">
 .switcher-horizontal {
   width: 100%;
-  .switcher {
-    width: 100%;
-    height: 100%;
-    align-items: center;
+  .center {
     justify-content: space-between;
-    padding: 0 2rem;
+    .title {
+      font-size: var(--size-m);
+      font-weight: 400;
+    }
     .item {
-      width: calc(2.25 * var(--size-s));
-      height: calc(1.25 * var(--size-s));
-      padding: 0.125rem;
-      background: var(--focus);
-      border-radius: 1rem;
+      width: calc(2 * var(--size-m));
+      height: 80%;
+      padding: 0.25rem;
+      border-radius: 2rem;
       cursor: pointer;
-      .gap {
-        flex: 1;
-      }
       .runner {
         height: 100%;
         aspect-ratio: 1 / 1;
+        border-radius: 2rem;
         background: var(--main-background);
-        border-radius: 1rem;
       }
     }
   }

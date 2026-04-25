@@ -103,14 +103,14 @@ const containerStyles = computed(() => {
       return {
         ...baseStyles,
         background: `var(--sub-background-tr)`,
-        border: `solid 1px var(--ex-background)`,
+        border: `solid 1px var(--ex-background-tr)`,
         backdropFilter: `url(#${filterId}) saturate(1) blur(2px)`,
       };
     else {
       return {
         ...baseStyles,
-        border: `solid 1px var(--ex-background)`,
-        backdropFilter: `url(#${filterId}) saturate(1) blur(0px)`,
+        border: `solid 1px var(--ex-background-tr)`,
+        backdropFilter: `url(#${filterId}) saturate(1) blur(1px)`,
       };
     }
   }

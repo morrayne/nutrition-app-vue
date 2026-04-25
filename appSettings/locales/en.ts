@@ -1,6 +1,6 @@
 export default {
   // AUTH
-  // navigation 
+  // navigation
   lang: "lang",
   sett: "sett",
   body: "body",
@@ -8,31 +8,35 @@ export default {
   macro: "macro",
   sign: "sign",
   account: "account",
-  // lang
+  // sett
   language: "language",
   english: "english",
   russian: "русский",
   mandarin: "中文",
   espaniol: "español",
-  // sett
   darkMode: "dark mode",
   fontSize: "font size",
   recomendedFont: "medium size recommended",
+  youWillSettings: "you will be able to change settings anytime after sign up",
   verySmall: "very small",
   small: "small",
   medium: "medium",
   big: "big",
   large: "large",
   // body
-  bodyTop: "this will go into weight history as starting point",
+  bodyTop: "this will be used to calculate macros, and then go into weight history as starting point",
   weight: "weight",
   aproximetly: "aproximetly",
   lbs: "lbs",
   ft: "ft",
   bodyFat: "body fat",
   bodyBot: "you should change your age at height frequently",
+  mostEff: "the bigger the weight difference, the less accurate macros calculations, pls try not to change more than 15kg at once",
   age: "age",
   height: "height",
+  gender: "gender",
+  female: "female",
+  male: "male",
   // goal
   activity: "activity",
   notToCount: "not to count",
@@ -44,8 +48,8 @@ export default {
   activityLevel5: "very active",
   activityLevel6: "extreme athlete",
   // macro
-  goalAffect: "this will affect your macros calculation",
-  canAdjust: "we will do first calculation, you can adjust anything you like",
+  canAdjust: "first calculation is automatic, and you can adjust any value to fit your needs",
+  plsNote: "please note: these are estimated values based on common formulas. for personalized medical or nutritional advice, consult a specialist",
   calories: "calories",
   proteins: "proteins",
   carbs: "carbs",
@@ -62,22 +66,34 @@ export default {
   // DASHBOARD
   // navigation
   home: "home",
-  meal: "meal", 
+  meal: "meal",
   meds: "meds",
   storage: "storage",
+  history: "history",
+  intake: "intake",
+  saved: "saved",
+  assets: "assets",
+  new: "new",
   // macro
   shortCalories: "kcal",
   shortProteins: "protein",
   shortFats: "fat",
   shortCarbs: "carbs",
+  mealName: "name",
   g: "g",
+  c: "c",
   settings: "settings",
   widgets: "widgets",
   sport: "sport",
-  dragHere: "drag here",
-  send: "send",
   simpleProduct: "simple products",
   hardProduct: "hard produts",
+  // intake
+  oneTime: "will not be saved (one time input)",
+  groups: "groups",
+  dragHere: "drop here",
+  send: "send",
+  add: "add",
+  total: "total",
   // weekdays
   monday: "mo",
   tuesday: "tu",

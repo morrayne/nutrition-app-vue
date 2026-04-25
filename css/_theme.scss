@@ -5,9 +5,11 @@
 :root[data-theme="light"] {
   --focus: #a29bfe;
   --main-background: #ffffff;
-  --sub-background-tr: #f0f0f080;
+  --main-background-tr: #ffffff80;
   --sub-background: #f0f0f0;
+  --sub-background-tr: #f0f0f080;
   --ex-background: #e2e2e2;
+  --ex-background-tr: #e2e2e280;
   --main-color: #242424;
   --sub-color: #363636;
   --ex-color: #484848;
@@ -22,9 +24,11 @@
 }
 :root[data-theme="dark"] {
   --focus: #a29bfe;
+  --main-background-tr: #16161680;
   --main-background: #161616;
   --sub-background-tr: #24242480;
   --sub-background: #242424;
+  --ex-background-tr: #36363680;
   --ex-background: #363636;
   --main-color: #f0f0f0;
   --sub-color: #e0e0e0;

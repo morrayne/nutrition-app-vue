@@ -28,7 +28,7 @@ const strokeColor = computed(() => {
 
 <template>
   <div class="in-round">
-    <div class="short">
+    <div class="wh-100 fl-col center short">
       <p class="top">{{ props.current }}</p>
       <p class="bot">{{ `/${props.goal}` }}</p>
     </div>
@@ -45,19 +45,13 @@ const strokeColor = computed(() => {
   aspect-ratio: 1 / 1;
   position: relative;
   .short {
-    width: 100%;
-    height: 100%;
     position: absolute;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    scale: 0.8;
     .top {
-      font-size: var(--size-l);
+      font-size: var(--size-xs);
       font-weight: 500;
     }
     .bot {
-      font-size: var(--size-s);
+      font-size: calc(var(--size-xs) - 4px);
     }
   }
   .progres {
