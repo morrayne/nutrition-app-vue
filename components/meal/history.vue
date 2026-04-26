@@ -1,101 +1,116 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
+
+import { today, getMealByTd } from "../../appSettings/defaultExport";
+
 import { useI18n } from "vue-i18n";
-import { getWeight, getCalories, getProteins, getFats, getCarbs } from "../../appSettings/defaultExport";
-import { useMealTableStore } from "../../stores/useMealTableStore";
-import { useMealAssetSavedStore } from "../../stores/useMealAssetSavedStore";
-import { useMealAssetGroupStore } from "../../stores/useMealAssetGroupStore";
-
 const { t } = useI18n();
-const mealTableStore = useMealTableStore();
-const mealAssetSaved = useMealAssetSavedStore();
-const mealAssetgroup = useMealAssetGroupStore();
 
-const groupedMeals = computed(() => {
+import simpleMealItem from "./simpleMealItem.vue";
+
+import { useMealTableStore } from "../../stores/useMealTableStore";
+const mealTableStore = useMealTableStore();
+
+const groupedHistory = computed(() => {
   const grouped = new Map<string, any[]>();
-  
   mealTableStore.table.forEach((meal) => {
     if (!grouped.has(meal.date)) grouped.set(meal.date, []);
     grouped.get(meal.date)!.push(meal);
   });
-  
   return Array.from(grouped.entries()).map(([date, meals]) => {
-    const allItems = [
-      ...meals.flatMap((meal) => (meal.groups || []).map((id: string) => {
-        const found = mealAssetgroup.groups.find((item: any) => item.id === id);
-        return found ? { ...found, type: "group" } : { id, name: id, type: "group", notFound: true };
-      })),
-      ...meals.flatMap((meal) => (meal.saved || []).map((id: string) => {
-        const found = mealAssetSaved.saved.find((item: any) => item.id === id);
-        return found ? { ...found, type: "saved" } : { id, name: id, type: "saved", notFound: true };
-      })),
-      ...meals.flatMap((meal) => (meal.unsaved || []).map((item: any) => ({ ...item, type: "unsaved" }))),
-    ];
-    return { date, allItems };
-  }).sort((a, b) => {
-    const [aDay, aMonth, aYear] = a.date.split('.');
-    const [bDay, bMonth, bYear] = b.date.split('.');
-    return new Date(`${bYear}-${bMonth}-${bDay}`).getTime() - new Date(`${aYear}-${aMonth}-${aDay}`).getTime(); 
+    const allItems: any[] = [];
+    meals.forEach(meal => {
+      (meal.groups || []).forEach((groupId: string) => {
+        allItems.push(groupId);
+      });
+      (meal.saved || []).forEach((savedId: string) => {
+        allItems.push(savedId);
+      });
+      (meal.unsaved || []).forEach((unsaved: any) => {
+        if (unsaved && unsaved.name) allItems.push(unsaved);
+      });
+    });
+    return { date, items: allItems };
   });
 });
+
+const filters = {
+  field: "",
+  direction: ""
+}
 </script>
 
 <template>
-  <div class="wh-100 prz-2 fl-col meal-log">
-    <div class="date" v-for="data in groupedMeals" :key="data.date">
-      <p>{{ data.date }}</p>
-      <div class="table">
-        <div class="fl-col solid-wrap table-item" v-for="(item, idx) in data.allItems" :key="idx">
-          <div class="t">
-            <p>{{ item.name }}</p>
-            <p>{{ getWeight(item) + ' ' + t('g') }}</p>
-          </div>
-          <div class="b">
-            <p>{{ t('calories') + ' ' + getCalories(item) }}</p>
-            <p>{{ t('proteins') + ' ' + getProteins(item) }}</p>
-            <p>{{ t('fats') + ' ' + getFats(item) }}</p>
-            <p>{{ t('carbs') + ' ' + getCarbs(item) }}</p>
-          </div>
+  <div class="wh-100 fl-col history">
+    <div class="filters">
+      <p class="filter-item" v-for="value in 5">{{ t("male") }}</p>
+    </div>
+    <div class="fl-col block" v-for="groupItem in groupedHistory">
+      <div class="block-top">
+        <p class="date">{{ groupItem.date }}</p>
+        <div class="status">
+          <div class="dot"></div>
+          <p>{{ t("male") }}</p>
         </div>
+      </div>
+      <div class="block-bot">
+        <simpleMealItem v-for="item in groupItem.items" :mealIdOrUnsaved="item" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.meal-log {
-  width: 100%;
-  gap: 1.5rem;
-  .date {
+.history {
+  gap: 1rem;
+  .filters {
     width: 100%;
-    flex-direction: column;
-    .table {
+    gap: 1rem;
+    .filter-item {
+      padding: 0.25rem 1rem;
+      font-size: var(--size-s);
+      background: var(--sub-background-tr);
+      border-radius: 2rem;
+      border: solid 1px var(--ex-background-tr);
+      cursor: pointer;
+    }
+  }
+  .block {
+    width: 100%;
+    gap: 1rem;
+    .block-top,
+    .block-bot {
       width: 100%;
-      margin-top: 1.5rem;
+    }
+    .block-top {
+      justify-content: space-between;
+      .date {
+        font-weight: 400;
+      }
+      .status {
+        height: 100%;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem;
+        border: solid 1px var(--ex-background-tr);
+        border-radius: 1rem;
+        background: var(--sub-background-tr);
+        .dot {
+          width: 0.5rem;
+          height: 0.5rem;
+          border-radius: 0.5rem;
+          background: var(--gr);
+        }
+        p {
+          font-size: var(--size-s);
+        }
+      }
+    }
+    .block-bot {
       display: grid;
       gap: 1rem;
       grid-template-columns: repeat(3, 1fr);
-      .table-item {
-        width: 100%;
-        border-radius: 1.5rem;
-        gap: 0.5rem;
-        .t {
-          width: 100%;
-          justify-content: space-between;
-          p {
-            font-size: var(--size-s);
-          }
-        }
-        .b {
-          width: 100%;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          p {
-            color: var(--ex-color);
-            font-size: var(--size-xs);
-          }
-        }
-      }
+      
     }
   }
 }

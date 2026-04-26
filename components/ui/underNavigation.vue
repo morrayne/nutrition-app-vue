@@ -50,7 +50,7 @@ const handleClick = (data: number) => {
 .under-navigation-wrap {
   width: 100%;
   position: absolute;
-  top: 6.5rem;
+  top: 7rem;
   left: 0;
   z-index: 3;
   .under-navigation {

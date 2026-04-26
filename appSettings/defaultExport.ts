@@ -1,5 +1,5 @@
 import { Languages, Cog, DraftingCompass, Sparkles, BadgeCheck, UserRound, Apple, Dumbbell, House, BicepsFlexed, Package2, Pill, HeartPlus, LogIn } from "@lucide/vue";
-import type { tSelect, tSelectOpt, tNavigationItem, tSwitcherHorizontal, tInputHorizontal } from "../appSettings/types";
+import type { tSelect, tSelectOpt, tNavigationItem, tSwitcherHorizontal, tInputHorizontal, tMealAssetSaved, tMealAssetUnsaved, tMealAssetGroup, tMealTableItem } from "../appSettings/types";
 // 
 import { useMealAssetSavedStore } from "../stores/useMealAssetSavedStore";
 import { useMealAssetGroupStore } from "../stores/useMealAssetGroupStore";
@@ -140,6 +140,19 @@ export const signSelect: tSelect = {
   },
   st: {},
 };
+const mealAssetOpt: tSelectOpt[] = [
+  { title: "single", worth: "single" },
+  { title: "group", worth: "group" },
+];
+export const mealAsset: tSelect = {
+  title: "meal",
+  data: {
+    dataType: "string",
+    start: 0,
+    opt: mealAssetOpt,
+  },
+  st: {},
+};
 // switcher horizontal
 export const themeSwitcher: tSwitcherHorizontal = {
   title: "darkMode",
@@ -150,6 +163,18 @@ export const themeSwitcher: tSwitcherHorizontal = {
     off: "light",
   },
   st: {},
+};
+export const recalcSwitcher: tSwitcherHorizontal = {
+  title: "recalc",
+  data: {
+    dataType: "text",
+    start: true,
+    on: "full",
+    off: "recalc",
+  },
+  st: {
+    fontSize: 's'
+  },
 };
 // input horizontal
 export const weightInput: tInputHorizontal = {
@@ -400,6 +425,23 @@ export const getRandomAvatarIndex = (): number => {
   return Math.floor(Math.random() * 27);
 };
 // stats calculation
+const mealFiller : tMealAssetUnsaved = {
+  name: 'deleted',
+  weight: 0,
+  calories: 0,
+  proteins: 0,
+  fats: 0,
+  carbs: 0,
+}
+export const getMealByTd = (data: string | number) : tMealAssetSaved | tMealAssetGroup | tMealAssetUnsaved | undefined => {
+  const mealAssetSaved = useMealAssetSavedStore();
+  const foundA = mealAssetSaved.saved.find((item: any) => item.id === data);
+  if (foundA) return foundA
+  const mealAssetGroup = useMealAssetGroupStore();
+  const foundB = mealAssetGroup.groups.find((item: any) => item.id === data);
+  if (foundB) return foundB
+  if (!foundA && !foundB) return mealFiller
+}
 export const getWeight = (data: any) => {
   const mealAssetSaved = useMealAssetSavedStore();
   if (!data.list) {
@@ -414,7 +456,6 @@ export const getWeight = (data: any) => {
     return weight;
   }
 };
-
 export const getCalories = (data: any) => {
   const mealAssetSaved = useMealAssetSavedStore();
   if (!data.list) {
@@ -429,7 +470,6 @@ export const getCalories = (data: any) => {
     return total;
   }
 };
-
 export const getProteins = (data: any) => {
   const mealAssetSaved = useMealAssetSavedStore();
   if (!data.list) {
@@ -444,7 +484,6 @@ export const getProteins = (data: any) => {
     return total;
   }
 };
-
 export const getFats = (data: any) => {
   const mealAssetSaved = useMealAssetSavedStore(); 
   if (!data.list) {
@@ -459,7 +498,6 @@ export const getFats = (data: any) => {
     return total;
   }
 };
-
 export const getCarbs = (data: any) => {
   const mealAssetSaved = useMealAssetSavedStore();
   if (!data.list) {

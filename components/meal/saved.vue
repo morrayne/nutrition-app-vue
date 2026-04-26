@@ -6,22 +6,22 @@ const { t } = useI18n();
 
 import type { tMealAssetSaved, tMealAssetUnsaved, tMealAssetGroup, tMealTableItem } from "../../appSettings/types";
 
+import simpleMealItem from "./simpleMealItem.vue";
+import inputHorizontal from "../form/inputHorizontal.vue";
+import switcherHorizontal from "../form/switcherHorizontal.vue";
+import selectHorizontal from "../form/selectHorizontal.vue";
+
 import { useMealAssetSavedStore } from "../../stores/useMealAssetSavedStore";
 const mealAssetSavedStore = useMealAssetSavedStore();
 import { useMealAssetGroupStore } from "../../stores/useMealAssetGroupStore";
 const mealAssetGroupStore = useMealAssetGroupStore();
 
-import simpleMealItem from "./simpleMealItem.vue";
-import { X } from "@lucide/vue";
-import inputHorizontal from "../form/inputHorizontal.vue";
-import switcherHorizontal from "../form/switcherHorizontal.vue";
-
-import { mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher } from "../../appSettings/defaultExport";
+import { mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher, mealAsset } from "../../appSettings/defaultExport";
 const a = [weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput];
-recalcSwitcher.st.padding = '0.5rem 1.25rem';
+recalcSwitcher.st.padding = "0.5rem 1.25rem";
 for (let i = 0; i < a.length; i++) {
-  a[i].st.padding = '0.75rem 1.25rem';
-  a[i].st.fontSize = 's';
+  a[i].st.padding = "0.75rem 1.25rem";
+  a[i].st.fontSize = "s";
 }
 const m = [caloriesInput, proteinsInput, fatsInput, carbsInput];
 for (let i = 0; i < m.length; i++) {
@@ -29,51 +29,37 @@ for (let i = 0; i < m.length; i++) {
   m[i].rule.number!.maxValue = 3000;
 }
 
-import { today } from "../../appSettings/defaultExport";
-const recalc = ref('full');
-const basketDisplay = ref<(tMealAssetSaved | tMealAssetUnsaved | tMealAssetGroup)[]>([]);
-const basketSupabase = ref<tMealTableItem>({
-  date: today,
-  saved: [],         
-  unsaved: [],  
-  groups: [], 
+const recalc = ref("full");
+const mode = ref("single");
+const group = ref<tMealAssetGroup>({
+  id: '',
+  name: '',
+  list: [],
 });
 
+import { X } from "@lucide/vue";
+
 const handleSavedPush = (id: any) => {
-  basketSupabase.value.saved.push(id);
-  basketDisplay.value.push(id);
-}
-const handleGroupPush = (id: any) => {
-  basketSupabase.value.groups.push(id);
-  basketDisplay.value.push(id);
-}
-const clearAll = () => {
-  basketDisplay.value = [];
-  basketSupabase.value.unsaved = [];
-  basketSupabase.value.saved = [];
-  basketSupabase.value.groups = [];
-}
-const clearInputs = () => {
-  
+  group.value.list!.push(id);
 }
 </script>
 
 <template>
   <div class="wh-100 intake">
     <div class="fl-col no-scroll in-left">
-      <p class="tit">{{ t("male") }}</p>
-      <div class="fl-col solid-wrap">
-        <p class="center placeholder"> {{ t('dragHere') }} </p>
-        <simpleMealItem v-for="item in basketDisplay" :mealIdOrUnsaved="item" />
+      <selectHorizontal v-bind="mealAsset" v-model="mode" />
+      <div class="fl-col solid-wrap" v-if="mode === 'group'">
+        <p class="center placeholder">{{ t("dragHere") }}</p>
+        <inputHorizontal v-bind="mealNameInput" v-model="group.name" />
+        <simpleMealItem v-for="item in group.list" :mealIdOrUnsaved="item" />
         <div class="buttons">
-          <p class="solid-wrap center send"> {{ t('send') }} </p>
-          <p class="solid-wrap round" @click="clearAll">
+          <p class="solid-wrap center send">{{ t("send") }}</p>
+          <p class="solid-wrap round">
             <component :is="X" />
           </p>
         </div>
       </div>
-      <p class="tit">{{ t("male") }}</p>
-      <div class="fl-col solid-wrap">
+      <div class="fl-col solid-wrap" v-if="mode === 'single'">
         <inputHorizontal v-bind="mealNameInput" />
         <inputHorizontal v-bind="weightMiniInput" />
         <div class="grid">
@@ -84,24 +70,24 @@ const clearInputs = () => {
         </div>
         <switcherHorizontal v-bind="recalcSwitcher" v-model="recalc" />
         <div class="buttons">
-          <p class="solid-wrap center send"> {{ t('send') }} </p>
-          <p class="solid-wrap round">
-            <component :is="X" @click="clearInputs" />
+          <p class="solid-wrap center send">{{ t("send") }}</p>
+          <p class="solid-wrap round" @click="group.list = []">
+            <component :is="X" />
           </p>
         </div>
       </div>
     </div>
     <div class="fl-col in-right">
       <div class="fl-col in-const">
-        <p class="tit">{{ t("male") }}</p>
+        <p class="tit">{{ t("single") }}</p>
         <div class="l-const">
           <simpleMealItem v-for="item in mealAssetSavedStore.saved" :mealIdOrUnsaved="item.id!" @click="handleSavedPush(item.id)" />
         </div>
       </div>
       <div class="fl-col in-const">
-        <p>{{ t("male") }}</p>
+        <p class="tit">{{ t("group") }}</p>
         <div class="l-const">
-          <simpleMealItem v-for="item in mealAssetGroupStore.groups" :mealIdOrUnsaved="item.id!" @click="handleGroupPush(item.id)" />
+          <simpleMealItem v-for="item in mealAssetGroupStore.groups" :mealIdOrUnsaved="item.id!" />
         </div>
       </div>
     </div>
@@ -136,7 +122,8 @@ const clearInputs = () => {
       .buttons {
         width: 100%;
         gap: 1rem;
-        .send, .round {
+        .send,
+        .round {
           cursor: pointer;
         }
         .send {
@@ -164,9 +151,6 @@ const clearInputs = () => {
         display: grid;
         gap: 1rem;
         grid-template-columns: repeat(2, 1fr);
-        * {
-          cursor: pointer;
-        }
       }
     }
   }

@@ -94,6 +94,9 @@ export default {
   send: "send",
   add: "add",
   total: "total",
+  recalc: 'full meal',
+  single: "single",
+  group: "group",
   // weekdays
   monday: "mo",
   tuesday: "tu",

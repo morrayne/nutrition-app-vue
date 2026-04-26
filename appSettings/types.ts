@@ -30,6 +30,7 @@ export interface tInputHorizontal {
   st: {
     fontSize?: "xs" | "s" | "m" | "l" | "xl";
     displayExternal?: "weight-kg" | "height-cm";
+    padding?: string;
   };
 }
 // select horizontal
@@ -60,6 +61,7 @@ export interface tSwitcherHorizontal {
   };
   st: {
     fontSize?: "xs" | "s" | "m" | "l" | "xl";
+    padding?: string;
   };
 }
 // part
@@ -113,13 +115,13 @@ export interface tWeightLogItem {
 }
 // Meal
 export interface tMealAssetSaved {
-  id: string;
-  name: string;
-  weight: number;
-  calories: number;
-  proteins: number;
-  carbs: number;
-  fats: number;
+  id?: string;
+  name?: string;
+  weight?: number;
+  calories?: number;
+  proteins?: number;
+  carbs?: number;
+  fats?: number;
 }
 export interface tMealAssetUnsaved {
   name?: string;
@@ -158,7 +160,7 @@ export interface tExerciseTableItem {
   id: string;
   date: string;
   saved: string[];  
-  groups: string[];  
+  groups: string[];
 }
 // 
 export interface tInRound {

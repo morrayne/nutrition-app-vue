@@ -36,9 +36,9 @@ const getIconUrl = () => {
   return data.publicUrl;
 };
 
-import intakeHistory from "../meal/intake.vue";
 import mealHistory from "../meal/history.vue";
-import mealAssets from "../meal/assets.vue";
+import mealIntake from "../meal/intake.vue";
+import mealSaved from "../meal/saved.vue";
 </script>
 
 <template>
@@ -50,17 +50,11 @@ import mealAssets from "../meal/assets.vue";
       <div class="wh-100 prz-2" :key="0" v-show="currentMain === 0">
 
       </div>
-      <div class="wh-100 prz-2" :key="1" v-show="currentMain === 1">
-        <div class="wh-100" v-show="currentSub === 0">
-          <mealHistory />
-        </div>
-        <div class="wh-100" v-show="currentSub === 1">
-          <intakeHistory />
-        </div>
-        <div class="wh-100" v-show="currentSub === 2">
-          <mealAssets />
-        </div>
-      </div>
+      <TransitionGroup name="mini" tag="div" class="wh-100 prz-2 transition-container" mode="out-in" :key="1" v-show="currentMain === 1">
+        <mealHistory :key="0" v-show="currentSub === 0" />
+        <mealIntake :key="1" v-show="currentSub === 1" />
+        <mealSaved :key="2" v-show="currentSub === 2" />
+      </TransitionGroup>
       <div class="wh-100 prz-2" :key="2" v-show="currentMain === 2"></div>
       <div class="wh-100 prz-2" :key="3" v-show="currentMain === 3"></div>
     </TransitionGroup>
@@ -68,17 +62,10 @@ import mealAssets from "../meal/assets.vue";
 </template>
 
 <style scoped lang="scss">
-.dashboard-enter-active,
-.dashboard-leave-active {
-  transition: all 0.3s ease;
-}
-.dashboard-move {
-  transition: transform 0.3s ease;
-}
-.dashboard-enter-from {
+.dashboard-enter-from, .mini-enter-from {
   opacity: 0;
 }
-.dashboard-leave-to {
+.dashboard-leave-to, .mini-leave-to {
   opacity: 0;
 }
 .dashboard-page {

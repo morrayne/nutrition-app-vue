@@ -21,9 +21,9 @@ const handleSwitch = () => {
 </script>
 
 <template>
-  <div class="solid-wrap switcher-horizontal">
+  <div class="solid-wrap switcher-horizontal" :style="{ padding: props.st.padding ? `var(--size-${props.st.padding })` : '1rem 2rem' }">
     <div class="wh-100 center">
-      <p class="title">{{ t(props.title) }}</p>
+      <p class="title" :style="{ fontSize: props.st.fontSize ? `var(--size-${props.st.fontSize})` : 'var(--size-m)' }">{{ t(props.title) }}</p>
       <div class="item bounce" :style="{ background: active ? 'var(--focus)' : 'var(--ex-background-tr)' }" @click="handleSwitch">
         <div :style="{flex: active ? '1' : '0'}"></div>
         <div class="runner"></div>
@@ -44,12 +44,12 @@ const handleSwitch = () => {
     }
     .item {
       width: calc(2 * var(--size-m));
-      height: 80%;
+      min-height: 80%;
       padding: 0.25rem;
       border-radius: 2rem;
       cursor: pointer;
       .runner {
-        height: 100%;
+        flex: 1;
         aspect-ratio: 1 / 1;
         border-radius: 2rem;
         background: var(--main-background);

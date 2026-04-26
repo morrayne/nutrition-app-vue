@@ -81,8 +81,8 @@ watch(() => props.modelValue, (newVal) => {
 </script>
 
 <template>
-  <div class="fl-col prz-2 input-horizontal" :style="{marginBottom: props.st.displayExternal ? 'var(--size-m)' : '0'}">
-    <input class="solid-wrap input" :type="props.data.dataType" :placeholder="t(props.title)" :value="inputValue" @input="handleInput" />
+  <div class="fl-col prz-2 input-horizontal" :style="{ marginBottom: props.st.displayExternal ? 'var(--size-m)' : '0'}">
+    <input class="solid-wrap input" :style="{ padding: props.st.padding ? props.st.padding : '1rem 2rem', fontSize: props.st.fontSize ? `var(--size-${props.st.fontSize})` : 'var(--size-m)' }" :type="props.data.dataType" :placeholder="t(props.title)" :value="inputValue" @input="handleInput" />
     <div :class="hasError ? 'center error-wrap open' : 'center error-wrap close'">
       <div class="wh-100 error">
         <X color="var(--white)" />
