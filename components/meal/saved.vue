@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 import type { tMealAssetSaved, tMealAssetUnsaved, tMealAssetGroup, tMealTableItem } from "../../appSettings/types";
+import { X } from "@lucide/vue";
 
 import simpleMealItem from "./simpleMealItem.vue";
 import inputHorizontal from "../form/inputHorizontal.vue";
@@ -31,16 +32,56 @@ for (let i = 0; i < m.length; i++) {
 
 const recalc = ref("full");
 const mode = ref("single");
-const group = ref<tMealAssetGroup>({
-  id: '',
+const groupEmpty = <tMealAssetGroup>{
   name: '',
   list: [],
+};
+const group = ref<tMealAssetGroup>(groupEmpty);
+const savedEmpty = <tMealAssetSaved>({
+  name: '',
+  weight: undefined,
+  calories: undefined,
+  proteins: undefined,
+  fats: undefined,
+  carbs: undefined
 });
-
-import { X } from "@lucide/vue";
-
+const saved = ref<tMealAssetSaved>(savedEmpty);
+const handleSingleClick = () => {
+  console.log(recalc.value);
+  if (!saved.value.name) return;
+  let itemToSave = { ...saved.value };
+  if (recalc.value !== "full") {
+    const fields = ['calories', 'proteins', 'fats', 'carbs'] as const;
+    for (const field of fields) {
+      const value = itemToSave[field];
+      if (value && itemToSave.weight) itemToSave[field] = Number((value * itemToSave.weight / 100).toFixed(1));
+    }
+  }
+  mealAssetSavedStore.addItem({ id: generateId(), ...itemToSave });
+  saved.value = { ...savedEmpty };
+}
 const handleSavedPush = (id: any) => {
   group.value.list!.push(id);
+  clearSingleForm();
+}
+const handleGroupClick = () => {
+  if (!group.value.name) return
+  mealAssetGroupStore.addGroup({ id: generateId(), ...group.value });
+  group.value.name = '';
+  group.value.list = [];
+  clearGroupForm();
+}
+const generateId = () => {
+  const now = new Date();
+  return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}${String(now.getMilliseconds()).padStart(3, '0')}`;
+};
+const clearSingleForm = () => {
+  saved.value = { ...savedEmpty };
+}
+const clearGroupForm = () => {
+  group.value = { ...groupEmpty };
+  group.value.list = [];
+  group.value.name = '';
 }
 </script>
 
@@ -48,30 +89,30 @@ const handleSavedPush = (id: any) => {
   <div class="wh-100 intake">
     <div class="fl-col no-scroll in-left">
       <selectHorizontal v-bind="mealAsset" v-model="mode" />
-      <div class="fl-col solid-wrap" v-if="mode === 'group'">
-        <p class="center placeholder">{{ t("dragHere") }}</p>
-        <inputHorizontal v-bind="mealNameInput" v-model="group.name" />
-        <simpleMealItem v-for="item in group.list" :mealIdOrUnsaved="item" />
+      <div class="fl-col lefty solid-wrap" v-if="mode === 'single'">
+        <inputHorizontal v-bind="mealNameInput" v-model="saved.name" />
+        <inputHorizontal v-bind="weightMiniInput" v-model="saved.weight" />
+        <div class="grid">
+          <inputHorizontal v-bind="caloriesInput" v-model="saved.calories" />
+          <inputHorizontal v-bind="proteinsInput" v-model="saved.proteins" />
+          <inputHorizontal v-bind="fatsInput" v-model="saved.fats" />
+          <inputHorizontal v-bind="carbsInput" v-model="saved.carbs" />
+        </div>
+        <switcherHorizontal v-bind="recalcSwitcher" v-model="recalc" />
         <div class="buttons">
-          <p class="solid-wrap center send">{{ t("send") }}</p>
-          <p class="solid-wrap round">
+          <p class="solid-wrap center send" @click="handleSingleClick" >{{ t("send") }}</p>
+          <p class="solid-wrap round" @click="clearSingleForm" >
             <component :is="X" />
           </p>
         </div>
       </div>
-      <div class="fl-col solid-wrap" v-if="mode === 'single'">
-        <inputHorizontal v-bind="mealNameInput" />
-        <inputHorizontal v-bind="weightMiniInput" />
-        <div class="grid">
-          <inputHorizontal v-bind="caloriesInput" />
-          <inputHorizontal v-bind="proteinsInput" />
-          <inputHorizontal v-bind="fatsInput" />
-          <inputHorizontal v-bind="carbsInput" />
-        </div>
-        <switcherHorizontal v-bind="recalcSwitcher" v-model="recalc" />
+      <div class="fl-col lefty solid-wrap" v-if="mode === 'group'">
+        <p class="center placeholder">{{ t("dragHere") }}</p>
+        <inputHorizontal v-bind="mealNameInput" v-model="group.name" />
+        <simpleMealItem v-for="item in group.list" :mealIdOrUnsaved="item" />
         <div class="buttons">
-          <p class="solid-wrap center send">{{ t("send") }}</p>
-          <p class="solid-wrap round" @click="group.list = []">
+          <p class="solid-wrap center send" @click="handleGroupClick">{{ t("send") }}</p>
+          <p class="solid-wrap round" @click="clearGroupForm">
             <component :is="X" />
           </p>
         </div>
@@ -103,6 +144,10 @@ const handleSavedPush = (id: any) => {
     gap: 1rem;
     position: sticky;
     top: 0;
+    .lefty {
+      padding: 0.5rem !important;
+      border-radius: 2.25rem !important;
+    }
     .solid-wrap {
       width: 100%;
       padding: 1rem;

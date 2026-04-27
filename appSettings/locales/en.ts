@@ -72,6 +72,7 @@ export default {
   history: "history",
   intake: "intake",
   saved: "saved",
+  unsaved: "unsaved",
   assets: "assets",
   new: "new",
   // macro

@@ -16,6 +16,7 @@
 .wrap {
   max-width: 1920px;
   max-height: 920px;
+  min-height: 100%;
   .content-wrap {
     padding: 0.5rem;
     .small-wrap {

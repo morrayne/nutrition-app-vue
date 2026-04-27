@@ -16,7 +16,9 @@ export const useMealAssetSavedStore = defineStore("mealAssetSaved", () => {
 
   const addItem = async (item: Omit<tMealAssetSaved, "id">) => {
     if (!authStore.user) return;
+    console.log(item)
     const { data, error } = await supabase.from("mealAssetSaved").insert({ user_id: authStore.user.id, ...item }).select().single();
+    console.log(error)
     if (!error && data) saved.value.unshift(data);
     return data;
   };

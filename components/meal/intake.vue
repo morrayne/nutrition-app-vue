@@ -10,6 +10,8 @@ import { useMealAssetSavedStore } from "../../stores/useMealAssetSavedStore";
 const mealAssetSavedStore = useMealAssetSavedStore();
 import { useMealAssetGroupStore } from "../../stores/useMealAssetGroupStore";
 const mealAssetGroupStore = useMealAssetGroupStore();
+import { useMealTableStore } from "../../stores/useMealTableStore";
+const mealTableStore = useMealTableStore();
 
 import simpleMealItem from "./simpleMealItem.vue";
 import { X } from "@lucide/vue";
@@ -18,10 +20,10 @@ import switcherHorizontal from "../form/switcherHorizontal.vue";
 
 import { mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher } from "../../appSettings/defaultExport";
 const a = [weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput];
-recalcSwitcher.st.padding = '0.5rem 1.25rem';
+recalcSwitcher.st.padding = "0.5rem 1.25rem";
 for (let i = 0; i < a.length; i++) {
-  a[i].st.padding = '0.75rem 1.25rem';
-  a[i].st.fontSize = 's';
+  a[i].st.padding = "0.75rem 1.25rem";
+  a[i].st.fontSize = "s";
 }
 const m = [caloriesInput, proteinsInput, fatsInput, carbsInput];
 for (let i = 0; i < m.length; i++) {
@@ -30,78 +32,132 @@ for (let i = 0; i < m.length; i++) {
 }
 
 import { today } from "../../appSettings/defaultExport";
-const recalc = ref('full');
+const recalc = ref("full");
+
+// Unsaved форма
+const unsavedMeal = ref<tMealAssetUnsaved>({
+  name: '',
+  weight: undefined,
+  calories: undefined,
+  proteins: undefined,
+  carbs: undefined,
+  fats: undefined,
+});
+
 const basketDisplay = ref<(tMealAssetSaved | tMealAssetUnsaved | tMealAssetGroup)[]>([]);
 const basketSupabase = ref<tMealTableItem>({
   date: today,
-  saved: [],         
-  unsaved: [],  
-  groups: [], 
+  saved: [],
+  unsaved: [],
+  groups: [],
 });
 
 const handleSavedPush = (id: any) => {
   basketSupabase.value.saved.push(id);
   basketDisplay.value.push(id);
-}
+};
+
 const handleGroupPush = (id: any) => {
   basketSupabase.value.groups.push(id);
   basketDisplay.value.push(id);
-}
+};
+
+const handleUnsavedPush = () => {
+  if (!unsavedMeal.value.name) return;
+  let itemToAdd = { ...unsavedMeal.value };
+  if (recalc.value === "full") {
+    const fields = ['calories', 'proteins', 'fats', 'carbs'] as const;
+    const weight = itemToAdd.weight;
+    if (weight) {
+      for (const field of fields) {
+        const value = itemToAdd[field];
+        if (value) itemToAdd[field] = Number((value * weight / 100).toFixed(1));
+      }
+    }
+  }
+  basketSupabase.value.unsaved.push(itemToAdd);
+  basketDisplay.value.push(itemToAdd);
+  clearUnsavedInputs();
+};
+
+const handleTablePush = () => {
+  if (basketSupabase.value.saved.length === 0 && basketSupabase.value.unsaved.length === 0 && basketSupabase.value.groups.length === 0) return;
+  mealTableStore.addToMealTable({ id: generateId(), ...basketSupabase.value });
+  clearAll();
+};
+
 const clearAll = () => {
   basketDisplay.value = [];
-  basketSupabase.value.unsaved = [];
-  basketSupabase.value.saved = [];
-  basketSupabase.value.groups = [];
-}
-const clearInputs = () => {
-  
-}
+  basketSupabase.value = {
+    date: today,
+    saved: [],
+    unsaved: [],
+    groups: [],
+  };
+};
+
+const clearUnsavedInputs = () => {
+  unsavedMeal.value = {
+    name: '',
+    weight: undefined,
+    calories: undefined,
+    proteins: undefined,
+    carbs: undefined,
+    fats: undefined,
+  };
+};
+
+const generateId = () => {
+  const now = new Date();
+  return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}${String(now.getMilliseconds()).padStart(3, '0')}`;
+};
 </script>
 
 <template>
   <div class="wh-100 intake">
     <div class="fl-col no-scroll in-left">
-      <p class="tit">{{ t("male") }}</p>
-      <div class="fl-col solid-wrap">
-        <p class="center placeholder"> {{ t('dragHere') }} </p>
-        <simpleMealItem v-for="item in basketDisplay" :mealIdOrUnsaved="item" />
+      <p class="tit">{{ t("intake") }}</p>
+      <div class="fl-col solid-wrap lefty">
+        <p class="center placeholder">{{ t("dragHere") }}</p>
+        <simpleMealItem v-for="item in basketDisplay" :key="item.name" :mealIdOrUnsaved="item" />
         <div class="buttons">
-          <p class="solid-wrap center send"> {{ t('send') }} </p>
+          <p class="solid-wrap center send" @click="handleTablePush">{{ t("send") }}</p>
           <p class="solid-wrap round" @click="clearAll">
             <component :is="X" />
           </p>
         </div>
       </div>
-      <p class="tit">{{ t("male") }}</p>
-      <div class="fl-col solid-wrap">
-        <inputHorizontal v-bind="mealNameInput" />
-        <inputHorizontal v-bind="weightMiniInput" />
+      <p class="tit">{{ t("unsaved") }}</p>
+      <div class="fl-col solid-wrap lefty">
+        <inputHorizontal v-bind="mealNameInput" v-model="unsavedMeal.name" />
+        <inputHorizontal v-bind="weightMiniInput" v-model="unsavedMeal.weight" />
         <div class="grid">
-          <inputHorizontal v-bind="caloriesInput" />
-          <inputHorizontal v-bind="proteinsInput" />
-          <inputHorizontal v-bind="fatsInput" />
-          <inputHorizontal v-bind="carbsInput" />
+          <inputHorizontal v-bind="caloriesInput" v-model="unsavedMeal.calories" />
+          <inputHorizontal v-bind="proteinsInput" v-model="unsavedMeal.proteins" />
+          <inputHorizontal v-bind="fatsInput" v-model="unsavedMeal.fats" />
+          <inputHorizontal v-bind="carbsInput" v-model="unsavedMeal.carbs" />
         </div>
         <switcherHorizontal v-bind="recalcSwitcher" v-model="recalc" />
         <div class="buttons">
-          <p class="solid-wrap center send"> {{ t('send') }} </p>
-          <p class="solid-wrap round">
-            <component :is="X" @click="clearInputs" />
+          <p class="solid-wrap center send" @click="handleUnsavedPush">{{ t("send") }}</p>
+          <p class="solid-wrap round" @click="clearUnsavedInputs">
+            <component :is="X" />
           </p>
         </div>
       </div>
     </div>
+    
     <div class="fl-col in-right">
       <div class="fl-col in-const">
-        <p class="tit">{{ t("male") }}</p>
+        <p class="tit">{{ t("single") }}</p>
         <div class="l-const">
-          <simpleMealItem v-for="item in mealAssetSavedStore.saved" :mealIdOrUnsaved="item.id!" @click="handleSavedPush(item.id)" />
+          <simpleMealItem v-for="item in mealAssetSavedStore.saved" :key="item.id":mealIdOrUnsaved="item.id!" @click="handleSavedPush(item.id)" />
         </div>
       </div>
       <div class="fl-col in-const">
-        <p>{{ t("male") }}</p>
+        <p class="tit">{{ t("group") }}</p>
         <div class="l-const">
-          <simpleMealItem v-for="item in mealAssetGroupStore.groups" :mealIdOrUnsaved="item.id!" @click="handleGroupPush(item.id)" />
+          <simpleMealItem v-for="item in mealAssetGroupStore.groups" :key="item.id":mealIdOrUnsaved="item.id!" @click="handleGroupPush(item.id)" />
         </div>
       </div>
     </div>
@@ -117,6 +173,10 @@ const clearInputs = () => {
     gap: 1rem;
     position: sticky;
     top: 0;
+    .lefty {
+      padding: 0.5rem !important;
+      border-radius: 2.25rem !important;
+    }
     .solid-wrap {
       width: 100%;
       padding: 1rem;
@@ -136,7 +196,8 @@ const clearInputs = () => {
       .buttons {
         width: 100%;
         gap: 1rem;
-        .send, .round {
+        .send,
+        .round {
           cursor: pointer;
         }
         .send {
