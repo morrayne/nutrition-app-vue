@@ -6,7 +6,7 @@ import type { tNavigationItem } from "../../appSettings/types";
 const props = defineProps<{
   modelValue: number;
   left: tNavigationItem[];
-  right: tNavigationItem;
+  right?: tNavigationItem;
 }>();
 const emits = defineEmits<{
   (e: "update:modelValue", value: number): void;
@@ -46,7 +46,7 @@ const runnerStyle = computed(() => ({
         <glass :style="styleGlass" :borderRadius="72" />
         <div class="runner" :style="runnerStyle"></div>
         <div class="items-wrapper prz-2">
-          <div class="item bounce" v-for="item in props.left" :key="item.index" @click="handleClick(item.index)">
+          <div class="item" v-for="item in props.left" :key="item.index" @click="handleClick(item.index)">
             <div class="svg-wrap">
               <component :is="item.svg" :color="active === item.index ? 'var(--focus)' : 'var(--sub-color)'" :rotate="0" />
             </div>
@@ -56,10 +56,10 @@ const runnerStyle = computed(() => ({
           </div>
         </div>
       </div>
-      <div class="right prz-2">
+      <div class="right prz-2" v-if="props.right">
         <glass :style="styleGlass" :borderRadius="72" />
         <div class="items-wrapper prz-2">
-          <div class="item bounce" @click="handleClick(-1)">
+          <div class="item" @click="handleClick(-1)">
             <div class="svg-wrap">
               <component :is="props.right.svg" :color="active === -1 ? 'var(--focus)' : 'var(--sub-color)'" :rotate="0" />
             </div>
@@ -126,6 +126,10 @@ const runnerStyle = computed(() => ({
     }
     .right {
       padding: 0.5rem 1rem;
+      z-index: 1;
+      .items-wrapper {
+        z-index: 7;
+      }
     }
   }
 }

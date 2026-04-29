@@ -19,16 +19,16 @@ import inputHorizontal from "../form/inputHorizontal.vue";
 import switcherHorizontal from "../form/switcherHorizontal.vue";
 
 import { mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher } from "../../appSettings/defaultExport";
-const a = [weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput];
+const a = [mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher];
 recalcSwitcher.st.padding = "0.5rem 1.25rem";
 for (let i = 0; i < a.length; i++) {
-  a[i].st.padding = "0.75rem 1.25rem";
-  a[i].st.fontSize = "s";
+  a[i]!.st.padding = "0.75rem 1.25rem";
+  a[i]!.st.fontSize = "s";
 }
 const m = [caloriesInput, proteinsInput, fatsInput, carbsInput];
 for (let i = 0; i < m.length; i++) {
-  m[i].rule.number!.minValue = 0;
-  m[i].rule.number!.maxValue = 3000;
+  m[i]!.rule.number!.minValue = 0;
+  m[i]!.rule.number!.maxValue = 3000;
 }
 
 import { today } from "../../appSettings/defaultExport";
@@ -53,19 +53,19 @@ const basketSupabase = ref<tMealTableItem>({
 });
 
 const handleSavedPush = (id: any) => {
-  basketSupabase.value.saved.push(id);
+  basketSupabase.value.saved!.push(id);
   basketDisplay.value.push(id);
 };
 
 const handleGroupPush = (id: any) => {
-  basketSupabase.value.groups.push(id);
+  basketSupabase.value.groups!.push(id);
   basketDisplay.value.push(id);
 };
 
 const handleUnsavedPush = () => {
   if (!unsavedMeal.value.name) return;
   let itemToAdd = { ...unsavedMeal.value };
-  if (recalc.value === "full") {
+  if (recalc.value !== "full") {
     const fields = ['calories', 'proteins', 'fats', 'carbs'] as const;
     const weight = itemToAdd.weight;
     if (weight) {
@@ -75,15 +75,16 @@ const handleUnsavedPush = () => {
       }
     }
   }
-  basketSupabase.value.unsaved.push(itemToAdd);
+  basketSupabase.value.unsaved!.push(itemToAdd);
   basketDisplay.value.push(itemToAdd);
   clearUnsavedInputs();
 };
 
 const handleTablePush = () => {
-  if (basketSupabase.value.saved.length === 0 && basketSupabase.value.unsaved.length === 0 && basketSupabase.value.groups.length === 0) return;
-  mealTableStore.addToMealTable({ id: generateId(), ...basketSupabase.value });
-  clearAll();
+  if (basketSupabase.value.saved!.length === 0 && basketSupabase.value.unsaved!.length === 0 && basketSupabase.value.groups!.length === 0) return;
+  console.log(basketSupabase.value);
+  mealTableStore.addToMealToTable({ id: generateId(), ...basketSupabase.value });
+  // clearAll();
 };
 
 const clearAll = () => {
@@ -109,7 +110,8 @@ const clearUnsavedInputs = () => {
 
 const generateId = () => {
   const now = new Date();
-  return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}${String(now.getMilliseconds()).padStart(3, '0')}`;
+  let id = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}${String(now.getMilliseconds()).padStart(3, '0')}`;
+  return Number(id);
 };
 </script>
 
@@ -146,7 +148,6 @@ const generateId = () => {
         </div>
       </div>
     </div>
-    
     <div class="fl-col in-right">
       <div class="fl-col in-const">
         <p class="tit">{{ t("single") }}</p>
@@ -175,7 +176,8 @@ const generateId = () => {
     top: 0;
     .lefty {
       padding: 0.5rem !important;
-      border-radius: 2.25rem !important;
+      gap: 0.5rem !important;
+      border-radius: 2rem !important;
     }
     .solid-wrap {
       width: 100%;
@@ -190,7 +192,7 @@ const generateId = () => {
       }
       .grid {
         display: grid;
-        gap: 1rem;
+        gap: 0.5rem;
         grid-template-columns: repeat(2, 1fr);
       }
       .buttons {

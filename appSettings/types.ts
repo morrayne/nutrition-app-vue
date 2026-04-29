@@ -115,7 +115,7 @@ export interface tWeightLogItem {
 }
 // Meal
 export interface tMealAssetSaved {
-  id?: string;
+  id?: number;
   name?: string;
   weight?: number;
   calories?: number;
@@ -132,16 +132,16 @@ export interface tMealAssetUnsaved {
   fats?: number;
 }
 export interface tMealAssetGroup {
-  id?: string;
+  id?: number;
   name?: string;
-  list?: string[];
+  list?: number[];
 }
 export interface tMealTableItem {
-  id?: string;
-  date: string;
-  saved: string[];         
-  unsaved: tMealAssetUnsaved[];  
-  groups: string[];        
+  id?: number;
+  date?: string;
+  saved?: number[];         
+  unsaved?: tMealAssetUnsaved[];  
+  groups?: number[];        
 }
 // Exercise
 export interface tExerciseAssetSaved {
@@ -164,8 +164,8 @@ export interface tExerciseTableItem {
 }
 // 
 export interface tInRound {
+  title: string;
   color: string;
   current: number;
   goal: number;
-  text: string;
 }

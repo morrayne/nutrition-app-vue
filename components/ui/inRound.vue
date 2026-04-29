@@ -33,7 +33,7 @@ const strokeColor = computed(() => {
       <p class="bot">{{ `/${props.goal}` }}</p>
     </div>
     <svg class="progres" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" :r="circleRound" fill="none" stroke="var(--ex-background)" stroke-width="2.5" />
+      <circle cx="20" cy="20" :r="circleRound" fill="none" :stroke="`var(--${props.color})`" stroke-width="2.5" style="opacity: 0.25" />
       <circle cx="20" cy="20" :r="circleRound" fill="none" :stroke="strokeColor" stroke-width="2.5" :stroke-dasharray="circumference" :stroke-dashoffset="getOffset(props.current, props.goal)" stroke-linecap="round" />
     </svg>
   </div>
@@ -41,7 +41,7 @@ const strokeColor = computed(() => {
 
 <style scoped lang="scss">
 .in-round {
-  height: 100%;
+  height: 6rem;
   aspect-ratio: 1 / 1;
   position: relative;
   .short {

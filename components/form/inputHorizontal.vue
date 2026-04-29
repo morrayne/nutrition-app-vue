@@ -1,59 +1,59 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { X } from "@lucide/vue";
 import type { tInputHorizontal } from "../../appSettings/types";
-
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 
+const { t } = useI18n();
 const props = defineProps<tInputHorizontal & { modelValue?: string | number }>();
 const emits = defineEmits<{
   (e: 'update:modelValue', value: string | number): void;
   (e: 'error', hasError: boolean): void;
 }>();
 
-const inputValue = ref(props.modelValue ?? props.data.start ?? '');
+const inputValue = ref<string | number>(props.modelValue ?? props.data.start ?? '');
 const hasError = ref(false);
 let errorTimer: ReturnType<typeof setTimeout> | null = null;
 
-const checkInput = (target: string | number): boolean => {
-  if (target === '') { 
-    emits('update:modelValue', '');
-    return false
-  };
-  if (!target) return true;
-  if (props.data.dataType !== "number") {
-    const rules = props.rule.string;
-    if (!rules) return false;
-    const str = String(target);
-    const lengthWithoutSpaces = str.replace(/\s/g, '').length;
-    if (lengthWithoutSpaces < rules.minLength) return true;
-    if (lengthWithoutSpaces > rules.maxLength) return true;
-    if (rules.toContain) for (const item of rules.toContain) if (!str.includes(item)) return true;
-    if (rules.noToContain) for (const item of rules.noToContain) if (str.includes(item)) return true;
-    if (rules.stringPattern && !rules.stringPattern.test(str)) return true;
-  } else {
-    const rules = props.rule.number;
-    if (!rules) return false;
-    const num = Number(target);
-    if (isNaN(num)) return true;
-    if (num < rules.minValue) return true;
-    if (num > rules.maxValue) return true;
-  }
+const isNumeric = computed(() => props.data.dataType === "number");
+const validateString = (str: string, rules: NonNullable<tInputHorizontal['rule']['string']>): boolean => {
+  const cleanedStr = str.replace(/\s/g, '');
+  if (cleanedStr.length < rules.minLength || cleanedStr.length > rules.maxLength) return true;
+  if (rules.toContain?.some(item => !str.includes(item))) return true;
+  if (rules.noToContain?.some(item => str.includes(item))) return true;
+  if (rules.stringPattern && !rules.stringPattern.test(str)) return true;
   return false;
+};
+
+const validateNumber = (num: number, rules: NonNullable<tInputHorizontal['rule']['number']>): boolean => {
+  if (isNaN(num)) return true;
+  return num < rules.minValue || num > rules.maxValue;
+};
+
+const checkInput = (value: string | number): boolean => {
+  if (value === '') {
+    emits('update:modelValue', '');
+    return false;
+  }
+  if (isNumeric.value) {
+    const numberRules = props.rule.number;
+    if (!numberRules) return false;
+    return validateNumber(Number(value), numberRules);
+  } else {
+    const stringRules = props.rule.string;
+    if (!stringRules) return false;
+    return validateString(String(value), stringRules);
+  }
 };
 
 const updateErrorState = (value: string | number) => {
   const hasErrors = checkInput(value);
+  if (errorTimer) clearTimeout(errorTimer);
   if (!hasErrors) {
-    if (errorTimer) {
-      clearTimeout(errorTimer);
-      errorTimer = null;
-    }
     hasError.value = false;
     emits('error', false);
+    errorTimer = null;
   } else {
-    if (errorTimer) clearTimeout(errorTimer);
     errorTimer = setTimeout(() => {
       hasError.value = true;
       emits('error', true);
@@ -64,11 +64,16 @@ const updateErrorState = (value: string | number) => {
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  let value: string | number = target.value;
-  if (props.data.dataType === 'number') value = value === '' ? '' : Number(value);
+  const rawValue = target.value;
+  let value: string | number;
+  if (isNumeric.value && rawValue !== '') value = Number(rawValue);
+  else value = rawValue;
   inputValue.value = value;
+  const hasErrors = checkInput(value);
   updateErrorState(value);
-  if (!checkInput(value)) emits('update:modelValue', value);
+  if (!hasErrors) {
+    emits('update:modelValue', value);
+  }
 };
 
 watch(() => props.modelValue, (newVal) => {
@@ -78,18 +83,36 @@ watch(() => props.modelValue, (newVal) => {
   }
 });
 
+const displayText = computed(() => {
+  const numValue = Number(inputValue.value);
+  if (isNaN(numValue)) return null;
+  switch (props.st.displayExternal) {
+    case 'weight-kg': return `${t('aproximetly')} ${(numValue * 2.2).toFixed(1)} ${t('lbs')}`;
+    case 'height-cm': return `${t('aproximetly')} ${(numValue * 0.033).toFixed(1)} ${t('ft')}`;
+    default : return null;
+  }
+});
+
+const inputStyle = computed(() => ({
+  padding: props.st.padding || '1rem 2rem',
+  fontSize: props.st.fontSize ? `var(--size-${props.st.fontSize})` : 'var(--size-m)'
+}));
+const containerStyle = computed(() => ({
+  marginBottom: props.st.displayExternal ? 'var(--size-m)' : '0'
+}));
 </script>
 
 <template>
-  <div class="fl-col prz-2 input-horizontal" :style="{ marginBottom: props.st.displayExternal ? 'var(--size-m)' : '0'}">
-    <input class="solid-wrap input" :style="{ padding: props.st.padding ? props.st.padding : '1rem 2rem', fontSize: props.st.fontSize ? `var(--size-${props.st.fontSize})` : 'var(--size-m)' }" :type="props.data.dataType" :placeholder="t(props.title)" :value="inputValue" @input="handleInput" />
-    <div :class="hasError ? 'center error-wrap open' : 'center error-wrap close'">
+  <div class="fl-col prz-2 input-horizontal" :style="containerStyle">
+    <input class="solid-wrap input" :style="inputStyle" :type="props.data.dataType === 'password' ? 'password' : props.data.dataType === 'number' ? 'number' : 'text'":placeholder="t(props.data.placeholder || props.title)" :value="inputValue" @input="handleInput" />
+    <div :class="['center error-wrap', hasError ? 'open' : 'close']">
       <div class="wh-100 error">
         <X color="var(--white)" />
       </div>
     </div>
-    <p class="center lbs" v-if="props.st.displayExternal === 'weight-kg'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 2.2).toFixed(1) + ' ' + t('lbs') }} </p>
-    <p class="center lbs" v-if="props.st.displayExternal === 'height-cm'"> {{ t('aproximetly') + ' ' + (Number(inputValue) * 0.033).toFixed(1) + ' ' + t('ft') }} </p>
+    <p v-if="displayText" class="center lbs">
+      {{ displayText }}
+    </p>
   </div>
 </template>
 

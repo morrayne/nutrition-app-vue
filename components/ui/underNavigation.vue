@@ -33,7 +33,7 @@ const handleClick = (data: number) => {
   }
 }
 </script>
-
+ 
 <template>
   <div class="under-navigation-wrap center" v-if="props.current !== -1">
     <div class="under-navigation">

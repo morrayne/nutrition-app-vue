@@ -2,7 +2,7 @@ export default {
   // AUTH
   // navigation
   lang: "язык",
-  sett: "настройки",
+  sett: "парам",
   body: "тело",
   goal: "цель",
   macro: "макро",

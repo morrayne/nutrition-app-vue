@@ -6,7 +6,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const props = defineProps<{
-  mealIdOrUnsaved: number | string | tMealAssetUnsaved;
+  mealIdOrUnsaved: number | tMealAssetUnsaved;
 }>();
 
 const mealData = () => {
@@ -15,10 +15,10 @@ const mealData = () => {
 };
 
 const macro = [
-  { title: "calories", func: getCalories },
-  { title: "proteins", func: getProteins },
-  { title: "fats", func: getFats },
-  { title: "carbs", func: getCarbs },
+  { title: "calories", color: 'pu', func: getCalories },
+  { title: "proteins", color: 'pi', func: getProteins },
+  { title: "fats", color: 'ye', func: getFats },
+  { title: "carbs", color: 'gr', func: getCarbs },
 ];
 </script>
 
@@ -30,7 +30,8 @@ const macro = [
     </div>
     <div class="bot-item-bot">
       <p class="any" v-for="item in macro" :key="item.title">
-        {{ t(item.title) + " " + item.func(mealData()!) }}
+        <div class="dot" :style="{background: `var(--${item.color})`}"></div>
+        <p>{{ t(item.title) + " " + item.func(mealData()!) }}</p>
       </p>
     </div>
   </div>
@@ -50,9 +51,20 @@ const macro = [
     display: grid;
     gap: 0.25rem;
     grid-template-columns: repeat(2, 1fr);
-    p {
-      color: var(--ex-color);
-      font-size: var(--size-xs);
+    .any {
+      gap: 0.5rem;
+      align-items: center;
+      .dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        margin-top: 0.125rem;
+        border-radius: 0.5rem;
+        background: #000;
+      }
+      p {
+        color: var(--ex-color);
+        font-size: var(--size-xs);
+      }
     }
   }
 }

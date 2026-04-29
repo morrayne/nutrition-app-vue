@@ -15,7 +15,7 @@ import loadingWrap from "../wraps/loading.vue";
 import uniNavigation from "../ui/uniNavigation.vue";
 import underNavigation from "../ui/underNavigation.vue";
 
-import { dashboardNavigationArray, dashboardNavigationItem } from "../../appSettings/defaultExport";
+import { dashboardNavigationArray } from "../../appSettings/defaultExport";
 
 const loading = ref<boolean>(false);
 const currentMain = ref<number>(1);
@@ -44,7 +44,7 @@ import mealSaved from "../meal/saved.vue";
 <template>
   <div class="wh-100 center prz-2 dashboard-page">
     <loadingWrap v-show="loading" :style="{opacity: loading ? '0' : '1'}" />
-    <uniNavigation v-model="currentMain" :left="dashboardNavigationArray" :right="dashboardNavigationItem" />
+    <uniNavigation v-model="currentMain" :left="dashboardNavigationArray" />
     <underNavigation v-model="currentSub" :current="currentMain" />
     <TransitionGroup name="dashboard" tag="div" class="wh-100 max-width-1080 prz-2 transition-container" mode="out-in">
       <div class="wh-100 prz-2" :key="0" v-show="currentMain === 0">

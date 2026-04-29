@@ -17,11 +17,12 @@ export const useMealAssetGroupStore = defineStore("mealAssetGroup", () => {
   const addGroup = async (group: Omit<tMealAssetGroup, "id">) => {
     if (!authStore.user) return;
     const { data, error } = await supabase.from("mealAssetGroup").insert({ user_id: authStore.user.id, ...group }).select().single();
-    if (!error && data) groups.value.unshift(data);
+    console.log(data, error);
+    // if (!error && data) groups.value.unshift(data);
     return data;
   };
 
-  const updateGroup = async (id: string, updates: Partial<tMealAssetGroup>) => {
+  const updateGroup = async (id: number, updates: Partial<tMealAssetGroup>) => {
     if (!authStore.user) return;
     const { data, error } = await supabase.from("mealAssetGroup").update(updates).eq("id", id).select().single();
     if (!error && data) {
@@ -31,16 +32,16 @@ export const useMealAssetGroupStore = defineStore("mealAssetGroup", () => {
     return data;
   };
 
-  const deleteGroup = async (id: string) => {
+  const deleteGroup = async (id: number) => {
     if (!authStore.user) return;
     const { error } = await supabase.from("mealAssetGroup").delete().eq("id", id);
     if (!error) groups.value = groups.value.filter(g => g.id !== id);
     return !error;
   };
 
-  const getById = (id: string) => groups.value.find(g => g.id === id);
+  const getById = (id: number) => groups.value.find(g => g.id === id);
 
-  const expandGroup = (groupId: string): string[] => {
+  const expandGroup = (groupId: number): number[] => {
     const group = getById(groupId);
     return group?.list || [];
   };

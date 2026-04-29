@@ -18,25 +18,20 @@ import { useMealAssetGroupStore } from "../../stores/useMealAssetGroupStore";
 const mealAssetGroupStore = useMealAssetGroupStore();
 
 import { mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher, mealAsset } from "../../appSettings/defaultExport";
-const a = [weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput];
+const a = [mealNameInput, weightMiniInput, caloriesInput, proteinsInput, fatsInput, carbsInput, recalcSwitcher];
 recalcSwitcher.st.padding = "0.5rem 1.25rem";
 for (let i = 0; i < a.length; i++) {
-  a[i].st.padding = "0.75rem 1.25rem";
-  a[i].st.fontSize = "s";
+  a[i]!.st.padding = "0.75rem 1.25rem";
+  a[i]!.st.fontSize = "s";
 }
 const m = [caloriesInput, proteinsInput, fatsInput, carbsInput];
 for (let i = 0; i < m.length; i++) {
-  m[i].rule.number!.minValue = 0;
-  m[i].rule.number!.maxValue = 3000;
+  m[i]!.rule.number!.minValue = 0;
+  m[i]!.rule.number!.maxValue = 3000;
 }
 
 const recalc = ref("full");
 const mode = ref("single");
-const groupEmpty = <tMealAssetGroup>{
-  name: '',
-  list: [],
-};
-const group = ref<tMealAssetGroup>(groupEmpty);
 const savedEmpty = <tMealAssetSaved>({
   name: '',
   weight: undefined,
@@ -46,10 +41,10 @@ const savedEmpty = <tMealAssetSaved>({
   carbs: undefined
 });
 const saved = ref<tMealAssetSaved>(savedEmpty);
-const handleSingleClick = () => {
+const handleSingleClick = async () => {
   console.log(recalc.value);
   if (!saved.value.name) return;
-  let itemToSave = { ...saved.value };
+  let itemToSave = { id: generateId(), ...saved.value };
   if (recalc.value !== "full") {
     const fields = ['calories', 'proteins', 'fats', 'carbs'] as const;
     for (const field of fields) {
@@ -57,19 +52,24 @@ const handleSingleClick = () => {
       if (value && itemToSave.weight) itemToSave[field] = Number((value * itemToSave.weight / 100).toFixed(1));
     }
   }
-  mealAssetSavedStore.addItem({ id: generateId(), ...itemToSave });
-  saved.value = { ...savedEmpty };
+  await mealAssetSavedStore.addItem(itemToSave);
 }
+const groupEmpty = <tMealAssetGroup>{
+  name: '',
+  list: [],
+};
+const group = ref<tMealAssetGroup>(groupEmpty);
 const handleSavedPush = (id: any) => {
   group.value.list!.push(id);
-  clearSingleForm();
 }
 const handleGroupClick = () => {
   if (!group.value.name) return
   mealAssetGroupStore.addGroup({ id: generateId(), ...group.value });
   group.value.name = '';
   group.value.list = [];
-  clearGroupForm();
+  setTimeout(() => {
+    clearGroupForm();
+  }, 2000);
 }
 const generateId = () => {
   const now = new Date();
@@ -88,7 +88,7 @@ const clearGroupForm = () => {
 <template>
   <div class="wh-100 intake">
     <div class="fl-col no-scroll in-left">
-      <selectHorizontal v-bind="mealAsset" v-model="mode" />
+      <selectHorizontal v-bind="mealAsset" v-model="mode" style="margin-top: 0.5rem" />
       <div class="fl-col lefty solid-wrap" v-if="mode === 'single'">
         <inputHorizontal v-bind="mealNameInput" v-model="saved.name" />
         <inputHorizontal v-bind="weightMiniInput" v-model="saved.weight" />
@@ -146,7 +146,8 @@ const clearGroupForm = () => {
     top: 0;
     .lefty {
       padding: 0.5rem !important;
-      border-radius: 2.25rem !important;
+      gap: 0.5rem !important;
+      border-radius: 2rem !important;
     }
     .solid-wrap {
       width: 100%;
@@ -161,7 +162,7 @@ const clearGroupForm = () => {
       }
       .grid {
         display: grid;
-        gap: 1rem;
+        gap: 0.5rem;
         grid-template-columns: repeat(2, 1fr);
       }
       .buttons {

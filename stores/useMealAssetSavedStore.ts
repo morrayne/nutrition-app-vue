@@ -16,9 +16,9 @@ export const useMealAssetSavedStore = defineStore("mealAssetSaved", () => {
 
   const addItem = async (item: Omit<tMealAssetSaved, "id">) => {
     if (!authStore.user) return;
-    console.log(item)
+    console.log(item);
     const { data, error } = await supabase.from("mealAssetSaved").insert({ user_id: authStore.user.id, ...item }).select().single();
-    console.log(error)
+    console.log(data, error);
     if (!error && data) saved.value.unshift(data);
     return data;
   };
@@ -27,7 +27,7 @@ export const useMealAssetSavedStore = defineStore("mealAssetSaved", () => {
     if (!authStore.user) return;
     const { data, error } = await supabase.from("mealAssetSaved").update(updates).eq("id", id).select().single();
     if (!error && data) {
-      const index = saved.value.findIndex(i => i.id === id);
+      const index = saved.value.findIndex(i => i.id === Number(id));
       if (index !== -1) saved.value[index] = data;
     }
     return data;
@@ -36,7 +36,7 @@ export const useMealAssetSavedStore = defineStore("mealAssetSaved", () => {
   const deleteItem = async (id: string) => {
     if (!authStore.user) return;
     const { error } = await supabase.from("mealAssetSaved").delete().eq("id", id);
-    if (!error) saved.value = saved.value.filter(i => i.id !== id);
+    if (!error) saved.value = saved.value.filter(i => i.id !== Number(id));
     return !error;
   };
 

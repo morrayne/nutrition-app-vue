@@ -5,6 +5,7 @@ import { useMealAssetSavedStore } from "../stores/useMealAssetSavedStore";
 import { useMealAssetGroupStore } from "../stores/useMealAssetGroupStore";
 // date
 export const today = new Date().toISOString().split("T")[0];
+// export const today = "2026-04-28";
 export const dateToISO = (dateString: string): string | undefined => {
   if (!dateString) return undefined;
   if (dateString.match(/^\d{4}-\d{2}-\d{2}/)) return dateString.split("T")[0];
@@ -41,26 +42,28 @@ export const authNavigationArray: tNavigationItem[] = [
   { index: 0, title: "body", svg: DraftingCompass },
   { index: 0, title: "goal", svg: Sparkles },
   { index: 0, title: "macro", svg: Apple },
+  { index: 0, title: "account", svg: UserRound }
 ];
 for (let i = 1; i < authNavigationArray.length; i++) {
   authNavigationArray[i]!.index = i;
 }
-export const authNavigationItem: tNavigationItem = { index: 0, title: "account", svg: UserRound };
+// export const authNavigationItem: tNavigationItem = { index: 0, title: "account", svg: UserRound };
 export const dashboardNavigationArray: tNavigationItem[] = [
   { index: 0, title: "home", svg: House },
   { index: 0, title: "meal", svg: Apple },
   { index: 0, title: "sport", svg: BicepsFlexed },
   { index: 0, title: "meds", svg: Pill },
+  { index: 0, title: "account", svg: UserRound }
 ];
 for (let i = 1; i < dashboardNavigationArray.length; i++) {
   dashboardNavigationArray[i]!.index = i;
 }
-export const dashboardNavigationItem: tNavigationItem = { index: 0, title: "account", svg: UserRound };
+// export const dashboardNavigationItem: tNavigationItem = { index: 0, title: "account", svg: UserRound };
 export const subNavigationArray: any = [
-  ["meal", "sport", "meds", "thing"],
+  ["meal", "sport", "meds"],
   ["history", "intake", "new"],
-  ["log", "activity", "exercises", "thing"],
-  ["log", "vitamins", "vitamin list", "thing"],
+  ["history", "activity", "exercises"],
+  // ["history", "vitamins", "vitaminList"],
 ];
 // select vertical
 const languageOpt: tSelectOpt[] = [
@@ -433,7 +436,7 @@ const mealFiller : tMealAssetUnsaved = {
   fats: 0,
   carbs: 0,
 }
-export const getMealByTd = (data: string | number) : tMealAssetSaved | tMealAssetGroup | tMealAssetUnsaved | undefined => {
+export const getMealByTd = (data: number) : tMealAssetSaved | tMealAssetGroup | tMealAssetUnsaved | undefined => {
   const mealAssetSaved = useMealAssetSavedStore();
   const foundA = mealAssetSaved.saved.find((item: any) => item.id === data);
   if (foundA) return foundA

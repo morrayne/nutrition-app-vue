@@ -15,16 +15,13 @@ export const useMealTableStore = defineStore("mealTable", () => {
     if (!error && data) table.value = data.map(item => ({ ...item, date: dateFromISO(item.date) }));
   };
 
-  const addToMealTable = async (item: tMealTableItem) => {
+  const addToMealToTable = async (item: tMealTableItem) => {
     if (!authStore.user) return;
-    const dateForDB = dateToISO(item.date);
-    const { data, error } = await supabase.from("mealTable").insert({ user_id: authStore.user.id, date: dateForDB, saved: item.saved || [], unsaved: item.unsaved || [], groups: item.groups || [] }).select().single();
-    if (error) {
-      console.error("Ошибка:", error);
-    } else if (data) {
-      table.value.unshift({ ...data, date: dateFromISO(data.date) });
-    }
+    const dateForDB = dateToISO(item.date!);
+    const { data, error } = await supabase.from("mealTable").insert({ user_id: authStore.user.id, date: dateForDB, saved: item.saved, unsaved: item.unsaved, groups: item.groups }).select().single();
+    if (!error) getStore();
+    if (error) console.error("Ошибка:", error);
   };
 
-  return { table, getStore, addToMealTable };
+  return { table, getStore, addToMealToTable };
 });

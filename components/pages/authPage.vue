@@ -10,7 +10,7 @@ import type { tCommon, tConfig, tGoal, tBody, tAuth, tGoalWeightBoadyFat } from 
 import uniNavigation from "../ui/uniNavigation.vue";
 import loadingWrap from "../wraps/loading.vue";
 
-import { authNavigationArray, authNavigationItem, calculateMacros } from "../../appSettings/defaultExport";
+import { authNavigationArray, calculateMacros } from "../../appSettings/defaultExport";
 
 import router from "../../appSettings/router";
 
@@ -143,7 +143,7 @@ const trySignIn = async () => {
 <template>
   <div class="wh-100 center prz-2 auth-page">
     <loadingWrap v-show="loading" :style="{opacity: loading ? '1' : '0'}" />
-    <uniNavigation v-model="current" :left="authNavigationArray" :right="authNavigationItem" />
+    <uniNavigation v-model="current" :left="authNavigationArray" />
       <TransitionGroup name="auth" tag="div" class="wh-100 max-width-720 prz-2 transition-container" mode="out-in">
         <div class="wh-100 fl-col" :key="0" v-show="current === 0">
           <selectVertical v-bind="languageSelect" v-model="config.language" />
@@ -174,7 +174,7 @@ const trySignIn = async () => {
           <inputHorizontal v-bind="carbsInput" v-model="goal.carbs" />
           <p class="h2"> {{ t('plsNote') }} </p>
         </div>
-        <div class="wh-100 fl-col center" :key="-1" v-show="current === -1">
+        <div class="wh-100 fl-col center" :key="4" v-show="current === 4">
           <!-- <p class="h2"> {{ t('logInto') }} </p> -->
           <selectHorizontal v-bind="signSelect" v-model="mode" />
           <inputHorizontal v-bind="usernameInput" v-model="common.username" v-if="mode === 'signUp'" />

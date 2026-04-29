@@ -95,7 +95,7 @@ export default {
   send: "send",
   add: "add",
   total: "total",
-  recalc: 'full meal',
+  recalc: "full meal",
   single: "single",
   group: "group",
   // weekdays
@@ -106,4 +106,7 @@ export default {
   friday: "fr",
   saturday: "sa",
   sunday: "su",
+  //
+  vitamins: "vitamins",
+  exercises: "exercises",
 };
