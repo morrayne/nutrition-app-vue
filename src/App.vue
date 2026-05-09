@@ -1,27 +1,24 @@
 <script setup lang="ts">
+import { watch } from "vue";
 import { RouterView } from "vue-router";
-import { ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useConfigStore } from "../stores/useConfigStore";
+
 import { storeToRefs } from "pinia";
 import contentWrap from "../components/wraps/content.vue";
 
+import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 
-const configStore = useConfigStore();
-const { config } = storeToRefs(configStore);
+import { useCommonStore } from "../stores/useCommonStore";
+const commonStore = useCommonStore();
+const { common } = storeToRefs(commonStore);
 
-watch(config, (newConfig) => {
-  if (newConfig?.language && locale.value !== newConfig.language) locale.value = newConfig.language;
-}, { deep: true });
-
-import { DnDProvider } from "@vue-dnd-kit/core";
+watch(common, (newConfig) => {
+  if (newConfig!.language && locale.value !== newConfig.language) locale.value = newConfig.language;
+}, { deep: true }); 
 </script>
 
 <template>
-  <DnDProvider>
-    <contentWrap>
-      <RouterView />
-    </contentWrap>
-  </DnDProvider>
+  <contentWrap>
+    <RouterView />
+  </contentWrap>
 </template>

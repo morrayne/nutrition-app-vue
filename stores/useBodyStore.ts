@@ -2,32 +2,44 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-import type { tBody } from "../appSettings/types";
+import type { tBodyTable } from "../appSettings/types/store";
 
 export const useBodyStore = defineStore("body", () => {
   const authStore = useAuthStore();
 
-  const body = ref<tBody>({
-    weight: undefined,
-    bodyFat: undefined,
-    height: undefined,
-    activity: 1.2,
-    gender: "male",
+  const body = ref<tBodyTable>({
     age: undefined,
+    height: undefined,
+    gender: "male",
+    activity: 1.2,
+    weightNow: undefined,
+    bodyFatNow: undefined,
+    calories: undefined,
+    proteins: undefined,
+    fats: undefined,
+    carbs: undefined,
+    weightGoal: undefined,
+    bodyFatGoal: undefined,
   });
 
   const clearStore = () => {
     body.value = {
-      weight: undefined,
-      bodyFat: undefined,
-      height: undefined,
-      activity: 1.2,
-      gender: "male",
       age: undefined,
+      height: undefined,
+      gender: "male",
+      activity: 1.2,
+      weightNow: undefined,
+      bodyFatNow: undefined,
+      calories: undefined,
+      proteins: undefined,
+      fats: undefined,
+      carbs: undefined,
+      weightGoal: undefined,
+      bodyFatGoal: undefined,
     };
   };
 
-  const setStore = (data: tBody) => {
+  const setStore = (data: tBodyTable) => {
     body.value = data;
   };
 

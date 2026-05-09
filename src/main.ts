@@ -5,14 +5,12 @@ import App from "./App.vue";
 import router from "../appSettings/router";
 
 import { useAuthStore } from "../stores/useAuthStore";
-import { useConfigStore } from "../stores/useConfigStore";
 import { useCommonStore } from "../stores/useCommonStore";
 import { useBodyStore } from "../stores/useBodyStore";
-import { useGoalStore } from "../stores/useGoalStore";
 import { useWeightLogStore } from "../stores/useWeightLogStore";
-import { useMealAssetSavedStore } from "../stores/useMealAssetSavedStore";
-import { useMealAssetGroupStore } from "../stores/useMealAssetGroupStore";
-import { useMealTableStore } from "../stores/useMealTableStore";
+import { useProductStore } from "../stores/useProductStore";
+import { useMealStore } from "../stores/useMealStore";
+import { useFoodHistoryStore } from "../stores/useFoodHistoryStore";
 
 import { i18n } from "../appSettings/locales/local";
 
@@ -25,35 +23,31 @@ app.use(i18n);
 
 const applyConfig = (config: any) => {
   if (!config) return;
-  const configStore = useConfigStore();
-  configStore.changeAttrByStore(config);
+  const commonStore = useCommonStore();
+  commonStore.updateVisual(config);
   if (config.language && i18n.global) i18n.global.locale.value = config.language;
 };
 
 const bootstrap = async () => {
   const authStore = useAuthStore();
-  const configStore = useConfigStore();
   const commonStore = useCommonStore();
   const bodyStore = useBodyStore();
-  const goalStore = useGoalStore();
   const weightLogStore = useWeightLogStore();
-  const mealAssetSavedStore = useMealAssetSavedStore();
-  const mealAssetGroupStore = useMealAssetGroupStore();
-  const mealTableStore = useMealTableStore();
+  const productStore = useProductStore();
+  const mealStore = useMealStore();
+  const foodHistoryStore = useFoodHistoryStore();
   await authStore.initialize();
   if (authStore.isAuthenticated && authStore.userId) {
     await Promise.all([
-      configStore.getStore(),
       commonStore.getStore(),
       bodyStore.getStore(),
-      goalStore.getStore(),
       weightLogStore.getStore(),
-      mealAssetSavedStore.getStore(),
-      mealAssetGroupStore.getStore(),
-      mealTableStore.getStore()
+      productStore.getStore(),
+      mealStore.getStore(),
+      foodHistoryStore.getStore()
     ]);
-    applyConfig(configStore.config);
-  } else router.push("/auth");
+    applyConfig(commonStore.common);
+  } else router.push("/signup");
   app.mount("#app");
 };
 

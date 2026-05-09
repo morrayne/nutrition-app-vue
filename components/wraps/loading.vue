@@ -10,7 +10,6 @@
 .loading {
   width: 100%;
   height: 100%;
-  background: #00000040;
   backdrop-filter: blur(1px);
   position: absolute;
   z-index: 15;

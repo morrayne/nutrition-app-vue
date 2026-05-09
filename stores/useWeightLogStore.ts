@@ -2,42 +2,37 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-import type { tWeightLogItem } from "../appSettings/types";
-import { dateToISO, dateFromISO } from "../appSettings/defaultExport";
+import type { tWeightLog } from "../appSettings/types/store";
 
 export const useWeightLogStore = defineStore("weightLog", () => {
   const authStore = useAuthStore();
-  const weightLog = ref<tWeightLogItem[]>([]);
+  const weightLog = ref<tWeightLog[]>([]);
 
   const clearStore = () => {
     weightLog.value = [];
   };
 
-  const setStore = (data: tWeightLogItem[]) => {
+  const setStore = (data: tWeightLog[]) => {
     weightLog.value = data;
   };
 
   const getStore = async () => {
     if (!authStore.user) return;
     try {
-      const { data, error } = await supabase.from("weightLog").select("*").eq("user_id", authStore.user.id).order("date", { ascending: false });
+      const { data, error } = await supabase.from("weightLog").select("*").eq("user_id", authStore.user.id);
       if (error) throw error;
-      if (data) {
-        const formattedData = data.map(item => ({ ...item, date: dateFromISO(item.date) }));
-        setStore(formattedData);
-      }
+      if (data) weightLog.value = data;
     } catch (err) {
       console.error("Error at 'getStore': ", err);
     }
   };
 
-  const addEntry = async (entry: Omit<tWeightLogItem, "id">) => {
+  const addEntry = async (entry: Omit<tWeightLog, "id" | "user_id">) => {
     if (!authStore.user) return;
     try {
-      const dateForDB = dateToISO(entry.date!);
-      const { data, error } = await supabase.from("weightLog").insert({ user_id: authStore.user.id, ...entry, date: dateForDB }).select().single();
+      const { data, error } = await supabase.from("weightLog").insert({ user_id: authStore.user.id, ...entry }).select().single();
       if (error) throw error;
-      if (data) weightLog.value.unshift({ ...data, date: dateFromISO(data.date) });
+      if (data) weightLog.value.unshift(data);
       return data;
     } catch (err) {
       console.error("Error at 'addEntry': ", err);
@@ -45,16 +40,14 @@ export const useWeightLogStore = defineStore("weightLog", () => {
     }
   };
 
-  const updateEntry = async (id: string, updates: Partial<tWeightLogItem>) => {
+  const updateEntry = async (id: number, updates: Partial<Omit<tWeightLog, "id" | "user_id">>) => {
     if (!authStore.user) return;
     try {
-      const updateData = { ...updates };
-      if (updates.date) updateData.date = dateToISO(updates.date);
-      const { data, error } = await supabase.from("weightLog").update(updateData).eq("id", id).select().single();
+      const { data, error } = await supabase.from("weightLog").update(updates).eq("id", id).eq("user_id", authStore.user.id).select().single();
       if (error) throw error;
       if (data) {
-        const index = weightLog.value.findIndex(item => item.id === id);
-        if (index !== -1) weightLog.value[index] = { ...data, date: dateFromISO(data.date) };
+        const index = weightLog.value.findIndex((item) => item.id === id);
+        if (index !== -1) weightLog.value[index] = data;
       }
       return data;
     } catch (err) {
@@ -63,12 +56,12 @@ export const useWeightLogStore = defineStore("weightLog", () => {
     }
   };
 
-  const deleteEntry = async (id: string) => {
+  const deleteEntry = async (id: number) => {
     if (!authStore.user) return;
     try {
-      const { error } = await supabase.from("weightLog").delete().eq("id", id);
+      const { error } = await supabase.from("weightLog").delete().eq("id", id).eq("user_id", authStore.user.id);
       if (error) throw error;
-      weightLog.value = weightLog.value.filter(item => item.id !== id);
+      weightLog.value = weightLog.value.filter((item) => item.id !== id);
       return true;
     } catch (err) {
       console.error("Error at 'deleteEntry': ", err);

@@ -1,11 +1,20 @@
 <script setup lang="ts">
-// import iridescence from "../vueBits/iridescence.vue";
+import { ref, watch } from "vue";
+import { useAuthStore } from "../../stores/useAuthStore";
+const authStore = useAuthStore();
+const showNavigation = ref<boolean>(authStore.isAuthenticated);
+import navigation from "../../components/navigation/common.vue";
+
+watch([authStore], () => {
+  showNavigation.value = authStore.isAuthenticated;
+}, {deep: true})
 </script>
 
 <template>
-  <div class="wh-100 wrap">
-    <div class="wh-100 prz-2 content-wrap">
-      <div class="wh-100 small-wrap">
+  <div class="w-100 h-100 wrap">
+    <div class="w-100 h-100 content-wrap">
+      <div class="w-100 h-100 j-c pos-r content">
+        <navigation v-if="showNavigation" />
         <slot></slot>
       </div>
     </div>
@@ -16,23 +25,25 @@
 .wrap {
   max-width: 1920px;
   max-height: 920px;
+  min-height: 100%;
   .content-wrap {
-    padding: 0.5rem;
-    .small-wrap {
-      background: var(---background);
-      border: solid 1px var(--sub-background);
-      box-shadow: var(--box-shadow);
+    padding: 1rem;
+    .content {
+      padding: 1rem;
+      background: var(--main-background);
+      border: solid 1px var(--ex-background);
       border-radius: 2rem;
-      overflow: hidden;
     }
   }
 }
 
 @media (max-width: 768px) {
-  .wrap .content-wrap {
-    padding: 0;
-    .small-wrap {
-      border: none;
+  .content-wrap {
+    padding: 0 !important;
+    .content {
+      padding: 1rem;
+      border-radius: 0 !important;
+      border: none !important;
     }
   }
 }
