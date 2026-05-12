@@ -29,7 +29,7 @@ const handleNavigation = (data: string) => {
 
 <template>
   <div class="navigation-wrap pos-f g-05 j-b">
-    <div class="navigation def-wrap">
+    <div class="navigation pos-r def-wrap">
       <div class="flex-c a-c pos-r navigation-item" v-for="(item, index) in navigationArray.slice(0, -1)" :key="index" @click="handleNavigation(item.route)">
         <div class="w-100 h-100 round" :style="roundStyle(item.route)"></div>
         <component :is="item.svg" color="var(--sub-color)" />
@@ -82,7 +82,7 @@ const handleNavigation = (data: string) => {
     .navigation-item:active {
       scale: 0.925;
     }
-    
+
     .account-item {
       width: 4rem;
     }

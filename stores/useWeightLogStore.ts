@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-import type { tWeightLog } from "../appSettings/types/store";
+import type { tWeightLog } from "../appSettings/export/types/store";
 
 export const useWeightLogStore = defineStore("weightLog", () => {
   const authStore = useAuthStore();

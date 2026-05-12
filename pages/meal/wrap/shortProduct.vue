@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { X, PlusCircle, MinusCircle } from "@lucide/vue";
 
-import type { tProductSaved } from "../../../appSettings/types/food";
+import type { tProductSaved } from "../../../appSettings/export/types/food";
 
 const props = defineProps<{
   weight: number;
@@ -21,8 +21,8 @@ const weightModel = computed({
   set: (value: number) => emits("update:weight", value),
 });
 
-import vInput from "../../../components/form/vInput.vue";
-import { mealWeight } from "../../../appSettings/export/vInput";
+import vInputNumber from "../../../components/form/vInputNumber.vue";
+import { mealWeight } from "../../../appSettings/export/form/vInputNumber";
 
 const macros = [
   { title: "shortCalories", data: "calories", color: "var(--pu)" },
@@ -61,7 +61,7 @@ const handleQuantityPlus = () => {
       </div>
     </div>
     <div class="w-100 g-05 foot">
-      <vInput :construct="mealWeight" v-model="weightModel" :undercover="true" />
+      <vInputNumber :construct="mealWeight" v-model="weightModel" :undercover="true" />
       <div class="h-100 a-c j-b def-wrap">
         <div class="h-100 round" @click="handleQuantityMinus"><MinusCircle color="var(--ex-color)" /></div>
         <p>{{ props.quantity }}</p>

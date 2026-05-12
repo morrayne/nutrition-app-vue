@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { tSelect } from "../../appSettings/types/form";
+import type { tSelect } from "../../appSettings/export/types/form";
 import { Check } from "@lucide/vue";
 
 import { useI18n } from "vue-i18n";
@@ -19,7 +19,7 @@ const emits = defineEmits<{
     <p class="fs-l" v-if="props.construct.title">{{ t(props.construct.title) }}</p>
     <div class="flex-c def-wrap">
       <div class="row w-100 a-c j-b" v-for="item in construct.data.opt" @click="emits('update:modelValue', item.worth)">
-        <p>{{ item.title }}</p>
+        <p>{{ t(item.title) }}</p>
         <Check color="var(--focus)" :opacity="props.modelValue === item.worth ? '1' : '0'"/>
       </div>
     </div>

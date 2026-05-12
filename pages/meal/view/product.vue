@@ -6,8 +6,9 @@ import { X, ArrowLeft } from "@lucide/vue";
 const menu = ref<boolean>(false);
 const editMode = ref<boolean>(false);
 
-import { getDateLikeId } from "../../../appSettings/export/default";
-import type { tProductSaved } from "../../../appSettings/types/food";
+import { getDateLikeId } from "../../../appSettings/export/vars/default";
+import type { tProductSaved } from "../../../appSettings/export/types/food";
+
 const editor = ref<tProductSaved>({
   id: undefined,
   name: undefined,
@@ -23,8 +24,10 @@ const { t } = useI18n();
 import { useProductStore } from "../../../stores/useProductStore";
 const productStore = useProductStore();
 
-import vInput from "../../../components/form/vInput.vue";
-import { mealName, mealCalories, mealProteins, mealCarbs, mealFats } from "../../../appSettings/export/vInput";
+import vInputString from "../../../components/form/vInputString.vue";
+import { mealName } from "../../../appSettings/export/form/vInputString";
+import vInputNumber from "../../../components/form/vInputNumber.vue";
+import { mealCalories, mealProteins, mealCarbs, mealFats } from "../../../appSettings/export/form/vInputNumber";
 
 import productWrap from "../wrap/product.vue";
 
@@ -91,7 +94,6 @@ const finish = async () => {
 };
 
 import loadingView from "../../../components/wraps/loading.vue";
-import { getProductById } from "../../../appSettings/export/food";
 const loading = ref<boolean>(false);
 </script>
 
@@ -100,17 +102,17 @@ const loading = ref<boolean>(false);
   <div class="w-100 h-100 g-05 pos-a editor-wrap" v-if="menu">
     <div class="flex-c g-05 def-wrap editor">
       <div class="w-100 g-05 a-c double">
-        <vInput :construct="mealName" v-model="editor.name" :disable="editMode" />
+        <vInputString :construct="mealName" v-model="editor.name" :disable="editMode" />
         <!-- prettier-ignore -->
         <div class="h-100 def-wrap round" @click="menu = false; clearEditor()">
           <ArrowLeft color="var(--sub-color)" />
         </div>
       </div>
       <div class="g-05 middle">
-        <vInput :construct="mealCalories" v-model="editor.calories" />
-        <vInput :construct="mealProteins" v-model="editor.proteins" />
-        <vInput :construct="mealFats" v-model="editor.fats" />
-        <vInput :construct="mealCarbs" v-model="editor.carbs" />
+        <vInputNumber :construct="mealCalories" v-model="editor.calories" />
+        <vInputNumber :construct="mealProteins" v-model="editor.proteins" />
+        <vInputNumber :construct="mealFats" v-model="editor.fats" />
+        <vInputNumber :construct="mealCarbs" v-model="editor.carbs" />
       </div>
       <div class="w-100 g-05 a-c double">
         <p class="w-100 j-c finish def-wrap" @click="finish">{{ t("finish") }}</p>

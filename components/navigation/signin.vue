@@ -4,9 +4,14 @@ import { ChevronLeft } from "@lucide/vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-import type { tSignTable } from "../../appSettings/types/store";
+import type { tSignTable } from "../../appSettings/export/types/store";
+
 const props = defineProps<{
   modelValue: tSignTable;
+  loading: boolean;
+}>();
+const emits = defineEmits<{
+  (e: "loading"): void;
 }>();
 
 import router from "../../appSettings/router";
@@ -15,10 +20,19 @@ import { useAuthStore } from "../../stores/useAuthStore";
 const authStore = useAuthStore();
 
 const handleSignin = async () => {
-  if (!props.modelValue.email || !props.modelValue.password) return
-  const result = await authStore.signIn(props.modelValue.email, props.modelValue.password);
-  if (result.success) router.push('/home');
-}
+  emits("loading");
+  setTimeout(async () => {
+    if (!props.modelValue.email || !props.modelValue.password) return;
+    const result = await authStore.signIn(props.modelValue.email, props.modelValue.password);
+    if (result.success) {
+      emits("loading");
+      router.push("/home");
+    } else {
+      emits("loading");
+      console.error(result.error);
+    }
+  }, 250);
+};
 </script>
 
 <template>
@@ -58,10 +72,12 @@ const handleSignin = async () => {
         height: 100%;
       }
     }
-    .continue:hover, .arrow:hover {
+    .continue:hover,
+    .arrow:hover {
       scale: 1.025;
     }
-    .continue:active, .arrow:active {
+    .continue:active,
+    .arrow:active {
       scale: 0.975;
     }
   }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { tProductSaved, tProductSavedShort } from "../../../appSettings/types/food";
-import { getMealById, getMealMacros, getProductById } from "../../../appSettings/export/food";
+import type { tProductSavedShort } from "../../../appSettings/export/types/food";
+import { getMealMacros, getProductById } from "../../../appSettings/export/vars/food";
 
 import { useFoodHistoryStore } from "../../../stores/useFoodHistoryStore";
 const foodHistory = useFoodHistoryStore();
@@ -13,12 +13,18 @@ const props = defineProps<{
   date: string;
 }>();
 
+const strokeWidth = 12;
+const radii = [80, 64, 48, 32];
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 const dayEntries = computed(() => {
   return foodHistory.foodHistory.filter((entry) => entry.date === props.date);
 });
 
 const getProductMacros = (product: tProductSavedShort) => {
-  if (!product.id || !product.weight || !product.quantity) return;
+  if (!product?.id || !product.weight || !product.quantity) return;
   const fullProduct = getProductById(product.id);
   if (!fullProduct) return;
   if (!fullProduct) return { calories: 0, proteins: 0, fats: 0, carbs: 0 };
@@ -39,17 +45,16 @@ const dayMacros = computed(() => {
         totals.carbs += macros?.carbs || 0;
       }
     }
-
     // Считаем блюда (разворачиваем их в продукты)
     if (entry.meals) {
       for (const mealId of entry.meals) {
-        totals.calories += getMealMacros(getMealById(mealId)).calories;
-        totals.proteins += getMealMacros(getMealById(mealId)).proteins;
-        totals.fats += getMealMacros(getMealById(mealId)).fats;
-        totals.carbs += getMealMacros(getMealById(mealId)).carbs;
+        const mealMacros = getMealMacros(mealId);
+        totals.calories += mealMacros.calories;
+        totals.proteins += mealMacros.proteins;
+        totals.fats += mealMacros.fats;
+        totals.carbs += mealMacros.carbs;
       }
     }
-
     // Unsaved продукты (пока просто суммируем, но у них нет id)
     if (entry.unsaved) {
       for (const unsaved of entry.unsaved) {
@@ -61,7 +66,6 @@ const dayMacros = computed(() => {
       }
     }
   }
-
   return totals;
 });
 
@@ -85,12 +89,6 @@ const circles = computed(() => {
     { key: "carbs", title: "carbs", color: "var(--gr)", value: dayMacros.value.carbs, goal: bodyStore.body.carbs, percent: percentages.value.carbs },
   ];
 });
-
-const strokeWidth = 12;
-const radii = [80, 64, 48, 32];
-
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 </script>
 
 <!-- prettier-ignore -->
@@ -98,7 +96,7 @@ const { t } = useI18n();
   <div class="def-wrap j-b w-100">
     <svg class="svg" viewBox="-100 -100 200 200">
       <circle v-for="(circle, index) in circles" :key="`bg-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" stroke="var(--ex-background)" :stroke-width="strokeWidth" />
-      <circle v-for="(circle, index) in circles" :key="`fill-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" :stroke="circle.color" :stroke-width="strokeWidth" stroke-linecap="round" :stroke-dasharray="2 * Math.PI * radii[index]" :stroke-dashoffset="2 * Math.PI * radii[index] * (1 - circle.percent / 100)" :style="{ transform: 'rotate(-90deg)' }" />
+      <circle v-for="(circle, index) in circles" :key="`fill-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" :stroke="circle.color" :stroke-width="strokeWidth" stroke-linecap="round" :stroke-dasharray="2 * Math.PI * radii[index]!" :stroke-dashoffset="2 * Math.PI * radii[index]! * (1 - circle.percent / 100)" :style="{ transform: 'rotate(-90deg)' }" />
     </svg>
     <div class="legend w-100 h-100 flex-c j-c g-05">
       <div v-for="circle in circles" :key="circle.key" class="w-100 flex-c">
@@ -115,6 +113,7 @@ const { t } = useI18n();
   .svg {
     max-width: 15rem;
     width: 65%;
+    // transform: rotate(-30deg);
   }
   .legend {
     width: 35%;

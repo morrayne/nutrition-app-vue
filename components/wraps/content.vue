@@ -5,9 +5,13 @@ const authStore = useAuthStore();
 const showNavigation = ref<boolean>(authStore.isAuthenticated);
 import navigation from "../../components/navigation/common.vue";
 
-watch([authStore], () => {
-  showNavigation.value = authStore.isAuthenticated;
-}, {deep: true})
+watch(
+  [authStore],
+  () => {
+    showNavigation.value = authStore.isAuthenticated;
+  },
+  { deep: true },
+);
 </script>
 
 <template>

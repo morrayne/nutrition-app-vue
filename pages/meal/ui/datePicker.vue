@@ -15,7 +15,7 @@ interface dateItem {
 }
 const getWeekday = (date: Date): string => {
   const weekdays = ["su", "mn", "tu", "we", "th", "fr", "sa"];
-  return weekdays[date.getDay()];
+  return weekdays[date.getDay()]!;
 };
 const getLast30Days = (): dateItem[] => {
   const days: dateItem[] = [];
@@ -24,7 +24,7 @@ const getLast30Days = (): dateItem[] => {
   for (let i = 0; i < 30; i++) {
     const date = new Date();
     date.setDate(today.getDate() - i);
-    const fullDate = date.toISOString().split("T")[0]; // "2026-05-08"
+    const fullDate = date.toISOString().split("T")[0]!; 
     const day = String(date.getDate()).padStart(2, "0");
     const weekday = getWeekday(date);
 

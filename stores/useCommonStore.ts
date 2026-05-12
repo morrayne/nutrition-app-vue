@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../appSettings/supabase";
 import { useAuthStore } from "./useAuthStore";
-import type { tCommonTable } from "../appSettings/types/store";
+import type { tCommonTable } from "../appSettings/export/types/store";
 
 export const useCommonStore = defineStore("common", () => {
   const authStore = useAuthStore();

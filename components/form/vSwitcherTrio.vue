@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import type { tSelect } from "../../appSettings/types/form";
+import type { tSelect } from "../../appSettings/export/types/form";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -21,20 +21,17 @@ const runnerStyle = ref({
 const handleClick = (data: string | number) => {
   emits("update:modelValue", data);
   if (data === props.construct.data.opt[0]!.worth) runnerStyle.value.left = "0.25rem";
-  else runnerStyle.value.left = "calc(50% + 0.125rem)";
+  if (data === props.construct.data.opt[1]!.worth) runnerStyle.value.left = "calc(33.3% + 0.125rem)";
+  if (data === props.construct.data.opt[2]!.worth) runnerStyle.value.left = "calc(66.6%)";
   runnerStyle.value.scale = 1.1;
   setTimeout(() => {
     runnerStyle.value.scale = 1;
   }, 150);
 };
 
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    if (newVal) handleClick(newVal);
-  },
-  { deep: true, immediate: true },
-);
+watch(() => props.modelValue, (newVal) => {
+  if (newVal) handleClick(newVal);
+}, { deep: true, immediate: true });
 </script>
 
 <template> 
@@ -51,7 +48,7 @@ watch(
 .def-wrap {
   padding: 0.5rem 0.75rem;
   .runner {
-    width: calc(50% - 0.375rem);
+    width: calc(33.3% - 0.25rem);
     height: calc(100% - 0.5rem);
     position: absolute;
     background: var(--ex-background);

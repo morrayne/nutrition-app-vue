@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, onMounted, computed, watch, nextTick, onUnmounted } from 'vue';
+import { ref, useTemplateRef, onMounted, computed, watch, nextTick, onUnmounted } from "vue";
 
 interface GlassSurfaceProps {
   width?: string | number;
@@ -10,23 +10,23 @@ interface GlassSurfaceProps {
 }
 
 const props = withDefaults(defineProps<GlassSurfaceProps>(), {
-  width: '100%',
-  height: '100%',
+  width: "100%",
+  height: "100%",
   borderRadius: 20,
   blur: true,
-  scaleDeg: 60
+  scaleDeg: 60,
 });
 
 const isDarkMode = ref(false);
 
 const updateDarkMode = () => {
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   isDarkMode.value = mediaQuery.matches;
   const handler = (e: MediaQueryListEvent) => {
     isDarkMode.value = e.matches;
   };
-  mediaQuery.addEventListener('change', handler);
-  return () => mediaQuery.removeEventListener('change', handler);
+  mediaQuery.addEventListener("change", handler);
+  return () => mediaQuery.removeEventListener("change", handler);
 };
 
 const generateUniqueId = () => Math.random().toString(36).substring(2, 15);
@@ -35,8 +35,8 @@ const filterId = `glass-filter-${uniqueId}`;
 const redGradId = `red-grad-${uniqueId}`;
 const blueGradId = `blue-grad-${uniqueId}`;
 
-const containerRef = useTemplateRef<HTMLDivElement>('containerRef');
-const feImageRef = useTemplateRef<SVGSVGElement>('feImageRef');
+const containerRef = useTemplateRef<HTMLDivElement>("containerRef");
+const feImageRef = useTemplateRef<SVGSVGElement>("feImageRef");
 
 let resizeObserver: ResizeObserver | null = null;
 
@@ -68,32 +68,32 @@ const generateDisplacementMap = () => {
 
 const updateDisplacementMap = () => {
   if (feImageRef.value) {
-    feImageRef.value.setAttribute('href', generateDisplacementMap());
+    feImageRef.value.setAttribute("href", generateDisplacementMap());
   }
 };
 
 const supportsSVGFilters = () => {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
   const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
   const isFirefox = /Firefox/.test(navigator.userAgent);
   if (isWebkit || isFirefox) return false;
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.style.backdropFilter = `url(#${filterId})`;
-  return div.style.backdropFilter !== '';
+  return div.style.backdropFilter !== "";
 };
 
 const containerStyles = computed(() => {
   const baseStyles = {
-    width: typeof props.width === 'number' ? `${props.width}` : props.width,
-    height: typeof props.height === 'number' ? `${props.height}` : props.height,
+    width: typeof props.width === "number" ? `${props.width}` : props.width,
+    height: typeof props.height === "number" ? `${props.height}` : props.height,
     borderRadius: `${props.borderRadius}px`,
-    position: 'absolute' as const,
-    zIndex: '1',
+    position: "absolute" as const,
+    zIndex: "1",
     top: 0,
     left: 0,
-    isolation: 'isolate' as const,
-    overflow: 'hidden',
-    pointerEvent: 'none',
+    isolation: "isolate" as const,
+    overflow: "hidden",
+    pointerEvent: "none",
   };
 
   const svgSupported = supportsSVGFilters();
@@ -103,29 +103,29 @@ const containerStyles = computed(() => {
       return {
         ...baseStyles,
         background: `var(--sub-background-tr)`,
-        border: `solid 1px var(--ex-background-tr)`,
+        border: `solid 1px var(--ex-background)`,
         backdropFilter: `url(#${filterId}) saturate(1) blur(2px)`,
       };
     else {
       return {
         ...baseStyles,
-        border: `solid 1px var(--ex-background-tr)`,
-        backdropFilter: `url(#${filterId}) saturate(1) blur(1px)`,
+        border: `solid 1px var(--ex-background)`,
+        backdropFilter: `url(#${filterId}) saturate(1) blur(0px)`,
       };
     }
   }
 
   return {
     ...baseStyles,
-    background: isDarkMode.value ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.25)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    background: isDarkMode.value ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.25)",
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
   };
 });
 
 const setupResizeObserver = () => {
-  if (!containerRef.value || typeof ResizeObserver === 'undefined') return;
+  if (!containerRef.value || typeof ResizeObserver === "undefined") return;
   resizeObserver = new ResizeObserver(() => {
     setTimeout(updateDisplacementMap, 0);
   });
@@ -151,8 +151,8 @@ onMounted(() => {
 
 <template>
   <div ref="containerRef" class="relative flex items-center justify-center overflow-hidden" :style="containerStyles">
-    <div v-if="supportsSVGFilters()" class="absolute inset-0 -z-10 opacity-0 pointer-events-none" :style="{width: '100%', height: '100%'}">
-      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" :style="{width: '100%', height: '100%'}">
+    <div v-if="supportsSVGFilters()" class="absolute inset-0 -z-10 opacity-0 pointer-events-none" :style="{ width: '100%', height: '100%' }">
+      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" :style="{ width: '100%', height: '100%' }">
         <defs>
           <filter :id="filterId" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%">
             <feImage ref="feImageRef" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map" />

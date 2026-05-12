@@ -1,38 +1,36 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import type { tProductSavedShort, tProductSaved } from "../../../appSettings/export/types/food";
-import { getProductById } from "../../../appSettings/export/vars/food";
+import type { tProductUnsaved } from "../../../appSettings/export/types/food";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-const props = defineProps<{ 
-  construct: tProductSavedShort & { intake: string }; 
+const props = defineProps<{
+  construct: tProductUnsaved & { intake: string };
 }>();
 
-// Получаем продукт (может быть undefined)
-const originalProduct = getProductById(props.construct.id);
+const emits = defineEmits<{
+  (e: "delete", value: tProductUnsaved): void;
+  (e: "main", value: tProductUnsaved): void;
+}>();
 
-// Вычисляем КБЖУ с учётом веса и количества
+// Вычисляем КБЖУ с учётом веса (для unsaved вес всегда 100г за порцию)
 const productWithCalculatedMacros = computed(() => {
-  if (!originalProduct) return null;
-  const quantity = props.construct.quantity || 1;
-  const weight = props.construct.weight || 100;
-  const multiplier = (quantity * weight) / 100;
+  if (!props.construct.name) return null;
+
   return {
-    ...originalProduct,
-    weight: props.construct.weight,
-    calories: (originalProduct.calories || 0) * multiplier,
-    proteins: (originalProduct.proteins || 0) * multiplier,
-    fats: (originalProduct.fats || 0) * multiplier,
-    carbs: (originalProduct.carbs || 0) * multiplier,
+    ...props.construct,
+    weight: 100,
+    calories: props.construct.calories || 0,
+    proteins: props.construct.proteins || 0,
+    fats: props.construct.fats || 0,
+    carbs: props.construct.carbs || 0,
   };
 });
 
 type MacroKey = "weight" | "calories" | "proteins" | "fats" | "carbs";
 const macros = [
-  // { title: "mealWeight", data: "weight" },
   { title: "shortCalories", data: "calories" },
   { title: "shortProteins", data: "proteins" },
   { title: "shortFats", data: "fats" },
@@ -45,13 +43,14 @@ const getColor = (data: string) => {
   if (data === "supper") return "var(--pi)";
   if (data === "dinner") return "var(--pu)";
   if (data === "snack") return "var(--gr)";
+  return "var(--ex-color)";
 };
 </script>
 
 <template>
   <div v-if="productWithCalculatedMacros" class="product-wrap bounce w-100 flex-c g-05 def-wrap">
     <div class="w-100 j-b top">
-      <p class="fs-l fw-6 name">{{ productWithCalculatedMacros.name + " (" + props.construct.quantity + ")" || "Unknown" }}</p>
+      <p class="fs-l fw-6 name">{{ productWithCalculatedMacros.name || "Unknown" }}</p>
       <div class="h-100 a-c intake" :style="{ background: getColor(props.construct.intake) }">
         <p class="fs-xs fw-6">{{ t(props.construct.intake) }}</p>
       </div>
@@ -59,7 +58,8 @@ const getColor = (data: string) => {
     <div class="g-05 bot">
       <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey].toFixed(1)) }} cal</p>
+        <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey]?.toFixed(1) || 0) }} cal</p>
+        <!-- <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey]?.toFixed(1) || 0) }} {{ t(item.title) }}</p> -->
       </div>
     </div>
   </div>
@@ -68,9 +68,10 @@ const getColor = (data: string) => {
 <style scoped lang="scss">
 .product-wrap {
   padding: 0.75rem 1rem;
+  position: relative;
   .top {
     .name {
-      max-width: 80%;
+      max-width: 70%;
       display: inline;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -79,7 +80,7 @@ const getColor = (data: string) => {
     .intake {
       border-radius: 1rem;
       padding: 0 1rem;
-      P {
+      p {
         color: var(--white);
         opacity: 0.85;
       }
@@ -100,7 +101,7 @@ const getColor = (data: string) => {
   }
 }
 .product-wrap:hover {
-  .top .controls {
+  .controls {
     opacity: 1;
   }
 }

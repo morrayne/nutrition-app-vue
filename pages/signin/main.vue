@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { tSignTable } from "../../appSettings/types/store";
-import vInput from "../../components/form/vInput.vue";
-import { email, password } from "../../appSettings/export/vInput";
+import type { tSignTable } from "../../appSettings/export/types/store";
+import vInputString from "../../components/form/vInputString.vue";
+import { email, password } from "../../appSettings/export/form/vInputString";
 
 const signinData = ref<tSignTable>({
   email: "",
@@ -11,13 +11,17 @@ const signinData = ref<tSignTable>({
 });
 
 import navigation from "../../components/navigation/signin.vue";
+
+import loadingWrap from "../../components/wraps/loading.vue";
+const loading = ref<boolean>(false);
 </script>
 
 <template>
-  <navigation v-model="signinData" />
+  <loadingWrap v-if="loading" />
+  <navigation v-model="signinData" :loading="loading" @loading="loading = !loading" />
   <form class="w-100 h-100 flex-c j-c max-w-640 pos-r g-1">
-    <vInput :construct="email" v-model="signinData.email" />
-    <vInput :construct="password" v-model="signinData.password" />
+    <vInputString :construct="email" v-model="signinData.email" />
+    <vInputString :construct="password" v-model="signinData.password" />
   </form>
 </template>
 

@@ -4,10 +4,10 @@ import { defineStore } from "pinia";
 import router from "../appSettings/router";
 
 import { supabase } from "../appSettings/supabase";
-import { getRandomAvatarIndex, today } from "../appSettings/export/default";
+import { getRandomAvatarIndex, today } from "../appSettings/export/vars/default";
 
 import type { AuthError, Session, User } from "@supabase/supabase-js";
-import type { tCommonTable, tBodyTable, tSignTable } from "../appSettings/types/store";
+import type { tCommonTable, tBodyTable, tSignTable } from "../appSettings/export/types/store";
 
 import { useBodyStore } from "./useBodyStore";
 import { useCommonStore } from "./useCommonStore";
@@ -46,7 +46,10 @@ export const useAuthStore = defineStore("auth", () => {
   const initialize = async () => {
     if (isInitialized.value) return;
     try {
-      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+      const {
+        data: { session: currentSession },
+        error: sessionError,
+      } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
       session.value = currentSession;
       user.value = currentSession?.user ?? null;
@@ -87,11 +90,14 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const { data, error: supabaseError } = await supabase.auth.signUp({ email: auth.email!, password: auth.password! });
       if (supabaseError) throw supabaseError;
-      if (!data.session) return { success: true };
       if (data.user) {
         user.value = data.user;
         session.value = data.session;
+        // Ждём создания профиля
         await createUserProfile(common, body);
+        // Небольшая задержка для синхронизации с БД
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Загружаем данные
         await loadUserData();
       }
       return { success: true, data };
@@ -109,8 +115,9 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = data.user;
       session.value = data.session;
       if (data.user) {
+        // Небольшая задержка для синхронизации
+        await new Promise((resolve) => setTimeout(resolve, 300));
         await loadUserData();
-        commonStore.setStore(commonStore.common);
         await commonStore.updateStore();
       }
       return { success: true, data };

@@ -28,6 +28,6 @@ export interface tCommonTable {
 export interface tWeightLog {
   id?: number;
   date?: string;
-  weight: number;
-  bodyFat: number;
+  weight?: number;
+  bodyFat?: number;
 }

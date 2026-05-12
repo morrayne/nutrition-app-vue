@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { X } from "@lucide/vue";
-import type { tMeal } from "../../../appSettings/types/food";
+import type { tMeal } from "../../../appSettings/export/types/food";
 
-import { getProductById, getMealMacros } from "../../../appSettings/export/food";
+import { getProductById, getMealMacros } from "../../../appSettings/export/vars/food";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { X } from "@lucide/vue";
 
-import type { tProductSaved } from "../../../appSettings/export/types/food";
+import type { tProductUnsaved } from "../../../appSettings/export/types/food";
 
 const props = defineProps<{
-  construct: tProductSaved;
+  construct: tProductUnsaved;
   active?: boolean;
 }>();
+console.log(props.construct)
 const emits = defineEmits<{
-  (e: "delete", value: number): void;
-  (e: "main", value: tProductSaved): void;
+  (e: "delete", value: tProductUnsaved): void;
+  (e: "main", value: tProductUnsaved): void;
 }>();
 
 const macros = [
@@ -25,7 +26,7 @@ const macros = [
     <div class="w-100 top">
       <p class="fs-l fw-6">{{ props.construct.name }}</p>
       <div class="def-wrap controls" @click.stop>
-        <button style="scale: 0.9" @click="emits('delete', props.construct.id!)">
+        <button style="scale: 0.9" @click="emits('delete', props.construct)">
           <X color="var(--sub-color)" />
         </button>
       </div>
@@ -33,7 +34,7 @@ const macros = [
     <div class="g-05 bot">
       <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductSaved] }} cal</p>
+        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductUnsaved] }} cal</p>
       </div>
     </div>
   </div>

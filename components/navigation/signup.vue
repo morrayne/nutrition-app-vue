@@ -67,10 +67,12 @@ const handleClickForward = () => {
     .arrow-r {
       padding: 0.75rem;
     }
-    .continue:hover, .arrow:hover {
+    .continue:hover,
+    .arrow:hover {
       scale: 1.025;
     }
-    .continue:active, .arrow:active {
+    .continue:active,
+    .arrow:active {
       scale: 0.975;
     }
   }

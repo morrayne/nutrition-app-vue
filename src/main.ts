@@ -12,7 +12,7 @@ import { useProductStore } from "../stores/useProductStore";
 import { useMealStore } from "../stores/useMealStore";
 import { useFoodHistoryStore } from "../stores/useFoodHistoryStore";
 
-import { i18n } from "../appSettings/locales/local";
+import { i18n } from "../appSettings/export/locales/local";
 
 const app = createApp(App);
 const pinia = createPinia();
