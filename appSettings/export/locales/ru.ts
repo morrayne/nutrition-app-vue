@@ -58,7 +58,6 @@ export default {
   meals: "блюда",
   addnew: "добавить",
   addunsaved: "свой продукт",
-  pushunsaved: "сохранить",
   finishpickingproducts: "завершить",
   // intake
   intake: "приём",
@@ -70,10 +69,10 @@ export default {
   snack: "перекус",
   basket: "корзина",
   // short units
-  shortcalories: "ккал",
-  shortproteins: "бел",
-  shortfats: "жир",
-  shortcarbs: "угл",
+  shortCalories: "ккал",
+  shortProteins: "бел",
+  shortFats: "жир",
+  shortCarbs: "угл",
   // days of week
   mn: "пн",
   tu: "вт",

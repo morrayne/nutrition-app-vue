@@ -93,7 +93,7 @@ const circles = computed(() => {
 
 <!-- prettier-ignore -->
 <template>
-  <div class="def-wrap j-b w-100">
+  <div class="def-wrap j-b a-c w-100">
     <svg class="svg" viewBox="-100 -100 200 200">
       <circle v-for="(circle, index) in circles" :key="`bg-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" stroke="var(--ex-background)" :stroke-width="strokeWidth" />
       <circle v-for="(circle, index) in circles" :key="`fill-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" :stroke="circle.color" :stroke-width="strokeWidth" stroke-linecap="round" :stroke-dasharray="2 * Math.PI * radii[index]!" :stroke-dashoffset="2 * Math.PI * radii[index]! * (1 - circle.percent / 100)" :style="{ transform: 'rotate(-90deg)' }" />

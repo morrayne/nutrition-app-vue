@@ -226,10 +226,6 @@ input::placeholder {
   position: absolute;
 }
 
-.pos-f {
-  position: fixed;
-}
-
 .max-w-1080 {
   max-width: 1080px;
   height: 100%;
@@ -249,9 +245,14 @@ input::placeholder {
 }
 
 .header-pad {
-  padding-bottom: 4.5rem;
+  padding-bottom: 5.5rem;
 }
 
+@media (max-width: 768px) {
+  .header-pad {
+    padding-bottom: 4.5rem;
+  }
+}
 .sign-pad {
   padding-bottom: 5rem;
   overflow-y: scroll;

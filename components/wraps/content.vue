@@ -29,7 +29,6 @@ watch(
 .wrap {
   max-width: 1920px;
   max-height: 920px;
-  min-height: 100%;
   .content-wrap {
     padding: 1rem;
     .content {

@@ -61,3 +61,13 @@ export const viewOrAdd: tSelect = {
     opt: viewOrAddOpt,
   },
 };
+const medsOpt: tSelectOpt[] = [
+  { title: "view", worth: "view" },
+  { title: "edit", worth: "edit" },
+];
+export const meds: tSelect = {
+  data: {
+    dataType: "string",
+    opt: medsOpt,
+  },
+};

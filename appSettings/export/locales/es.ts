@@ -58,7 +58,6 @@ export default {
   meals: "comidas",
   addnew: "añadir",
   addunsaved: "personalizado",
-  pushunsaved: "guardar",
   finishpickingproducts: "finalizar",
   // intake
   intake: "comida",

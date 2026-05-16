@@ -19,6 +19,9 @@ const macros = [
   { title: "shortFats", data: "fats", color: "var(--ye)" },
   { title: "shortCarbs", data: "carbs", color: "var(--gr)" },
 ];
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 </script>
 
 <template>
@@ -34,7 +37,7 @@ const macros = [
     <div class="g-05 bot">
       <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductUnsaved] }} cal</p>
+        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductUnsaved] + ' ' + t(item.title) }}</p>
       </div>
     </div>
   </div>

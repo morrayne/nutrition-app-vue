@@ -58,7 +58,6 @@ export default {
   meals: "餐食",
   addnew: "添加",
   addunsaved: "自定义",
-  pushunsaved: "保存",
   finishpickingproducts: "完成",
   // intake
   intake: "餐次",

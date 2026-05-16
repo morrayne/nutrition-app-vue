@@ -53,15 +53,16 @@ const { t } = useI18n();
 .def-wrap {
   padding: 0.75rem;
   .list {
-    width: fit-content;
+    width: 100%;
     border-radius: 0.5rem;
-    flex-direction: row-reverse;
-    overflow-x: scroll;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
     .item {
       padding: 0.25rem 0.5rem;
       border-radius: 0.75rem;
       background: var(--sub-background);
       border: solid 1px var(--ex-background);
+      cursor: pointer;
     }
     .active {
       background: var(--ex-background);
@@ -71,5 +72,14 @@ const { t } = useI18n();
 }
 .def-wrap .list::-webkit-scrollbar {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .list {
+    width: fit-content !important;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    overflow-x: scroll !important;
+  }
 }
 </style>

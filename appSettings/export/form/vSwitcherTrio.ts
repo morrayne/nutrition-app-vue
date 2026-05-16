@@ -10,3 +10,14 @@ export const intake: tSelect = {
     opt: intakeOpt,
   },
 };
+const sportViewOpt: tSelectOpt[] = [
+  { title: "history", worth: "history" },
+  { title: "workout", worth: "workout" },
+  { title: "exercises", worth: "exercises" },
+];
+export const sportView: tSelect = {
+  data: {
+    dataType: "string",
+    opt: sportViewOpt,
+  },
+};

@@ -59,7 +59,7 @@ const getColor = (data: string) => {
     <div class="g-05 bot">
       <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey].toFixed(1)) }} cal</p>
+        <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey].toFixed(1)) + ' ' + t(item.title) }}</p>
       </div>
     </div>
   </div>

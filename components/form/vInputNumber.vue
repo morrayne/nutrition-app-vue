@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { tInputNumber } from "../../appSettings/export/types/form";
 
 import { useI18n } from "vue-i18n";
@@ -21,6 +21,26 @@ const hasError = ref<boolean>(false);
 const placeholder = props.construct.data.placeholder ? t(props.construct.data.placeholder) : "";
 const localValue = ref<string>(props.modelValue?.toString() ?? "");
 
+const checkForErrors = (data: number) => {
+  hasError.value = false;
+  hasCorrect.value = false;
+
+  if (isNaN(data)) return;
+
+  const rules = props.construct.rule;
+  if (!rules) {
+    hasCorrect.value = true;
+    return;
+  }
+
+  if (data < rules.minValue || data > rules.maxValue) {
+    hasError.value = true;
+    return;
+  }
+
+  hasCorrect.value = true;
+};
+
 const handleInput = (event: Event) => {
   let rawValue = (event.target as HTMLInputElement).value;
   rawValue = rawValue.replace(/[^\d.,-]/g, "");
@@ -28,42 +48,39 @@ const handleInput = (event: Event) => {
   const parts = normalized.split(".");
   if (parts.length > 2) normalized = parts[0] + "." + parts.slice(1).join("");
   localValue.value = normalized;
+
   if (normalized === "" || normalized === "-") {
     emits("update:modelValue", 0);
     checkForErrors(0);
     return;
   }
+
   const num = parseFloat(normalized);
   if (isNaN(num)) {
     hasError.value = true;
     emits("update:modelValue", 0);
     return;
   }
+
   checkForErrors(num);
   emits("update:modelValue", num);
 };
 
-const checkForErrors = (data: number) => {
-  hasError.value = false;
-  hasCorrect.value = false;
-  if (isNaN(data)) return;
-  const rules = props.construct.rule;
-  if (!rules) {
-    hasCorrect.value = true;
-    return;
-  }
-  if (data < rules.minValue || data > rules.maxValue) {
-    hasError.value = true;
-    return;
-  }
-  hasCorrect.value = true;
-};
-
-import { watch } from "vue";
-watch(() => props.modelValue, (newVal) => {
-  if (newVal !== undefined && newVal !== null && !isNaN(newVal)) localValue.value = newVal.toString();
-  else localValue.value = "";
-});
+// Следим за изменением modelValue из родителя
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== null && !isNaN(newVal) && newVal !== 0) {
+      localValue.value = newVal.toString();
+      checkForErrors(newVal);
+    } else {
+      localValue.value = "";
+      hasError.value = false;
+      hasCorrect.value = false;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>

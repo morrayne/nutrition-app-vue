@@ -3,6 +3,9 @@ import { X } from "@lucide/vue";
 
 import type { tProductSaved } from "../../../appSettings/export/types/food";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 const props = defineProps<{
   construct: tProductSaved;
   active?: boolean;
@@ -33,7 +36,7 @@ const macros = [
     <div class="g-05 bot">
       <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductSaved] }} cal</p>
+        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductSaved] + ' ' + t(item.title) }}</p>
       </div>
     </div>
   </div>

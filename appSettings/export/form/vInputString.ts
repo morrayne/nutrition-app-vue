@@ -1,5 +1,4 @@
 import type { tInputString } from "../../export/types/form";
-
 // user (строковые)
 export const username: tInputString = {
   title: "username",
@@ -15,7 +14,6 @@ export const username: tInputString = {
     stringPattern: /^[a-zA-Z][a-zA-Z0-9_ ]*$/,
   },
 };
-
 export const email: tInputString = {
   title: "email",
   data: {
@@ -30,7 +28,6 @@ export const email: tInputString = {
     stringPattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
 };
-
 export const password: tInputString = {
   title: "password",
   data: {
@@ -45,12 +42,37 @@ export const password: tInputString = {
     stringPattern: /^[a-zA-Z0-9!]+$/,
   },
 };
-
 // meal (строковые)
 export const mealName: tInputString = {
   data: {
     dataType: "string",
     placeholder: "mealName",
+  },
+  rule: {
+    minLength: 2,
+    maxLength: 24,
+    toContain: [],
+    noToContain: ["@", "#"],
+  },
+};
+// sport
+export const exerciseName: tInputString = {
+  data: {
+    dataType: "string",
+    placeholder: "exerciseName",
+  },
+  rule: {
+    minLength: 2,
+    maxLength: 24,
+    toContain: [],
+    noToContain: ["@", "#"],
+  },
+};
+// meds
+export const medsName: tInputString = {
+  data: {
+    dataType: "string",
+    placeholder: "name",
   },
   rule: {
     minLength: 2,

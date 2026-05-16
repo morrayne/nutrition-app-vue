@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 import { supabase } from "../appSettings/supabase";
-import type { tProductSaved } from "../appSettings/types/food";
+import type { tProductSaved } from "../appSettings/export/types/food";
 
 import { useAuthStore } from "./useAuthStore";
 

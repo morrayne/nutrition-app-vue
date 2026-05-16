@@ -37,7 +37,7 @@ const macros = [
       </button>
     </div>
     <div class="w-100 g-05 macros">
-      <p class="w-100 j-c fs-s fw-4 macros-item" v-for="(item, index) in macros">{{ "cal" + " " + item.worth }}</p>
+      <p class="w-100 j-c fs-s fw-6 macros-item" v-for="(item, index) in macros">{{ t(item.title) + " " + item.worth }}</p>
     </div>
     <div class="w-100 flex-c g-05 receit">
       <div class="w-100 j-b receit-item" v-for="item in props.construct.list">
@@ -68,7 +68,6 @@ const macros = [
     .macros-item {
       padding: 0.25rem 0;
       border-radius: 1rem;
-      color: var(--ex-color);
       background: var(--ex-background);
     }
   }

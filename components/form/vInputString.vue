@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type { tInputString } from "../../appSettings/types/form";
+import { ref, watch } from "vue";
+import type { tInputString } from "../../appSettings/export/types/form";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -21,19 +21,17 @@ const hasError = ref<boolean>(false);
 const placeholder = props.construct.data.placeholder ? t(props.construct.data.placeholder) : "";
 const dataType = props.construct.data.dataType;
 
-const handleInput = (event: Event) => {
-  const rawValue = (event.target as HTMLInputElement).value;
-  let value = rawValue;
-  checkForErrors(value, dataType);
-  emits("update:modelValue", value);
-};
-
 const checkForErrors = (data: string, mode: "string" | "password") => {
   hasError.value = false;
   hasCorrect.value = false;
-  if (data === "" || data === null || data === undefined) return;
+  
+  if (!data || data === "" || data === null || data === undefined) {
+    return;
+  }
+  
   const str = String(data).replace(/\s/g, "");
   const rules = props.construct.rule;
+  
   if (str.length < rules.minLength || str.length > rules.maxLength) {
     hasError.value = true;
     return;
@@ -50,9 +48,22 @@ const checkForErrors = (data: string, mode: "string" | "password") => {
     hasError.value = true;
     return;
   }
+  
   hasError.value = false;
   hasCorrect.value = true;
 };
+
+const handleInput = (event: Event) => {
+  const rawValue = (event.target as HTMLInputElement).value;
+  let value = rawValue;
+  checkForErrors(value, dataType);
+  emits("update:modelValue", value);
+};
+
+// Следим за изменением modelValue из родителя
+watch(() => props.modelValue, (newValue) => {
+  checkForErrors(newValue || "", dataType);
+});
 </script>
 
 <template>

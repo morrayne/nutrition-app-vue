@@ -67,7 +67,7 @@ const finish = async () => {
   loading.value = true;
   // validation and autocorrect
   const e = editor.value;
-  if (!e.name && !e.calories) return
+  if (!e.name && !e.calories) return;
   if (!e.proteins) editor.value.proteins = 0;
   if (!e.fats) editor.value.fats = 0;
   if (!e.carbs) editor.value.carbs = 0;
@@ -120,11 +120,23 @@ const loading = ref<boolean>(false);
       </div>
     </div>
   </div>
-  <p class="w-100 j-c bounce new-asset" @click="handleNewProduct">{{ t("addNew") }}</p>
-  <productWrap v-for="(item, index) in productStore.products" :construct="productStore.products[productStore.products.length - index - 1]" @main="handleMain" @delete="handleDelete" />
+  <p class="w-100 j-c bounce new-asset" @click="handleNewProduct">{{ t("add") }}</p>
+  <div class="w-100 g-05 half">
+    <productWrap v-for="(item, index) in productStore.products" :construct="productStore.products[productStore.products.length - index - 1]!" @main="handleMain" @delete="handleDelete" />
+  </div>
 </template>
 
 <style scoped lang="scss">
+.half {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 768px) {
+  .half {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 .new-asset {
   padding: 1rem 0;
   border-radius: 1rem;

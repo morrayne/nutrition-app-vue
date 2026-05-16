@@ -57,22 +57,30 @@ const loading = ref<boolean>(false);
 <template>
   <loadingWrap v-if="loading" />
   <div class="w-100 h-fit max-w-1080 header-pad flex-c pos-r g-1 overflow-y-auto scroll-style">
-    <macroWidget :date="today!" />
-    <p class="fs-xl fw-7">{{ t("suggestions") }}</p>
-    <div class="w-100 flex-c g-05 def-wrap weight-log">
-      <div class="g-05 top">
-        <vInputNumber v-model="newWeightLog.weight" :construct="weightInput" />
-        <vInputNumber v-model="newWeightLog.bodyFat" :construct="fatInput" />
-      </div>
-      <div class="g-05 w-100 a-c bot">
-        <p class="w-100 def-wrap j-c send" @click="handleNewBody">{{ t("addnew") }}</p>
-        <div class="def-wrap x" @click="clearNewBody"><X color="var(--sub-color)" /></div>
+    <div class="w-100 g-1 half-screen">
+      <macroWidget :date="today!" />
+    </div>
+    <div class="w-100 g-1 half-screen">
+      <div class="w-100 flex-c g-05 def-wrap weight-log">
+        <div class="g-05 top">
+          <vInputNumber v-model="newWeightLog.weight" :construct="weightInput" />
+          <vInputNumber v-model="newWeightLog.bodyFat" :construct="fatInput" />
+        </div>
+        <div class="g-05 w-100 a-c bot">
+          <p class="w-100 def-wrap j-c send" @click="handleNewBody">{{ t("addnew") }}</p>
+          <div class="def-wrap x" @click="clearNewBody"><X color="var(--sub-color)" /></div>
+        </div>
       </div>
     </div>
+    <!-- <p class="fs-xl fw-7">{{ t("suggestions") }}</p> -->
   </div>
 </template>
 
 <style scoped lang="scss">
+.half-screen {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 .weight-log {
   padding: 0.75rem;
   border-radius: 1.5rem;
@@ -81,6 +89,9 @@ const loading = ref<boolean>(false);
     grid-template-columns: repeat(2, 1fr);
   }
   .bot {
+    .send, .x {
+      cursor: pointer;
+    }
     .send {
     }
     .x {
@@ -89,6 +100,13 @@ const loading = ref<boolean>(false);
       padding: 0.75rem;
       border-radius: 4rem;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .half-screen {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 </style>

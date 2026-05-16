@@ -157,3 +157,44 @@ export const mealFats: tInputNumber = {
     maxValue: 1000,
   },
 };
+export const sets: tInputNumber = {
+  data: {
+    dataType: "number",
+    placeholder: "sets",
+  },
+  rule: {
+    minValue: 1,
+    maxValue: 1000,
+  },
+};
+export const reps: tInputNumber = {
+  data: {
+    dataType: "number",
+    placeholder: "reps",
+  },
+  rule: {
+    minValue: 1,
+    maxValue: 1000,
+  },
+};
+export const exWeight: tInputNumber = {
+  data: {
+    dataType: "number",
+    placeholder: "weight",
+  },
+  rule: {
+    minValue: 0.1,
+    maxValue: 1000,
+  },
+};
+
+export const scv: tInputNumber = {
+  data: {
+    dataType: "number",
+    placeholder: "oncePerDays",
+  },
+  rule: {
+    minValue: 1,
+    maxValue: 365,
+  },
+};

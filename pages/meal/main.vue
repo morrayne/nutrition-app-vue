@@ -40,6 +40,11 @@ import mealView from "./view/meal.vue";
   opacity: 1;
 }
 .meal-pad {
-  padding-bottom: 6.5rem;
+  padding-bottom: 8.25rem;
+}
+@media (max-width: 768px) {
+  .meal-pad {
+    padding-bottom: 6.5rem;
+  }
 }
 </style>

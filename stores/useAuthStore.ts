@@ -46,10 +46,7 @@ export const useAuthStore = defineStore("auth", () => {
   const initialize = async () => {
     if (isInitialized.value) return;
     try {
-      const {
-        data: { session: currentSession },
-        error: sessionError,
-      } = await supabase.auth.getSession();
+      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
       session.value = currentSession;
       user.value = currentSession?.user ?? null;
