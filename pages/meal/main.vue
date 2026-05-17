@@ -25,7 +25,7 @@ import mealView from "./view/meal.vue";
     <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="4" v-show="pageIndex === 'meals'">
       <mealView />
     </div>
-    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="5" v-show="pageIndex === 'suggestions'"></div>
+    <!-- <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="5" v-show="pageIndex === 'suggestions'"></div> -->
   </TransitionGroup>
 </template>
 

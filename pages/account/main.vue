@@ -83,14 +83,37 @@ const updateBody = () => {
   const b = newBody.value;
   if (!b.age || !b.weightGoal || !b.bodyFatGoal) return;
   if (!b.calories || !b.proteins || !b.fats || !b.carbs) return;
-  bodyStore.setStore({ ...newBody.value });
-  bodyStore.updateStore();
+  loading.value = true;
+  setTimeout(async () => {
+    try {
+      bodyStore.setStore({ ...newBody.value });
+      await bodyStore.updateStore();
+    } catch (error) {
+      console.error("Error updating body:", error);
+    } finally {
+      loading.value = false;
+    }
+  }, 250);
 };
+
+import { calculateMacros } from "../../appSettings/export/vars/default";
+watch(
+  [() => newBody.value.age, () => newBody.value.height, () => newBody.value.activity, () => newBody.value.gender, () => newBody.value.weightNow, () => newBody.value.bodyFatNow, () => newBody.value.weightGoal, () => newBody.value.bodyFatGoal],
+  ([newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal]) => {
+    if (!newAge || !newHeight || !newActivity || !newGender || !newWeightNow || !newBodyFatNow || !newWeightGoal || !newBodyFatGoal) return;
+    const newMacros = calculateMacros(newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal);
+    newBody.value.calories = newMacros.calories;
+    newBody.value.proteins = newMacros.proteins;
+    newBody.value.fats = newMacros.fats;
+    newBody.value.carbs = newMacros.carbs;
+  },
+  { deep: true },
+);
 </script>
 
 <template>
   <loadingWrap v-if="loading" />
-  <div class="w-100 h-100 max-w-1440 pos-r over-y grid grid-2 gap-100 header-padding">
+  <div class="w-100 h-100 max-w-640 pos-r over-y flex-c gap-100 header-padding">
     <div class="w-100 flex-c gap-50">
       <p class="text-xl">{{ t("account") }}</p>
       <div class="w-100 main gap-100 pos-r mini">
@@ -110,7 +133,10 @@ const updateBody = () => {
     </div>
     <div class="w-100 flex-c gap-50">
       <p class="text-xl">{{ t("changeBody") }}</p>
-      <vInputNumber :construct="age" v-model="newBody.age" />
+      <div class="grid grid-2 gap-50">
+        <vInputNumber :construct="age" v-model="newBody.age" />
+        <vInputNumber :construct="height" v-model="newBody.height" />
+      </div>
       <vSwitcherDuo :construct="gender" v-model="newBody.gender" />
       <vSelect :construct="activity" v-model="newBody.activity" />
       <p class="text-xl">{{ t("goals") }}</p>
@@ -141,7 +167,7 @@ const updateBody = () => {
     }
   }
   .bot {
-    padding: 0 0 0 5rem;
+    padding-left: 5rem;
     .b {
       color: var(--ex-color);
     }
@@ -159,5 +185,16 @@ const updateBody = () => {
   background: var(--focus);
   border: solid 1px var(--focus);
   cursor: pointer;
+}
+
+@media (max-width: 1280px) {
+  .bot {
+    padding-left: 3.5rem !important;
+  }
+}
+@media (max-width: 640px) {
+  .bot {
+    padding-left: 3rem !important;
+  }
 }
 </style>

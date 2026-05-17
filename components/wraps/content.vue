@@ -26,7 +26,7 @@ watch(authStore, () => {
 <style scoped lang="scss">
 .a {
   max-width: 1920px;
-  max-height: 920px;
+  max-height: 960px;
   .c {
     background: var(--main-background);
     border: solid 1px var(--ex-background);

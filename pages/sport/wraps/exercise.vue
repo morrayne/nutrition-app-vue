@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { X } from "@lucide/vue";
-
 import type { tExercise } from "../../../appSettings/export/types/sport";
 
 import { useI18n } from "vue-i18n";

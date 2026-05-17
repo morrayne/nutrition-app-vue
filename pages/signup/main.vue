@@ -39,28 +39,14 @@ watch(
 );
 // macros auto calculation
 import { calculateMacros } from "../../appSettings/export/vars/default";
-watch(
-  [
-    () => vBodyTable.value.age,
-    () => vBodyTable.value.height,
-    () => vBodyTable.value.activity,
-    () => vBodyTable.value.gender,
-    () => vBodyTable.value.weightNow,
-    () => vBodyTable.value.bodyFatNow,
-    () => vBodyTable.value.weightGoal,
-    () => vBodyTable.value.bodyFatGoal,
-  ],
-  ([newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal]) => {
-    const b = vBodyTable.value;
-    if (!newAge || !newHeight || !newActivity || !newGender || !newWeightNow || !newBodyFatNow || !newWeightGoal || !newBodyFatGoal) return;
-    const newMacros = calculateMacros(newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal);
-    vBodyTable.value.calories = newMacros.calories;
-    vBodyTable.value.proteins = newMacros.proteins;
-    vBodyTable.value.fats = newMacros.fats;
-    vBodyTable.value.carbs = newMacros.carbs;
-  },
-  { deep: true },
-);
+watch([() => vBodyTable.value.age, () => vBodyTable.value.height, () => vBodyTable.value.activity, () => vBodyTable.value.gender, () => vBodyTable.value.weightNow, () => vBodyTable.value.bodyFatNow, () => vBodyTable.value.weightGoal, () => vBodyTable.value.bodyFatGoal], ([newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal]) => {
+  if (!newAge || !newHeight || !newActivity || !newGender || !newWeightNow || !newBodyFatNow || !newWeightGoal || !newBodyFatGoal) return;
+  const newMacros = calculateMacros(newAge, newHeight, newActivity, newGender, newWeightNow, newBodyFatNow, newWeightGoal, newBodyFatGoal);
+  vBodyTable.value.calories = newMacros.calories;
+  vBodyTable.value.proteins = newMacros.proteins;
+  vBodyTable.value.fats = newMacros.fats;
+  vBodyTable.value.carbs = newMacros.carbs;
+}, { deep: true });
 
 const handleSignup = async () => {
   const result = authStore.signUp(vSignTable.value, vCommonTable.value, vBodyTable.value);

@@ -7,7 +7,6 @@ const props = defineProps<{
   construct: tProductUnsaved;
   active?: boolean;
 }>();
-console.log(props.construct)
 const emits = defineEmits<{
   (e: "delete", value: tProductUnsaved): void;
   (e: "main", value: tProductUnsaved): void;
@@ -25,19 +24,19 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <div class="product-wrap bounce w-100 flex-c g-05 def-wrap" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''"> 
+  <div class="product-wrap bounce-s w-100 flex-c gap-50 main" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''"> 
     <div class="w-100 top">
-      <p class="fs-l fw-6">{{ props.construct.name }}</p>
-      <div class="def-wrap controls" @click.stop>
+      <p class="text-l">{{ props.construct.name }}</p>
+      <div class="main controls" @click.stop>
         <button style="scale: 0.9" @click="emits('delete', props.construct)">
           <X color="var(--sub-color)" />
         </button>
       </div>
     </div>
-    <div class="g-05 bot">
-      <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
+    <div class="gap-50 bot">
+      <div class="gap-50 ali-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductUnsaved] + ' ' + t(item.title) }}</p>
+        <p class="text-s">{{ props.construct[item.data as keyof tProductUnsaved] + ' ' + t(item.title) }}</p>
       </div>
     </div>
   </div>

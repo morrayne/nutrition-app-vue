@@ -2,7 +2,8 @@
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-const navigation = ["history", "intake", "products", "meals", "suggestions"];
+// const navigation = ["history", "intake", "products", "meals", "suggestions"];
+const navigation = ["history", "intake", "products", "meals"];
 
 const props = defineProps<{
   modelValue: string;
@@ -15,8 +16,8 @@ const emits = defineEmits<{
 <template>
   <div class="a left-0 w-100 pos-a jus-c">
     <div class="w-100 max-w-1440 b">
-      <div class="w-fit over-x c">
-        <div class="meal w-100 g-05 main">
+      <div class="w-100 over-x c">
+        <div class="w-100 meal gap-50 jus-sb main">
           <p v-for="item in navigation" class="text-m meal-item" :class="props.modelValue === item ? 'active' : ''" @click="emits('update:modelValue', item)">{{ t(item) }}</p>
         </div>
       </div>
@@ -32,7 +33,7 @@ const emits = defineEmits<{
   .c {
     max-width: 100%;
     .meal {
-      width: fit-content;
+      max-width: 480px;
       border-radius: 3rem;
       padding: 0.25rem;
       .meal-item {

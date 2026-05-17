@@ -7,9 +7,9 @@ const { t } = useI18n();
 
 const navigationArray = [
   { title: "home", svg: House, route: "/home" },
-  { title: "meal", svg: Apple, route: "/meal" },
+  { title: "food", svg: Apple, route: "/meal" },
   { title: "sport", svg: BicepsFlexed, route: "/sport" },
-  { title: "pill", svg: Pill, route: "/pill" },
+  { title: "meds", svg: Pill, route: "/pill" },
   { title: "account", svg: UserRound, route: "/account" },
 ];
 

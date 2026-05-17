@@ -12,7 +12,7 @@ import history from "./view/history.vue";
 
 <template>
   <TransitionGroup name="sport" tag="div" class="w-100 h-100 max-w-1440 pos-r">
-    <div class="grid grid-2 g">
+    <div class="grid grid-2 g" :key="-1">
       <vSwitcherTrio :construct="sportView" v-model="sportMode" />
     </div>
     <div class="pos-a w-100 h-100 header-padding sport-padding over-y flex-c gap-50" :key="0" v-show="sportMode === 'history'">

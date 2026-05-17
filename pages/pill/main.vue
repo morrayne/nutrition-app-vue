@@ -69,6 +69,7 @@ const takePill = (item: tMed) => {
   loading.value = true;
   setTimeout(async () => {
     medicineStore.updateItem({ ...item, lastDate: today });
+    medicineStore.getStore();
     loading.value = false;
   }, 250);
 };
@@ -84,14 +85,13 @@ const takePill = (item: tMed) => {
           <vInputNumber :construct="scv" v-model="med.period" />
         </div>
         <div class="w-100 gap-50 ali-c double">
-          <p class="w-100 jus-c pad-100 main" @click="handleSend">{{ t("finish") }}</p>
-          <div class="h-100 main ali-c jus-c round" @click="clearForm"><X color="var(--sub-color)" /></div>
+          <p class="w-100 jus-c pad-100 main" @click="handleSend" style="cursor: pointer">{{ t("finish") }}</p>
+          <div class="h-100 main ali-c jus-c round" @click="clearForm" style="cursor: pointer"><X color="var(--sub-color)" /></div>
         </div>
       </div>
     </div>
     <div class="w-100 right">
       <div class="w-100 flex-c gap-50">
-        <p>{{ today }}</p>
         <div class="item jus-sb ali-c bounce-m main" v-for="item in medicineStore.medicines" :class="getStatus(item)" style="cursor: pointer" @click="takePill(item)">
           <p>{{ item.name }}</p>
           <p class="text-s">{{ getDateUntil(item.lastDate!, item.period!) }}</p>

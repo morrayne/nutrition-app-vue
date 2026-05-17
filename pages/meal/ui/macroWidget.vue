@@ -93,15 +93,15 @@ const circles = computed(() => {
 
 <!-- prettier-ignore -->
 <template>
-  <div class="main jus-sb ali-c w-100">
+  <div class="w-100 main jus-sb ali-c">
     <svg class="svg" viewBox="-100 -100 200 200">
       <circle v-for="(circle, index) in circles" :key="`bg-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" stroke="var(--ex-background)" :stroke-width="strokeWidth" />
       <circle v-for="(circle, index) in circles" :key="`fill-${circle.key}`" :r="radii[index]" cx="0" cy="0" fill="none" :stroke="circle.color" :stroke-width="strokeWidth" stroke-linecap="round" :stroke-dasharray="2 * Math.PI * radii[index]!" :stroke-dashoffset="2 * Math.PI * radii[index]! * (1 - circle.percent / 100)" :style="{ transform: 'rotate(-90deg)' }" />
     </svg>
     <div class="legend w-100 h-100 flex-c jus-c g-05">
       <div v-for="circle in circles" :key="circle.key" class="w-100 flex-c">
-        <p class="top text-l">{{ t(circle.title) + ' ' + Math.round(circle.percent) + '%'}}</p>
-        <p class="bot text-m">{{ Math.round(circle.value) }} / {{ circle.goal || 0 }}</p>
+        <p class="top text-m">{{ t(circle.title) + ' ' + Math.round(circle.percent) + '%'}}</p>
+        <p class="bot text-l" :style="{color: circle.color }">{{ Math.round(circle.value) }} / {{ circle.goal || 0 }}</p>
       </div>
     </div>
   </div>
@@ -120,7 +120,9 @@ const circles = computed(() => {
     .flex-c {
       align-items: end;
       .top {
-        color: var(--main-color);
+        display: inline;
+        white-space: nowrap;
+        overflow: hidden;
       }
       .bot {
         color: var(--ex-color);
