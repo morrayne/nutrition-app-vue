@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { House, Apple, BicepsFlexed, Pill, UserRound } from "@lucide/vue";
+import router from "../../appSettings/router";
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const navigationArray = [
   { title: "home", svg: House, route: "/home" },
@@ -9,17 +13,12 @@ const navigationArray = [
   { title: "account", svg: UserRound, route: "/account" },
 ];
 
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-
-import router from "../../appSettings/router";
 const roundStyle = (data: string) => {
   let styles;
   if (data !== router.currentRoute.value.path) styles = { scale: 0, background: "transparent" };
   else styles = { scale: 1, background: "var(--ex-background)" };
   return { ...styles };
 };
-
 const handleNavigation = (data: string) => {
   setTimeout(() => {
     router.push(data);
@@ -28,20 +27,20 @@ const handleNavigation = (data: string) => {
 </script>
 
 <template>
-  <div class="navigation-wrap pos-a j-c a-c g-05">
-    <div class="w-100 j-b s">
-      <div class="navigation pos-r def-wrap">
-        <div class="flex-c a-c pos-r navigation-item" v-for="(item, index) in navigationArray.slice(0, -1)" :key="index" @click="handleNavigation(item.route)">
-          <div class="w-100 h-100 round" :style="roundStyle(item.route)"></div>
+  <div class="a pos-a jus-c ali-c">
+    <div class="w-100 max-w-1440 jus-sb ali-c">
+      <div class="main b">
+        <div class="flex-c pos-r ali-c pad-50 c" v-for="(item, index) in navigationArray.slice(0, -1)" :key="index" @click="handleNavigation(item.route)">
+          <div class="w-100 h-100 pos-a top-0 left-0 d" :style="roundStyle(item.route)"></div>
           <component :is="item.svg" color="var(--sub-color)" />
-          <p class="w-100 j-c fs-xs fw-6">{{ t(item.title) }}</p>
+          <p class="w-100 jus-c text-s">{{ t(item.title) }}</p>
         </div>
       </div>
-      <div class="navigation def-wrap">
-        <div class="flex-c a-c j-c pos-r navigation-item account-item" v-for="(item, index) in navigationArray.slice(-1)" :key="index" @click="handleNavigation(item.route)">
-          <div class="w-100 h-100 round" :style="roundStyle(item.route)"></div>
+      <div class="main b">
+        <div class="flex-c pos-r ali-c pad-50 c one" v-for="(item, index) in navigationArray.slice(-1)" :key="index" @click="handleNavigation(item.route)">
+          <div class="w-100 h-100 pos-a top-0 left-0 d" :style="roundStyle(item.route)"></div>
           <component :is="item.svg" color="var(--sub-color)" />
-          <p class="w-100 j-c fs-xs fw-6">{{ t(item.title) }}</p>
+          <p class="w-100 jus-c text-s">{{ t(item.title) }}</p>
         </div>
       </div>
     </div>
@@ -49,64 +48,53 @@ const handleNavigation = (data: string) => {
 </template>
 
 <style scoped lang="scss">
-.navigation-wrap {
+.a {
   width: calc(100% - 2rem);
   bottom: 1rem;
   left: 1rem;
   z-index: 3;
-  .s {
-    max-width: 1080px;
-    .navigation {
-      width: fit-content;
-      backdrop-filter: blur(0.5rem);
-      border-radius: 3rem;
-      padding: 0.25rem;
-      .navigation-item {
-        width: 5rem;
-        height: 4rem;
-        border-radius: 3rem;
-        padding: 0.5rem;
-        cursor: pointer;
-        .round {
-          border-radius: 3rem;
-          position: absolute;
-          background: var(--ex-background);
-          z-index: -1;
-          top: 0;
-          left: 0;
-        }
-        svg {
-          width: 100%;
-        }
+  .b {
+    width: fit-content;
+    padding: 0.25rem;
+    border-radius: 4rem;
+    .c {
+      width: 6rem;
+      height: 4.5rem;
+      cursor: pointer;
+      .text-s {
+        font-weight: 500;
       }
-      .navigation-item:hover {
-        scale: 1.075;
-      }
-      .navigation-item:active {
-        scale: 0.925;
-      }
-      .account-item {
-        width: 6rem;
-      }
+    }
+    .one {
+      width: 7rem;
+    }
+    .d {
+      border-radius: 4rem;
+      background: var(--ex-background);
+      z-index: -1;
+    }
+    svg {
+      width: 100%;
     }
   }
 }
 
-@media (max-width: 768px) {
-  .navigation {
-    padding: 0.375rem 0.5rem;
+@media (max-width: 1280px) {
+  .c {
+    width: 5rem !important;
+    height: 4rem !important;
   }
-  .navigation {
-    padding: 0.25rem;
-    .navigation-item {
-      width: 3.5rem !important;
-      height: 3rem !important;
-      border-radius: 3rem;
-      padding: 0.5rem;
-    }
-    .account-item {
-      width: 4.5rem;
-    }
+  .one {
+    width: 6rem !important;
+  }
+}
+@media (max-width: 640px) {
+  .c {
+    width: 4rem !important;
+    height: 3.25rem !important;
+  }
+  .one {
+    width: 4.5rem !important;
   }
 }
 </style>

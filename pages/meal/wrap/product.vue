@@ -24,19 +24,19 @@ const macros = [
 </script>
 
 <template>
-  <div class="product-wrap bounce w-100 flex-c g-05 def-wrap" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''"> 
+  <div class="product-wrap bounce w-100 flex-c gap-50 main" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''">
     <div class="w-100 top">
-      <p class="fs-l fw-6">{{ props.construct.name }}</p>
-      <div class="def-wrap controls" @click.stop>
+      <p class="text-l">{{ props.construct.name }}</p>
+      <div class="main controls" @click.stop>
         <button style="scale: 0.9" @click="emits('delete', props.construct.id!)">
           <X color="var(--sub-color)" />
         </button>
       </div>
     </div>
-    <div class="g-05 bot">
-      <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
+    <div class="gap-50 bot">
+      <div class="gap-50 ali-c" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ props.construct[item.data as keyof tProductSaved] + ' ' + t(item.title) }}</p>
+        <p class="text-s">{{ props.construct[item.data as keyof tProductSaved] + " " + t(item.title) }}</p>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@ const macros = [
       max-width: 90%;
       display: inline;
       white-space: nowrap;
-      text-overflow: ellipsis; 
+      text-overflow: ellipsis;
       overflow: hidden;
     }
     .controls {
@@ -66,16 +66,14 @@ const macros = [
     }
   }
   .bot {
-    .item {
-      p {
-        color: var(--ex-color);
-      }
-      .dot {
-        width: 0.25rem;
-        height: 0.25rem;
-        border-radius: 50%;
-        background: var(--ex-color);
-      }
+    p {
+      color: var(--ex-color);
+    }
+    .dot {
+      width: 0.25rem;
+      height: 0.25rem;
+      border-radius: 50%;
+      background: var(--ex-color);
     }
   }
 }

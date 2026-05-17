@@ -32,20 +32,20 @@ const getColor = (data: string) => {
 </script>
 
 <template>
-  <div class="meal-wrap bounce w-100 flex-c g-05 def-wrap">
-    <div class="w-100 j-b top">
-      <p class="fs-l fw-6">{{ props.construct.name }}</p>
-      <div class="h-100 a-c intake" :style="{ background: getColor(props.construct.intake) }">
-        <p class="fs-xs fw-6">{{ t(props.construct.intake) }}</p>
+  <div class="meal-wrap bounce w-100 flex-c gap-50 main">
+    <div class="w-100 jus-sb ali-c top">
+      <p class="text-l">{{ props.construct.name }}</p>
+      <div class="h-100 ali-c intake" :style="{ background: getColor(props.construct.intake) }">
+        <p class="text-s">{{ t(props.construct.intake) }}</p>
       </div>
     </div>
-    <div class="w-100 g-05 macros">
-      <p class="w-100 j-c fs-s fw-6 macros-item" v-for="(item, index) in macros">{{ t(item.title) + " " + item.worth }}</p>
+    <div class="w-100 gap-50 macros">
+      <p class="w-100 jus-c text-m macros-item" v-for="(item, index) in macros">{{ t(item.title) + " " + item.worth }}</p>
     </div>
-    <div class="w-100 flex-c g-05 receit">
-      <div class="w-100 j-b receit-item" v-for="item in props.construct.list">
-        <p class="fs-s fw-5">{{ getProductById(item.id)?.name + " (" + item.quantity + ")" }}</p>
-        <p class="fs-s fw-6">{{ item.weight + t("g") }}</p>
+    <div class="w-100 flex-c gap-50">
+      <div class="w-100 jus-sb receit-item" v-for="item in props.construct.list">
+        <p class="text-s">{{ getProductById(item.id)?.name + " (" + item.quantity + ")" }}</p>
+        <p class="text-s">{{ item.weight + t("g") }}</p>
       </div>
     </div>
   </div>
@@ -74,11 +74,9 @@ const getColor = (data: string) => {
       background: var(--ex-background);
     }
   }
-  .receit {
-    .receit-item {
-      p {
-        color: var(--sub-color);
-      }
+  .receit-item {
+    p {
+      color: var(--sub-color);
     }
   }
 }

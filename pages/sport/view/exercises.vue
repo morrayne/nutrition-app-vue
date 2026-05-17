@@ -15,7 +15,7 @@ const editMode = ref<boolean>(false);
 const loading = ref<boolean>(false);
 
 // Активная группа для фильтрации списка мышц
-const activeGroup = ref<string | null>(null);
+const activeGroup = ref<string | null>("chest");
 // Активная конкретная мышца для фильтрации упражнений
 const activeMuscle = ref<string | null>(null);
 const editorActiveGroup = ref<string | null>(null);
@@ -47,7 +47,7 @@ const selectMuscle = (muscleWorth: string) => {
     activeMuscle.value = null;
   } else {
     activeMuscle.value = muscleWorth;
-    // activeGroup.value = null; 
+    // activeGroup.value = null;
   }
 };
 
@@ -188,67 +188,62 @@ import exerciseCard from "../wraps/exercise.vue";
 
 <template>
   <loadingView v-if="loading" />
-  <!-- Модалка создания/редактирования -->
-  <div class="w-100 h-100 g-05 pos-a editor-wrap" v-if="menu">
-    <div class="flex-c g-05 def-wrap editor">
-      <div class="w-100 g-05 a-c double">
+  <div class="w-100 h-100 gap-50 pos-a jus-c over-y editor-wrap" v-if="menu">
+    <div class="w-100 flex-c max-w-1440 gap-50 main editor">
+      <!-- prettier-ignore -->
+      <div class="w-100 gap-50 ali-c double">
         <vInputString :construct="exerciseName" v-model="editor.name" :disable="editMode" />
-        <div class="h-100 def-wrap round" @click=" menu = false; clearEditor()">
+        <div class="h-100 main round" @click="menu = false; clearEditor()">
           <ArrowLeft color="var(--sub-color)" />
         </div>
       </div>
-      <!-- Фильтры групп в редакторе -->
-      <div class="def-wrap">
-        <div class="g-05 overflow-y-auto scroll-style filters">
+      <div class="main">
+        <div class="gap-50 over-x filters">
           <p v-for="group in mussleGrops" :key="group" :class="{ active: editorActiveGroup === group }" @click="selectEditorGroup(group)">
             {{ t(group) }}
           </p>
         </div>
       </div>
-      <!-- Список мышц для выбора -->
-      <div class="def-wrap">
-        <div class="g-05 overflow-y-auto scroll-style filters">
-          <p v-for="item in editorFilteredMuscles" :key="item.worth" class="fs-s" :class="{ selected: isTagSelected(item.worth) }" @click="isTagSelected(item.worth) ? removeEditorTag(item.worth) : addEditorTag(item.worth)">
+      <div class="main">
+        <div class="gap-50 over-x big-list filters">
+          <p v-for="item in editorFilteredMuscles" :key="item.worth" style="cursor: pointer" class="text-s" :class="{ selected: isTagSelected(item.worth) }" @click="isTagSelected(item.worth) ? removeEditorTag(item.worth) : addEditorTag(item.worth)">
             {{ t(item.title) }}
           </p>
         </div>
       </div>
-      <!-- Выбранные теги -->
-      <div class="def-wrap selected-tags" v-if="editorTags.length">
-        <div class="selected-tags-wrap g-05">
-          <p v-for="tag in editorTags" :key="tag" class="fs-xs selected-tag" @click="removeEditorTag(tag)">
+      <div class="main selected-tags" v-if="editorTags.length">
+        <div class="selected-tags-wrap gap-50">
+          <p v-for="tag in editorTags" :key="tag" class="text-xs selected-tag" @click="removeEditorTag(tag)" style="cursor: pointer">
             {{ t(tag) }}
           </p>
         </div>
       </div>
-      <div class="w-100 g-05 a-c double">
-        <p class="w-100 j-c finish def-wrap" @click="finish">{{ t("finish") }}</p>
-        <div class="h-100 def-wrap round" @click="clearEditor">
+      <div class="w-100 gap-50 ali-c double">
+        <p class="w-100 jus-c finish main" @click="finish">{{ t("finish") }}</p>
+        <div class="h-100 main round" @click="clearEditor">
           <X color="var(--sub-color)" />
         </div>
       </div>
     </div>
   </div>
-  <!-- Кнопка добавления -->
-  <p class="w-100 j-c bounce fw-6 add" @click="handleNewExercise">{{ t("add") }}</p>
-  <!-- Фильтры групп (основные) -->
-  <div class="def-wrap">
-    <div class="g-05 overflow-y-auto scroll-style filters">
-      <p v-for="group in mussleGrops" :key="group" :class="{ active: activeGroup === group }" @click="selectGroup(group)">
+  <p class="w-100 jus-c bounce-s text-l add" @click="handleNewExercise" style="cursor: pointer">{{ t("add") }}</p>
+  <div class="main">
+    <div class="gap-50 over-x filters">
+      <p v-for="group in mussleGrops" :key="group" :class="{ active: activeGroup === group }" @click="selectGroup(group)" style="cursor: pointer">
         {{ t(group) }}
       </p>
     </div>
   </div>
-  <!-- Список мышц по выбранной группе (кликабельные для фильтрации упражнений) -->
-  <div class="def-wrap">
-    <div class="g-05 overflow-y-auto scroll-style filters">
-      <p v-for="item in filteredMuscles" :key="item.worth" class="fs-s" :class="{ active: activeMuscle === item.worth }" @click="selectMuscle(item.worth)">
+  <div class="main">
+    <div class="gap-50 over-x big-list filters">
+      <p v-for="item in filteredMuscles" :key="item.worth" class="text-s" :class="{ active: activeMuscle === item.worth }" @click="selectMuscle(item.worth)" style="cursor: pointer">
         {{ t(item.title) }}
       </p>
     </div>
   </div>
-  <!-- Список упражнений -->
-  <exerciseCard v-for="item in filteredExercises" :key="item.id" :construct="item" @main="handleMain" @delete="handleDelete" />
+  <div class="grid grid-3 gap-50">
+    <exerciseCard v-for="item in filteredExercises" :key="item.id" :construct="item" @main="handleMain" @delete="handleDelete" />
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -284,7 +279,7 @@ import exerciseCard from "../wraps/exercise.vue";
       }
     }
     .double {
-      .def-wrap {
+      .main {
         padding: 1rem;
       }
       .finish {
@@ -310,11 +305,10 @@ import exerciseCard from "../wraps/exercise.vue";
   border: dashed 2px var(--ex-color);
   color: var(--ex-color);
 }
-.def-wrap {
+.main {
   padding: 0.5rem;
   .filters {
     width: fit-content;
-    border-radius: 2rem;
     overflow-x: scroll;
     p {
       white-space: nowrap;
@@ -327,6 +321,15 @@ import exerciseCard from "../wraps/exercise.vue";
       background: var(--focus);
       color: var(--white);
     }
+  }
+}
+.big-list {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .big-list {
+    flex-wrap: nowrap;
   }
 }
 </style>

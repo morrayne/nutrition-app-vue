@@ -17,24 +17,21 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <div class="flex-c g-05 bounce def-wrap" @click="emits('main', props.construct)">
+  <div class="flex-c gap-50 bounce-s main" @click="emits('main', props.construct)">
     <p class="fs-l fw-6" v-if="props.construct.name">{{ props.construct.name }}</p>
-    <div class="g-05 bb">
-      <p class="fs-s" v-for="item in props.construct.tags">{{ t(item) }}</p>
+    <div class="gap-50 bb">
+      <p class="text-xs" v-for="item in props.construct.tags">{{ t(item) }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.def-wrap {
-  padding: 1rem !important;
-  .bb {
-    flex-wrap: wrap;
-    p {
-      padding: 0.25rem 0.75rem;
-      border-radius: 2rem;
-      background: var(--ex-background);
-    }
+.bb {
+  flex-wrap: wrap;
+  p {
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    background: var(--ex-background);
   }
 }
 </style>

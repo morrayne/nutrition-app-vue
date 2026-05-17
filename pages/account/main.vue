@@ -81,62 +81,67 @@ const newBody = ref<tBodyTable>({
 
 const updateBody = () => {
   const b = newBody.value;
-  if (!b.age || !b.weightGoal || !b.bodyFatGoal) return
-  if (!b.calories || !b.proteins || !b.fats || !b.carbs) return
-  bodyStore.setStore({...newBody.value});
+  if (!b.age || !b.weightGoal || !b.bodyFatGoal) return;
+  if (!b.calories || !b.proteins || !b.fats || !b.carbs) return;
+  bodyStore.setStore({ ...newBody.value });
   bodyStore.updateStore();
-}
+};
 </script>
 
 <template>
   <loadingWrap v-if="loading" />
-  <div class="w-100 max-w-1080 flex-c pos-r overflow-y-auto g-1 header-pad">
-    <p class="fs-xl fw-7">{{ t("account") }}</p>
-    <div class="w-100 def-wrap g-1 mini">
-      <div class="h-100 left">
-        <img :src="getImageUrl()" alt="" />
+  <div class="w-100 h-100 max-w-1440 pos-r over-y grid grid-2 gap-100 header-padding">
+    <div class="w-100 flex-c gap-50">
+      <p class="text-xl">{{ t("account") }}</p>
+      <div class="w-100 main gap-100 pos-r mini">
+        <div class="h-100 pos-a left-0 top-0 pad-75 left">
+          <img :src="getImageUrl()" alt="" />
+        </div>
+        <div class="h-100 flex-c jus-sb bot">
+          <p class="text-m t">{{ commonStore.common.email }}</p>
+          <p class="text-s b">{{ commonStore.common.username }}</p>
+        </div>
       </div>
-      <div class="h-100 flex-c j-b bot">
-        <p class="fs-l fw-6 t">{{ commonStore.common.email }}</p>
-        <p class="fs-m fw-5 b">{{ commonStore.common.username }}</p>
-      </div>
+      <p class="text-xl">{{ t("settings") }}</p>
+      <vSwitcherDuo :construct="theme" v-model="vCommonTable.theme" />
+      <vSelect :construct="fontSize" v-model="vCommonTable.fontSize" />
+      <vSelect :construct="language" v-model="vCommonTable.language" />
+      <p class="h-100 main jus-c ali-c signout" @click="handleSignout">{{ t("signout") }}</p>
     </div>
-    <p class="def-wrap j-c signout" @click="handleSignout">{{ t("signout") }}</p>
-    <p class="fs-xl fw-7">{{ t("settings") }}</p>
-    <vSwitcherDuo :construct="theme" v-model="vCommonTable.theme" />
-    <vSelect :construct="fontSize" v-model="vCommonTable.fontSize" />
-    <vSelect :construct="language" v-model="vCommonTable.language" />
-    <p class="fs-xl fw-7">{{ t("changeBody") }}</p>
-    <vInputNumber :construct="age" v-model="newBody.age" />
-    <vSwitcherDuo :construct="gender" v-model="newBody.gender" />
-    <vSelect :construct="activity" v-model="newBody.activity" />
-    <p class="fs-xl fw-7">{{ t("goals") }}</p>
-    <vInputNumber :construct="bodyWeight" v-model="newBody.weightGoal" />
-    <vInputNumber :construct="bodyFat" v-model="newBody.bodyFatGoal" />
-    <p class="fs-xl fw-7">{{ t("macros") }}</p>
-    <vInputNumber :construct="calories" v-model="newBody.calories" />
-    <vInputNumber :construct="proteins" v-model="newBody.proteins" />
-    <vInputNumber :construct="fats" v-model="newBody.fats" />
-    <vInputNumber :construct="carbs" v-model="newBody.carbs" />
-    <p class="def-wrap j-c updatebody" @click="updateBody">{{ t("updateBody") }}</p>
+    <div class="w-100 flex-c gap-50">
+      <p class="text-xl">{{ t("changeBody") }}</p>
+      <vInputNumber :construct="age" v-model="newBody.age" />
+      <vSwitcherDuo :construct="gender" v-model="newBody.gender" />
+      <vSelect :construct="activity" v-model="newBody.activity" />
+      <p class="text-xl">{{ t("goals") }}</p>
+      <div class="grid grid-2 gap-50">
+        <vInputNumber :construct="bodyWeight" v-model="newBody.weightGoal" />
+        <vInputNumber :construct="bodyFat" v-model="newBody.bodyFatGoal" />
+        <vInputNumber :construct="calories" v-model="newBody.calories" />
+        <vInputNumber :construct="proteins" v-model="newBody.proteins" />
+        <vInputNumber :construct="fats" v-model="newBody.fats" />
+        <vInputNumber :construct="carbs" v-model="newBody.carbs" />
+      </div>
+      <p class="main jus-c updatebody" @click="updateBody">{{ t("updateBody") }}</p>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .mini {
+  max-height: 5.5rem;
   padding: 0.5rem;
   border-radius: 2.25rem;
   .left {
-    width: 3.5rem;
-    height: 3.5rem;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
     img {
       width: 100%;
-      height: 100%;
-      border-radius: 3rem;
+      border-radius: 50%;
     }
   }
   .bot {
-    padding: 0.25rem 0;
+    padding: 0 0 0 5rem;
     .b {
       color: var(--ex-color);
     }
@@ -146,10 +151,13 @@ const updateBody = () => {
   color: var(--white);
   background: var(--re);
   border: solid 1px var(--re);
+  border-radius: 2.25rem;
+  cursor: pointer;
 }
 .updatebody {
   color: var(--white);
   background: var(--focus);
   border: solid 1px var(--focus);
+  cursor: pointer;
 }
 </style>

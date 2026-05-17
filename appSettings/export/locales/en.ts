@@ -54,7 +54,7 @@ export default {
   activityLevel5: "high volume",
   activityLevel6: "extreme",
   // size
-  verySmall: "verySmall",
+  verySmall: "very small",
   small: "small",
   medium: "medium",
   big: "big",
@@ -112,6 +112,9 @@ export default {
   exerciseName: "exercise name",
   name: "name",
   g: "g",
+  enterCurrent: "enter your current parameters. This will be starting point of your journey and will affect some calculations.",
+  averageBodyFat: "if you dont have any clue about your body fat %, you should visit site with link below or enter 25",
+  weAreNot: "we are no doctors. This is aproxiamte values. to get more presice data you should contact professional.",
   // muscle groups
   chest: "chest",
   shoulders: "shoulders",

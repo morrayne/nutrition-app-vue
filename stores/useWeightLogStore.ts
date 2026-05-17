@@ -19,7 +19,7 @@ export const useWeightLogStore = defineStore("weightLog", () => {
   const getStore = async () => {
     if (!authStore.user) return;
     try {
-      const { data, error } = await supabase.from("weightLog").select("*").eq("user_id", authStore.user.id);
+      const { data, error } = await supabase.from("weightLog").select("*").eq("user_id", authStore.user.id).order("date", { ascending: true });;
       if (error) throw error;
       if (data) weightLog.value = data;
     } catch (err) {

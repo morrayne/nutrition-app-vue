@@ -76,29 +76,21 @@ import { getDateLikeId } from "../../../appSettings/export/vars/default";
 
 <template>
   <loadingWrap v-if="loading" />
-  <vSwitcherDuo :construct="viewOrAdd" v-model="topMode" />
-  <div class="w-100 g-05 half" v-if="topMode === 'view'">
+  <div class="grid grid-2 gap-50">
+    <vSwitcherDuo :construct="viewOrAdd" v-model="topMode" />
+    <vSwitcherDuo :construct="mealOrProducts" v-model="botMode" v-if="topMode === 'add'" />
+  </div>
+  <div class="grid grid-3 ali-c gap-50" v-if="topMode === 'add' && botMode === 'newMeal'">
+    <vInputString v-model="basket.name" :construct="mealName" />
+    <p class="w-100 jus-c text-m bounce-m main" @click="finish">{{ t("finish") }}</p>
+  </div>
+  <div class="w-100 grid grid-3 gap-50" v-if="topMode === 'view'">
     <mealWrap v-for="item in mealStore.meals" :construct="item" />
   </div>
-  <vSwitcherDuo :construct="mealOrProducts" v-model="botMode" v-if="topMode === 'add'" />
-  <vInputString v-model="basket.name" :construct="mealName" v-if="topMode === 'add' && botMode === 'newMeal'" />
-  <p class="w-100 j-c fs-l fw-6 bounce def-wrap" v-if="topMode === 'add' && botMode === 'newMeal'" @click="finish">{{ t("finish") }}</p>
-  <div class="w-100 g-05 half" v-if="topMode === 'add' && botMode === 'newMeal'">
+  <div class="w-100 grid grid-3 gap-50" v-if="topMode === 'add' && botMode === 'newMeal'">
     <shortProduct v-for="item in basket.list" :construct="getProductById(item.id)!" v-model:weight="item.weight" v-model:quantity="item.quantity" @delete="removeProduct" />
   </div>
-  <div class="w-100 g-05 half" v-if="topMode === 'add' && botMode === 'products'">
+  <div class="w-100 grid grid-3 gap-50" v-if="topMode === 'add' && botMode === 'products'">
     <productWrap v-for="item in productStore.products" :construct="item" @main="addProduct" :active="isThisInBasket(item.id!)" @delete="removeProduct" />
   </div>
 </template>
-
-<style scoped lang="scss">
-.half {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (max-width: 768px) {
-  .half {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-</style>

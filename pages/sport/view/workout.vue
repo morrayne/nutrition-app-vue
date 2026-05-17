@@ -14,7 +14,7 @@ const exerciseStore = useExerciseStore();
 const workoutStore = useWorkoutStore();
 
 // Активная группа для фильтрации списка мышц
-const activeGroup = ref<string | null>(null);
+const activeGroup = ref<string | null>('chest');
 // Активная конкретная мышца для фильтрации упражнений
 const activeMuscle = ref<string | null>(null);
 
@@ -137,36 +137,32 @@ import loadingView from "../../../components/wraps/loading.vue";
 
 <template>
   <loadingView v-if="loading" />
-
-  <p class="w-100 j-c bounce fw-6 add" @click="addWorkout">{{ t("add") }}</p>
-
-  <!-- Фильтры групп -->
-  <div class="def-wrap">
-    <div class="g-05 overflow-y-auto scroll-style filters">
+  <p class="w-100 jus-c bounce text-l add" @click="addWorkout">{{ t("add") }}</p>
+  <div class="main">
+    <div class="gap-50 over-x filters">
       <p v-for="group in mussleGrops" :key="group" :class="{ active: activeGroup === group }" @click="selectGroup(group)">
         {{ t(group) }}
       </p>
     </div>
   </div>
-
-  <!-- Список мышц по выбранной группе -->
-  <div class="def-wrap">
-    <div class="g-05 overflow-y-auto scroll-style filters">
-      <p v-for="item in filteredMuscles" :key="item.worth" class="fs-s" :class="{ active: activeMuscle === item.worth }" @click="selectMuscle(item.worth)">
+  <div class="main">
+    <div class="gap-50 over-x big-list filters">
+      <p v-for="item in filteredMuscles" :key="item.worth" class="text-s" :class="{ active: activeMuscle === item.worth }" @click="selectMuscle(item.worth)">
         {{ t(item.title) }}
       </p>
     </div>
   </div>
-
-  <!-- Список упражнений -->
-  <exercisePlus
-    v-for="item in filteredExercises"
-    :key="item.id"
-    :construct="item"
-    :initial-weight="getInitialData(item.id!)?.weight"
-    :initial-sets="getInitialData(item.id!)?.sets"
-    :initial-reps="getInitialData(item.id!)?.reps"
-    @update="(data) => handleUpdate(data, item.id!)" />
+  <div class="grid grid-3 gap-50">
+    <exercisePlus
+      v-for="item in filteredExercises"
+      :key="item.id"
+      :construct="item"
+      :initial-weight="getInitialData(item.id!)?.weight"
+      :initial-sets="getInitialData(item.id!)?.sets"
+      :initial-reps="getInitialData(item.id!)?.reps"
+      @update="(data) => handleUpdate(data, item.id!)"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -176,7 +172,7 @@ import loadingView from "../../../components/wraps/loading.vue";
   border: dashed 2px var(--ex-color);
   color: var(--ex-color);
 }
-.def-wrap {
+.main {
   padding: 0.5rem;
   .filters {
     display: flex;
@@ -195,6 +191,15 @@ import loadingView from "../../../components/wraps/loading.vue";
         color: var(--white);
       }
     }
+  }
+}
+.big-list {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .big-list {
+    flex-wrap: nowrap;
   }
 }
 </style>

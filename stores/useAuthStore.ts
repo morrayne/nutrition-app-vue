@@ -9,15 +9,34 @@ import { getRandomAvatarIndex, today } from "../appSettings/export/vars/default"
 import type { AuthError, Session, User } from "@supabase/supabase-js";
 import type { tCommonTable, tBodyTable, tSignTable } from "../appSettings/export/types/store";
 
-import { useBodyStore } from "./useBodyStore";
-import { useCommonStore } from "./useCommonStore";
-import { useWeightLogStore } from "./useWeightLogStore";
+// body & aommon & weighlog
+import { useBodyStore } from "../stores/useBodyStore";
+import { useCommonStore } from "../stores/useCommonStore";
+import { useWeightLogStore } from "../stores/useWeightLogStore";
+// food
+import { useProductStore } from "../stores/useProductStore";
+import { useMealStore } from "../stores/useMealStore";
+import { useFoodHistoryStore } from "../stores/useFoodHistoryStore";
+// sport
+import { useExerciseStore } from "../stores/useExerciseStore";
+import { useWorkoutStore } from "../stores/useWorkoutStore";
+// meds
+import { useMedicineStore } from "../stores/useMedicineStore";
 
 export const useAuthStore = defineStore("auth", () => {
-  // Инициализация сторов
+  // body & aommon & weighlog
   const bodyStore = useBodyStore();
   const commonStore = useCommonStore();
   const weightLogStore = useWeightLogStore();
+  // food
+  const productStore = useProductStore();
+  const mealStore = useMealStore();
+  const foodHistoryStore = useFoodHistoryStore();
+  // sport
+  const exerciseStore = useExerciseStore();
+  const workoutStore = useWorkoutStore();
+  // meds
+  const medicineStore = useMedicineStore();
   // Состояние
   const user = ref<User | null>(null);
   const session = ref<Session | null>(null);
@@ -37,7 +56,7 @@ export const useAuthStore = defineStore("auth", () => {
   const loadUserData = async () => {
     if (!userId.value) return;
     try {
-      await Promise.all([bodyStore.getStore(), commonStore.getStore(), weightLogStore.getStore()]);
+      await Promise.all([commonStore.getStore(), bodyStore.getStore(), weightLogStore.getStore(), productStore.getStore(), mealStore.getStore(), foodHistoryStore.getStore(), exerciseStore.getStore(), workoutStore.getStore(), medicineStore.getStore()]);
     } catch (err) {
       console.error("Error at 'loadUserData': ", err);
     }

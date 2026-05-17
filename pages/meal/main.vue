@@ -12,21 +12,20 @@ import mealView from "./view/meal.vue";
 
 <template>
   <mealNavigation v-model="pageIndex" />
-  <TransitionGroup name="meal" tag="div" class="w-100 h-100 max-w-1080 pos-r g-1">
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="0" v-show="pageIndex === 'deppAnalisys'"></div>
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="1" v-show="pageIndex === 'history'">
+  <TransitionGroup name="meal" tag="div" class="w-100 h-100 max-w-1440 pos-r">
+    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="1" v-show="pageIndex === 'history'">
       <historyView />
     </div>
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="2" v-show="pageIndex === 'intake'">
+    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="2" v-show="pageIndex === 'intake'">
       <intakeView />
     </div>
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="3" v-show="pageIndex === 'products'">
+    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="3" v-show="pageIndex === 'products'">
       <productsView />
     </div>
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="4" v-show="pageIndex === 'meals'">
+    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="4" v-show="pageIndex === 'meals'">
       <mealView />
     </div>
-    <div class="pos-a w-100 h-100 meal-pad overflow-y-auto flex-c g-05" :key="5" v-show="pageIndex === 'suggestions'"></div>
+    <div class="pos-a w-100 h-100 meal-padding over-y flex-c gap-50" :key="5" v-show="pageIndex === 'suggestions'"></div>
   </TransitionGroup>
 </template>
 
@@ -39,12 +38,18 @@ import mealView from "./view/meal.vue";
 .meal-leave-from {
   opacity: 1;
 }
-.meal-pad {
-  padding-bottom: 8.25rem;
+.meal-padding {
+  padding-bottom: 9rem;
 }
-@media (max-width: 768px) {
-  .meal-pad {
-    padding-bottom: 6.5rem;
+
+@media (max-width: 1280px) {
+  .meal-padding {
+    padding-bottom: 8rem;
+  }
+}
+@media (max-width: 640px) {
+  .meal-padding {
+    padding-bottom: 7rem;
   }
 }
 </style>

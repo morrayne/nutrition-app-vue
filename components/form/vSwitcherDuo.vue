@@ -34,17 +34,17 @@ watch(() => props.modelValue, (newVal) => {
 </script>
 
 <template> 
-  <div class="flex-c g-05 w-100">
-    <p class="fs-l" v-if="props.construct.title">{{ t(props.construct.title) }}</p>
-    <div class="pos-r def-wrap">
+  <div class="w-100 flex-c gap-50">
+    <p class="text-l" v-if="props.construct.title">{{ t(props.construct.title) }}</p>
+    <div class="pos-r main">
       <div class="runner" :style="runnerStyle"></div>
-      <p class="w-100 h-100 j-c pos-r" v-for="item in construct.data.opt" @click="handleClick(item.worth)">{{ t(item.title) }}</p>
+      <p class="w-100 h-100 jus-c pos-r text-m" v-for="item in construct.data.opt" @click="handleClick(item.worth)">{{ t(item.title) }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.def-wrap {
+.main {
   padding: 0.5rem 0.75rem;
   .runner {
     width: calc(50% - 0.375rem);

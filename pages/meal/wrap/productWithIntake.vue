@@ -7,8 +7,8 @@ import { getProductById } from "../../../appSettings/export/vars/food";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-const props = defineProps<{ 
-  construct: tProductSavedShort & { intake: string }; 
+const props = defineProps<{
+  construct: tProductSavedShort & { intake: string };
 }>();
 
 // Получаем продукт (может быть undefined)
@@ -49,17 +49,17 @@ const getColor = (data: string) => {
 </script>
 
 <template>
-  <div v-if="productWithCalculatedMacros" class="product-wrap bounce w-100 flex-c g-05 def-wrap">
-    <div class="w-100 j-b top">
-      <p class="fs-l fw-6 name">{{ productWithCalculatedMacros.name + " (" + props.construct.quantity + ")" || "Unknown" }}</p>
-      <div class="h-100 a-c intake" :style="{ background: getColor(props.construct.intake) }">
-        <p class="fs-xs fw-6">{{ t(props.construct.intake) }}</p>
+  <div v-if="productWithCalculatedMacros" class="product-wrap bounce-s w-100 flex-c g-05 main">
+    <div class="w-100 jus-sb ali-c top">
+      <p class="text-m name">{{ productWithCalculatedMacros.name + " (" + props.construct.quantity + ")" || "Unknown" }}</p>
+      <div class="h-100 ali-c intake" :style="{ background: getColor(props.construct.intake) }">
+        <p class="text-s">{{ t(props.construct.intake) }}</p>
       </div>
     </div>
-    <div class="g-05 bot">
-      <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
+    <div class="gap-50 bot">
+      <div class="gap-50 ali-c" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-5">{{ Number(productWithCalculatedMacros[item.data as MacroKey].toFixed(1)) + ' ' + t(item.title) }}</p>
+        <p class="text-s">{{ Number(productWithCalculatedMacros[item.data as MacroKey].toFixed(1)) + " " + t(item.title) }}</p>
       </div>
     </div>
   </div>
@@ -68,34 +68,30 @@ const getColor = (data: string) => {
 <style scoped lang="scss">
 .product-wrap {
   padding: 0.75rem 1rem;
-  .top {
-    .name {
-      max-width: 80%;
-      display: inline;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    .intake {
-      border-radius: 1rem;
-      padding: 0 1rem;
-      P {
-        color: var(--white);
-        opacity: 0.85;
-      }
+  .name {
+    max-width: 80%;
+    display: inline;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .intake {
+    border-radius: 1rem;
+    padding: 0 1rem;
+    P {
+      color: var(--white);
+      opacity: 0.85;
     }
   }
   .bot {
-    .item {
-      p {
-        color: var(--ex-color);
-      }
-      .dot {
-        width: 0.25rem;
-        height: 0.25rem;
-        border-radius: 50%;
-        background: var(--ex-color);
-      }
+    p {
+      color: var(--ex-color);
+    }
+    .dot {
+      width: 0.25rem;
+      height: 0.25rem;
+      border-radius: 50%;
+      background: var(--ex-color);
     }
   }
 }

@@ -24,14 +24,11 @@ const dataType = props.construct.data.dataType;
 const checkForErrors = (data: string, mode: "string" | "password") => {
   hasError.value = false;
   hasCorrect.value = false;
-  
   if (!data || data === "" || data === null || data === undefined) {
     return;
   }
-  
   const str = String(data).replace(/\s/g, "");
   const rules = props.construct.rule;
-  
   if (str.length < rules.minLength || str.length > rules.maxLength) {
     hasError.value = true;
     return;
@@ -48,7 +45,6 @@ const checkForErrors = (data: string, mode: "string" | "password") => {
     hasError.value = true;
     return;
   }
-  
   hasError.value = false;
   hasCorrect.value = true;
 };
@@ -60,20 +56,19 @@ const handleInput = (event: Event) => {
   emits("update:modelValue", value);
 };
 
-// Следим за изменением modelValue из родителя
 watch(() => props.modelValue, (newValue) => {
   checkForErrors(newValue || "", dataType);
 });
 </script>
 
 <template>
-  <div class="flex-c g-05 w-100">
-    <p v-if="props.construct.title" class="fs-l">{{ construct.title }}</p>
+  <div class="flex-c gap-50 w-100">
+    <p v-if="props.construct.title" class="text-l">{{ construct.title }}</p>
     <input
       :name="props.construct.title"
       :disabled="props.disable"
       :type="dataType === 'password' ? 'password' : 'text'"
-      class="w-100 def-wrap"
+      class="w-100 main"
       :class="[hasError ? 'error' : '', hasCorrect ? 'correct' : '']"
       :placeholder="placeholder"
       @input="handleInput"
@@ -83,6 +78,9 @@ watch(() => props.modelValue, (newValue) => {
 </template>
 
 <style scoped lang="scss">
+.main {
+  padding: 1rem 1.5rem;
+}
 .error {
   border: solid 1px var(--re);
 }

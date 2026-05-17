@@ -45,24 +45,24 @@ const handleQuantityPlus = () => {
 </script>
 
 <template>
-  <div class="product-wrap bounce w-100 flex-c g-05 def-wrap" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''"> 
+  <div class="product-wrap bounce-s w-100 flex-c gap-50 main" @click="emits('main', props.construct)" :class="props.active ? 'active' : ''">
     <div class="w-100 top">
-      <p class="fs-l fw-6 name">{{ props.construct.name }}</p>
-      <div class="def-wrap controls" @click.stop>
+      <p class="text-l name">{{ props.construct.name }}</p>
+      <div class="main controls" @click.stop>
         <button style="scale: 0.9" @click="emits('delete', props.construct.id!)">
           <X color="var(--sub-color)" />
         </button>
       </div>
     </div>
-    <div class="g-05 bot">
-      <div class="g-05 a-c item" v-for="(item, index) in macros" :key="item.data">
+    <div class="gap-50 bot">
+      <div class="gap-50 ali-c item" v-for="(item, index) in macros" :key="item.data">
         <div class="dot" v-if="index !== 0"></div>
-        <p class="fs-s fw-4">{{ Number(((Number(props.construct[item.data as keyof tProductSaved]) / 100) * props.weight * props.quantity).toFixed(1)) }} fake</p>
+        <p class="text-s">{{ Number(((Number(props.construct[item.data as keyof tProductSaved]) / 100) * props.weight * props.quantity).toFixed(1)) }} fake</p>
       </div>
     </div>
-    <div class="w-100 g-05 foot">
+    <div class="w-100 gap-50 ali-c gap-50">
       <vInputNumber :construct="mealWeight" v-model="weightModel" :undercover="true" />
-      <div class="h-100 a-c j-b def-wrap">
+      <div class="h-100 ali-c jus-sb main quan">
         <div class="h-100 round" @click="handleQuantityMinus"><MinusCircle color="var(--ex-color)" /></div>
         <p>{{ props.quantity }}</p>
         <div class="h-100 round" @click="handleQuantityPlus"><PlusCircle color="var(--ex-color)" /></div>
@@ -77,16 +77,14 @@ const handleQuantityPlus = () => {
 }
 .product-wrap {
   padding: 0.75rem 1rem;
-  .foot {
-    .def-wrap {
-      width: 12rem;
-      padding: 0.125rem;
-      .round {
-        aspect-ratio: 1 / 1;
-        svg {
-          width: 100%;
-          height: 100%;
-        }
+  .main {
+    width: 12rem;
+    padding: 0.25rem 0.5rem;
+    .round {
+      aspect-ratio: 1 / 1;
+      svg {
+        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -96,7 +94,7 @@ const handleQuantityPlus = () => {
       display: inline;
       white-space: nowrap;
       text-overflow: ellipsis;
-      overflow: hidden; 
+      overflow: hidden;
     }
     .controls {
       width: fit-content;

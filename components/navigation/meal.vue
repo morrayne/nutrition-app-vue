@@ -2,43 +2,41 @@
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
+const navigation = ["history", "intake", "products", "meals", "suggestions"];
+
 const props = defineProps<{
   modelValue: string;
 }>();
 const emits = defineEmits<{
   (e: "update:modelValue", value: string): void;
 }>();
-
-// const navigation = ["deepAnalisys", "history", "intake", "products", "meals", "suggestions"];
-const navigation = ["history", "intake", "products", "meals", "suggestions"];
 </script>
 
 <template>
-  <div class="meal-wrap w-100 pos-a j-c">
-    <div class="s">
-      <div class="meal w-100 g-05 def-wrap">
-        <p v-for="item in navigation" class="fs-s fw-6 meal-item" :class="props.modelValue === item ? 'active' : ''" @click="emits('update:modelValue', item)">{{ t(item) }}</p>
+  <div class="a left-0 w-100 pos-a jus-c">
+    <div class="w-100 max-w-1440 b">
+      <div class="w-fit over-x c">
+        <div class="meal w-100 g-05 main">
+          <p v-for="item in navigation" class="text-m meal-item" :class="props.modelValue === item ? 'active' : ''" @click="emits('update:modelValue', item)">{{ t(item) }}</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.meal-wrap {
-  bottom: 6rem;
-  left: 0;
+.a {
+  padding: 0 1rem;
+  bottom: 6.5rem;
   z-index: 3;
-  .s {
-    max-width: 1080px;
-    width: calc(100% - 2rem);
+  .c {
+    max-width: 100%;
     .meal {
-      justify-content: center;
-      backdrop-filter: blur(0.5rem);
+      width: fit-content;
       border-radius: 3rem;
-      padding: 0.125rem;
-      overflow-x: auto;
+      padding: 0.25rem;
       .meal-item {
-        padding: 0.25rem 0.75rem;
+        padding: 0.25rem 1rem;
         border-radius: 3rem;
         cursor: pointer;
       }
@@ -52,12 +50,14 @@ const navigation = ["history", "intake", "products", "meals", "suggestions"];
   }
 }
 
-@media (max-width: 768px) {
-  .meal-wrap {
-    bottom: 5rem;
-    .meal {
-      justify-content: unset !important;
-    }
+@media (max-width: 1280px) {
+  .a {
+    bottom: 6rem;
+  }
+}
+@media (max-width: 640px) {
+  .a {
+    bottom: 5.25rem;
   }
 }
 </style>

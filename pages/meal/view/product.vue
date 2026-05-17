@@ -99,49 +99,40 @@ const loading = ref<boolean>(false);
 
 <template>
   <loadingView v-if="loading" />
-  <div class="w-100 h-100 g-05 pos-a editor-wrap" v-if="menu">
-    <div class="flex-c g-05 def-wrap editor">
-      <div class="w-100 g-05 a-c double">
+  <div class="w-100 h-100 gap-50 pos-a max-w-1440 jus-c editor-wrap" v-if="menu">
+    <div class="w-100 flex-c gap-50 main max-w-640 editor">
+      <div class="w-100 gap-50 ali-c double">
         <vInputString :construct="mealName" v-model="editor.name" :disable="editMode" />
         <!-- prettier-ignore -->
-        <div class="h-100 def-wrap round" @click="menu = false; clearEditor()">
+        <div class="h-100 main round" @click="menu = false; clearEditor()">
           <ArrowLeft color="var(--sub-color)" />
         </div>
       </div>
-      <div class="g-05 middle">
+      <div class="w-100 gap-50 middle">
         <vInputNumber :construct="mealCalories" v-model="editor.calories" />
         <vInputNumber :construct="mealProteins" v-model="editor.proteins" />
         <vInputNumber :construct="mealFats" v-model="editor.fats" />
         <vInputNumber :construct="mealCarbs" v-model="editor.carbs" />
       </div>
-      <div class="w-100 g-05 a-c double">
-        <p class="w-100 j-c finish def-wrap" @click="finish">{{ t("finish") }}</p>
-        <div class="h-100 def-wrap round" @click="clearEditor"><X color="var(--sub-color)" /></div>
+      <div class="w-100 gap-50 ali-c double">
+        <p class="w-100 jus-c finish main" @click="finish">{{ t("finish") }}</p>
+        <div class="h-100 main round" @click="clearEditor"><X color="var(--sub-color)" /></div>
       </div>
     </div>
   </div>
-  <p class="w-100 j-c bounce new-asset" @click="handleNewProduct">{{ t("add") }}</p>
-  <div class="w-100 g-05 half">
+  <p class="w-100 jus-c text-l bounce-s new-asset" @click="handleNewProduct">{{ t("add") }}</p>
+  <div class="w-100 gap-50 grid grid-3">
     <productWrap v-for="(item, index) in productStore.products" :construct="productStore.products[productStore.products.length - index - 1]!" @main="handleMain" @delete="handleDelete" />
   </div>
 </template>
 
 <style scoped lang="scss">
-.half {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (max-width: 768px) {
-  .half {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
 .new-asset {
   padding: 1rem 0;
   border-radius: 1rem;
   border: dashed 2px var(--ex-color);
   color: var(--ex-color);
+  cursor: pointer;
 }
 .editor-wrap {
   align-items: end;

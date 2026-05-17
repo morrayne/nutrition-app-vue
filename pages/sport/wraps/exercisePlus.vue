@@ -61,33 +61,30 @@ watch([weight, setsCount, repsCount], () => {
 </script>
 
 <template>
-  <div class="flex-c g-05 bounce def-wrap">
-    <p class="fs-l fw-6" v-if="props.construct.name">{{ props.construct.name }}</p>
-    <div class="w-100 g-05 grid">
+  <div class="flex-c gap-50 bounce-s main">
+    <p class="text-l" v-if="props.construct.name">{{ props.construct.name }}</p>
+    <div class="w-100 gap-50 grid">
       <vInputNumber :construct="exWeight" :undercover="true" v-model="weight" />
       <vInputNumber :construct="reps" :undercover="true" v-model="repsCount" />
       <vInputNumber :construct="sets" :undercover="true" v-model="setsCount" />
     </div>
-    <div class="g-05 bb">
-      <p class="fs-s" v-for="item in props.construct.tags" :key="item">{{ t(item) }}</p>
+    <div class="gap-50 bb">
+      <p class="text-xs" v-for="item in props.construct.tags" :key="item">{{ t(item) }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.def-wrap {
-  padding: 1rem !important;
-  .bb {
-    flex-wrap: wrap;
-    p {
-      padding: 0.25rem 0.75rem;
-      border-radius: 2rem;
-      background: var(--ex-background);
-    }
+.bb {
+  flex-wrap: wrap;
+  p {
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    background: var(--ex-background);
   }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 </style>

@@ -24,20 +24,16 @@ const localValue = ref<string>(props.modelValue?.toString() ?? "");
 const checkForErrors = (data: number) => {
   hasError.value = false;
   hasCorrect.value = false;
-
   if (isNaN(data)) return;
-
   const rules = props.construct.rule;
   if (!rules) {
     hasCorrect.value = true;
     return;
   }
-
   if (data < rules.minValue || data > rules.maxValue) {
     hasError.value = true;
     return;
   }
-
   hasCorrect.value = true;
 };
 
@@ -48,50 +44,42 @@ const handleInput = (event: Event) => {
   const parts = normalized.split(".");
   if (parts.length > 2) normalized = parts[0] + "." + parts.slice(1).join("");
   localValue.value = normalized;
-
   if (normalized === "" || normalized === "-") {
     emits("update:modelValue", 0);
     checkForErrors(0);
     return;
   }
-
   const num = parseFloat(normalized);
   if (isNaN(num)) {
     hasError.value = true;
     emits("update:modelValue", 0);
     return;
   }
-
   checkForErrors(num);
   emits("update:modelValue", num);
 };
 
-// Следим за изменением modelValue из родителя
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    if (newVal !== undefined && newVal !== null && !isNaN(newVal) && newVal !== 0) {
-      localValue.value = newVal.toString();
-      checkForErrors(newVal);
-    } else {
-      localValue.value = "";
-      hasError.value = false;
-      hasCorrect.value = false;
-    }
-  },
-  { immediate: true },
-);
+watch(() => props.modelValue, (newVal) => {
+  if (newVal !== undefined && newVal !== null && !isNaN(newVal) && newVal !== 0) {
+    localValue.value = newVal.toString();
+    checkForErrors(newVal);
+  } else {
+    localValue.value = "";
+    hasError.value = false;
+    hasCorrect.value = false;
+  }
+});
 </script>
 
 <template>
-  <div class="flex-c g-05 w-100">
-    <p v-if="props.construct.title" class="fs-l">{{ t(props.construct.title) }}</p>
+  <div class="flex-c gap-50 w-100">
+    <p v-if="props.construct.title" class="text-l">{{ t(props.construct.title) }}</p>
     <input
       :name="props.construct.title"
       :disabled="props.disable"
       type="text"
       inputmode="decimal"
-      class="w-100 def-wrap"
+      class="w-100 main"
       :class="[hasError ? 'error' : '', hasCorrect ? 'correct' : '']"
       :placeholder="placeholder"
       @input="handleInput"
@@ -101,6 +89,9 @@ watch(
 </template>
 
 <style scoped lang="scss">
+.main {
+  padding: 1rem 1.5rem;
+}
 .error {
   border: solid 1px var(--re);
 }

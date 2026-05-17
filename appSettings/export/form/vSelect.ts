@@ -62,7 +62,6 @@ const intakeTypeOpt: tSelectOpt[] = [
   { title: "snack", worth: "snack" },
 ];
 export const intakeType: tSelect = {
-  title: "intakeTime",
   data: {
     dataType: "string",
     opt: intakeTypeOpt,

@@ -15,11 +15,11 @@ const emits = defineEmits<{
 </script>
 
 <template> 
-  <div class="flex-c g-05 w-100">
-    <p class="fs-l" v-if="props.construct.title">{{ t(props.construct.title) }}</p>
-    <div class="flex-c def-wrap">
-      <div class="row w-100 a-c j-b" v-for="item in construct.data.opt" @click="emits('update:modelValue', item.worth)">
-        <p>{{ t(item.title) }}</p>
+  <div class="flex-c gap-50 w-100">
+    <p class="text-l" v-if="props.construct.title">{{ t(props.construct.title) }}</p>
+    <div class="flex-c main">
+      <div class="row w-100 ali-c jus-sb" v-for="item in construct.data.opt" @click="emits('update:modelValue', item.worth)">
+        <p class="text-m">{{ t(item.title) }}</p>
         <Check color="var(--focus)" :opacity="props.modelValue === item.worth ? '1' : '0'"/>
       </div>
     </div>
@@ -27,7 +27,7 @@ const emits = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-.def-wrap {
+.main {
   padding: 0.5rem 1.5rem;
   .row {
     padding: 0.5rem 0;

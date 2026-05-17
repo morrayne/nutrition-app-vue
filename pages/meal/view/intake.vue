@@ -132,62 +132,60 @@ const clearEditor = () => {
 
 <template>
   <loadingWrap v-if="loading" />
+  <div class="grid grid-2">
     <vSwitcherTrio :construct="intake" v-model="mainMode" />
-  <div class="w-100 g-05 half" v-if="mainMode === 'basket'">
-    <vSelect :construct="intakeType" v-model="basket.intake" />
   </div>
-  <div class="w-100 g-05 half" v-if="mainMode === 'basket'">
-    <div class="w-100 g-05 duo">
-      <p class="w-100 j-c fs-l fw-5 bounce fs-m def-wrap" @click="addUnsaved" style="cursor: pointer">{{ t("addUnsaved") }}</p>
-      <p class="w-100 j-c fs-l fw-5 bounce fs-m def-wrap" @click="finish" style="cursor: pointer">{{ t("finish") }}</p>
+  <div class="w-100 grid grid-3 gap-50" v-if="mainMode === 'basket'">
+    <div class="w-100 gap-50">
+      <vSelect :construct="intakeType" v-model="basket.intake" />
+    </div>
+    <div class="w-100 h-100 flex-c jus-e gap-50">
+      <p class="w-100 j-c fs-l text-m jus-c main" @click="addUnsaved" style="cursor: pointer">{{ t("addUnsaved") }}</p>
+      <p class="w-100 j-c fs-l text-m jus-c main" @click="finish" style="cursor: pointer">{{ t("finish") }}</p>
     </div>
   </div>
   <!-- unsaved editor -->
-  <div class="w-100 h-100 g-05 pos-a editor-wrap" v-if="menu">
-    <div class="flex-c g-05 def-wrap editor">
-      <div class="w-100 g-05 a-c double">
+  <div class="w-100 h-100 gap-50 pos-a max-w-1440 jus-c editor-wrap" v-if="menu">
+    <div class="w-100 flex-c gap-50 main max-w-640 editor">
+      <div class="w-100 gap-50 a-c double">
         <vInputString :construct="mealName" v-model="editor.name" />
         <!-- prettier-ignore -->
-        <div class="h-100 def-wrap round" @click="menu = false; clearEditor()">
+        <div class="h-100 main round" @click="menu = false; clearEditor()">
           <ArrowLeft color="var(--sub-color)" />
         </div>
       </div>
-      <div class="g-05 middle">
+      <div class="w-100 gap-50 middle">
         <vInputNumber :construct="mealCalories" v-model="editor.calories" />
         <vInputNumber :construct="mealProteins" v-model="editor.proteins" />
         <vInputNumber :construct="mealFats" v-model="editor.fats" />
         <vInputNumber :construct="mealCarbs" v-model="editor.carbs" />
       </div>
-      <div class="w-100 g-05 a-c double">
-        <p class="w-100 j-c finish def-wrap" @click="pushUnsaved">{{ t("add") }}</p>
-        <div class="h-100 def-wrap round" @click="clearEditor"><X color="var(--sub-color)" /></div>
+      <div class="w-100 gap-50 a-c double">
+        <p class="w-100 j-c finish main" @click="pushUnsaved">{{ t("add") }}</p>
+        <div class="h-100 main round" @click="clearEditor"><X color="var(--sub-color)" /></div>
       </div>
     </div>
   </div>
   <!-- in basket -->
-  <div class="w-100 g-05 half">
+  <div class="w-100 grid grid-3 gap-50" v-if="mainMode === 'basket'">
     <productUnsaved v-for="item in basket.unsaved" :construct="item" />
-    <shortProduct v-for="item in basket.products" :construct="getProductById(item.id)!" v-model:weight="item.weight" v-model:quantity="item.quantity" v-if="mainMode === 'basket'" @delete="removeProduct" />
-    <mealWrap v-for="item in basket.meals" :construct="getMealById(item)!" v-if="mainMode === 'basket'" @delete="removeMeal" />
+    <shortProduct v-for="item in basket.products" :construct="getProductById(item.id)!" v-model:weight="item.weight" v-model:quantity="item.quantity" @delete="removeProduct" />
+    <mealWrap v-for="item in basket.meals" :construct="getMealById(item)!" @delete="removeMeal" />
   </div>
   <!-- just display -->
-  <div class="w-100 g-05 half" v-if="mainMode === 'products'">
+  <div class="w-100 grid grid-3 gap-50" v-if="mainMode === 'products'">
     <productWrap v-for="item in productStore.products" :construct="item" @main="addProduct" :active="isThisInBasket(item.id!)" @delete="removeProduct" />
   </div>
-  <div class="w-100 g-05 half" v-if="mainMode === 'meals'">
+  <div class="w-100 grid grid-3 gap-50" v-if="mainMode === 'meals'">
     <mealWrap v-for="item in mealStore.meals" :construct="item" v-if="mainMode === 'meals'" @main="addMeal" :active="isThisInBasket(item.id!)" @delete="removeMeal" />
   </div>
 </template>
 
 <style scoped lang="scss">
-.half {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
 .duo {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  .def-wrap {
+  .main {
     padding: 0.75rem 0;
     border-radius: 1.25rem;
   }
@@ -206,7 +204,7 @@ const clearEditor = () => {
       grid-template-columns: repeat(2, 1fr);
     }
     .double {
-      .def-wrap {
+      .main {
         padding: 1rem;
       }
       .finish {
@@ -223,12 +221,6 @@ const clearEditor = () => {
         }
       }
     }
-  }
-}
-
-@media (max-width: 768px) {
-  .half {
-    grid-template-columns: repeat(1, 1fr);
   }
 }
 </style>

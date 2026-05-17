@@ -13,10 +13,7 @@ import vInputNumber from "../../components/form/vInputNumber.vue";
 import { scv } from "../../appSettings/export/form/vInputNumber";
 import vInputString from "../../components/form/vInputString.vue";
 import { medsName } from "../../appSettings/export/form/vInputString";
-import vSwitcherDuo from "../../components/form/vSwitcherDuo.vue";
-import { meds } from "../../appSettings/export/form/vSwitcherDuo";
 
-const mode = ref("view");
 const med = ref<tMed>({
   id: undefined,
   lastDate: undefined,
@@ -51,50 +48,70 @@ import loadingWrap from "../../components/wraps/loading.vue";
 const loading = ref<boolean>(false);
 
 const getStatus = (item: tMed) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
   const lastDate = new Date(item.lastDate!);
   lastDate.setHours(0, 0, 0, 0);
   const nextDate = new Date(lastDate);
   nextDate.setDate(lastDate.getDate() + item.period!);
-  if (nextDate.getTime() === today.getTime()) {
-    return 'today';
-  } else if (nextDate.getTime() < today.getTime()) {
-    return 'overdue';
-  } 
-  // else {
-  //   const daysLeft = Math.ceil((nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  //   return `Следующий приём через ${daysLeft} дней`;
-  // }
+  if (lastDate.getTime() === todayDate.getTime()) return "taken";
+  if (nextDate.getTime() === todayDate.getTime()) return "need";
+  if (nextDate.getTime() < todayDate.getTime()) return "overdue";
+  return "normal";
+};
+const getDateUntil = (lastDate: string, period: number) => {
+  const date = new Date(lastDate);
+  date.setDate(date.getDate() + period);
+  return date.toISOString().split("T")[0];
+};
+
+const takePill = (item: tMed) => {
+  loading.value = true;
+  setTimeout(async () => {
+    medicineStore.updateItem({ ...item, lastDate: today });
+    loading.value = false;
+  }, 250);
 };
 </script>
 
 <template>
   <loadingWrap v-if="loading" />
-  <div class="w-100 h-100 max-w-1080 pos-r flex-c g-05">
-    <vSwitcherDuo v-model="mode" :construct="meds" />
-    <div class="w-100 flex-c g-05" v-if="mode !== 'edit'">
-      <p class="def-wrap" v-for="item in medicineStore.medicines" :class="getStatus(item)">{{ item.name }}</p>
+  <div class="w-100 h-fit max-w-1440 pos-r grid grid-2 gap-50">
+    <div class="w-100 left">
+      <div class="w-100 flex-c gap-50">
+        <div class="grid grid-2 gap-50">
+          <vInputString :construct="medsName" v-model="med.name" />
+          <vInputNumber :construct="scv" v-model="med.period" />
+        </div>
+        <div class="w-100 gap-50 ali-c double">
+          <p class="w-100 jus-c pad-100 main" @click="handleSend">{{ t("finish") }}</p>
+          <div class="h-100 main ali-c jus-c round" @click="clearForm"><X color="var(--sub-color)" /></div>
+        </div>
+      </div>
     </div>
-    <div class="w-100 flex-c g-05" v-if="mode === 'edit'">
-      <vInputString :construct="medsName" v-model="med.name" />
-      <vInputNumber :construct="scv" v-model="med.period" />
-      <div class="w-100 g-05 a-c double">
-        <p class="w-100 j-c finish def-wrap" @click="handleSend">{{ t("finish") }}</p>
-        <div class="h-100 def-wrap a-c j-c round" @click="clearForm"><X color="var(--sub-color)" /></div>
+    <div class="w-100 right">
+      <div class="w-100 flex-c gap-50">
+        <p>{{ today }}</p>
+        <div class="item jus-sb ali-c bounce-m main" v-for="item in medicineStore.medicines" :class="getStatus(item)" style="cursor: pointer" @click="takePill(item)">
+          <p>{{ item.name }}</p>
+          <p class="text-s">{{ getDateUntil(item.lastDate!, item.period!) }}</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.pill-enter-from,
+.pill-leave-to {
+  opacity: 0;
+}
+.pill-enter-to,
+.pill-leave-from {
+  opacity: 1;
+}
+
 .double {
-  .def-wrap {
-    padding: 1rem;
-  }
-  .finish {
-    padding: 0.9rem 1rem;
-  }
   .round {
     width: fit-content;
     aspect-ratio: 1 / 1;
@@ -105,5 +122,15 @@ const getStatus = (item: tMed) => {
       height: 1.5rem;
     }
   }
+}
+
+.taken {
+  border: solid 1px var(--gr);
+}
+.need {
+  border: solid 1px var(--focus);
+}
+.overdue {
+  border: solid 1px var(--re);
 }
 </style>
